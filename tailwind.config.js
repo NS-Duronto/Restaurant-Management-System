@@ -35,7 +35,7 @@ module.exports = {
               "paragraph": "#6E7191",
               "placeholder": "#A0A3BD",
               "primary": "rgb(var(--primary) / <alpha-value>)",
-              "primary-light": "rgb(220 234 255 / <alpha-value>)",
+              "primary-light": "rgb(255 237 213 / <alpha-value>)",
               brand: {
                   50: '#fff7ed',
                   100: '#ffedd5',

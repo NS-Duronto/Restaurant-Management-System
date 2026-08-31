@@ -19,7 +19,7 @@ class ThemeTableSeeder extends Seeder
             'theme_logo'          => "",
             'theme_favicon_logo'  => "",
             'theme_footer_logo'   => "",
-            'theme_primary_color' => "#FF5622",
+            'theme_primary_color' => "#f97316",
         ]);
     }
 }

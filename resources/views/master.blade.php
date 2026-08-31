@@ -9,7 +9,7 @@
         }
         return hexdec(substr($hex, 0, 2)) . ' ' . hexdec(substr($hex, 2, 2)) . ' ' . hexdec(substr($hex, 4, 2));
     };
-    $themePrimary = $hexToChannels(Settings::group('theme')->get('theme_primary_color'), '255 86 34');
+    $themePrimary = $hexToChannels(Settings::group('theme')->get('theme_primary_color'), '249 115 22');
 @endphp
 <!DOCTYPE html>
 {{-- DYNAMIC THEME COLOR: set as an inline style attribute (not a <style> block) so it always
