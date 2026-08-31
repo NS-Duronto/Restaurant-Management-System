@@ -3,6 +3,43 @@
     <PoscustomerComponent v-on:onCustomverCreate="onCustomverCreate" />
 
     <div class="md:w-[calc(100%-340px)] lg:w-[calc(100%-320px)] xl:w-[calc(100%-377px)]">
+        <!-- Top Sticky Live Dining Table Strip -->
+        <div class="mb-4 bg-white dark:bg-gray-900 p-3 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm" v-if="diningtables.length > 0">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-chair text-orange-500 text-sm"></i>
+                    <h3 class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">{{ $t('label.dining_table_strip') || 'ডাইনিং টেবিল' }}</h3>
+                </div>
+                <div class="flex items-center gap-3 text-[11px]">
+                    <span class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> {{ $t('label.table_available') || 'খালি' }}
+                    </span>
+                    <span class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
+                        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> {{ $t('label.table_running') || 'রানিং' }}
+                    </span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 thin-scrolling">
+                <button type="button" @click="clearSelectedTable"
+                    class="flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition border"
+                    :class="!checkoutProps.form.dining_table_id ? 'bg-orange-500 text-white border-orange-500 shadow-md shadow-orange-500/20' : 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-orange-400'">
+                    {{ $t('label.all_tables') || 'টেবিল ছাড়া' }}
+                </button>
+                <button v-for="table in diningtables" :key="table.id" type="button" @click="selectTable(table)"
+                    class="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition border"
+                    :class="checkoutProps.form.dining_table_id === table.id
+                        ? 'bg-orange-500 text-white border-orange-500 shadow-md shadow-orange-500/20'
+                        : table.dining_table_status === 2
+                            ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-700 hover:border-amber-400'
+                            : 'bg-emerald-50/60 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 hover:border-emerald-400'">
+                    <span class="w-2 h-2 rounded-full"
+                        :class="checkoutProps.form.dining_table_id === table.id ? 'bg-white' : table.dining_table_status === 2 ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'"></span>
+                    <span>{{ table.name }}</span>
+                    <span class="text-[10px] opacity-75 font-normal">({{ table.capacity }} জন)</span>
+                </button>
+            </div>
+        </div>
+
         <form @submit.prevent="search"
             class="flex items-center w-full h-[38px] leading-[38px] mb-4 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
             <input type="text" v-model="props.search.name" :placeholder="$t('label.search_by_menu_item')"
@@ -56,6 +93,16 @@
                     <i class="lab-close-circle-line font-fill-danger lab-font-size-24"></i>
                 </button>
             </div>
+            <div v-if="selectedTableName" class="mb-3 p-2.5 rounded-xl bg-orange-50 dark:bg-gray-800 border border-orange-500/30 flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2 font-bold text-orange-600 dark:text-orange-400">
+                    <i class="fa-solid fa-chair"></i>
+                    <span>{{ $t('label.select_table') || 'টেবিল' }}: {{ selectedTableName }}</span>
+                </div>
+                <button type="button" @click="clearSelectedTable" class="text-gray-400 hover:text-red-500 text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
             <div class="flex gap-2  mb-3">
                 <vue-select
                     class="db-field-control w-full flex-auto text-sm rounded-lg appearance-none text-heading border-[#D9DBE9] dark:border-gray-700"
@@ -514,6 +561,11 @@ export default {
         diningtables: function () {
             return this.$store.getters["diningTable/lists"];
         },
+        selectedTableName: function () {
+            if (!this.checkoutProps.form.dining_table_id || !this.diningtables) return null;
+            const table = this.diningtables.find(t => t.id === this.checkoutProps.form.dining_table_id);
+            return table ? table.name : null;
+        },
     },
     mounted() {
         this.closeSidebar();
@@ -762,6 +814,22 @@ export default {
             this.$refs.dineIn.classList.remove('active');
             this.$refs.dineInDiv.classList.add('hidden');
             this.$refs.dineInDiv.classList.remove('block');
+        },
+        selectTable: function (table) {
+            if (this.checkoutProps.form.dining_table_id === table.id) {
+                this.checkoutProps.form.dining_table_id = null;
+            } else {
+                this.checkoutProps.form.dining_table_id = table.id;
+                this.checkoutProps.form.order_type = this.orderTypeEnums.dineIn;
+                this.$nextTick(() => {
+                    if (this.$refs.dineIn) {
+                        this.dineInOrder();
+                    }
+                });
+            }
+        },
+        clearSelectedTable: function () {
+            this.checkoutProps.form.dining_table_id = null;
         },
     },
     watch: {

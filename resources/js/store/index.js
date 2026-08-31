@@ -75,6 +75,14 @@ import { chefAddress } from './modules/chefAddress';
 import { waiterAddress } from './modules/waiterAddress';
 import { ai } from './modules/ai';
 import { aiAgent } from './modules/aiAgent';
+import { unit } from './modules/unit';
+import { supplier } from './modules/supplier';
+import { kitchenGoodsCategory } from './modules/kitchenGoodsCategory';
+import { kitchenGoods } from './modules/kitchenGoods';
+import { purchase } from './modules/purchase';
+import { sendToKitchen } from './modules/sendToKitchen';
+import { expenseCategory } from './modules/expenseCategory';
+import { expense } from './modules/expense';
 
 
 export default new createStore({
@@ -155,7 +163,15 @@ export default new createStore({
         chefAddress,
         waiterAddress,
         aiAgent,
-        ai
+        ai,
+        unit,
+        supplier,
+        kitchenGoodsCategory,
+        kitchenGoods,
+        purchase,
+        sendToKitchen,
+        expenseCategory,
+        expense
     },
     plugins: [
         createPersistedState({

@@ -26,6 +26,12 @@ import kitchenDisplaySystemRoutes from "./modules/kitchenDisplaySystemRoutes";
 import orderStatusScreenRoutes from "./modules/orderStatusScreenRoutes";
 import waiterRoutes from "./modules/waiterRoutes";
 import chefRoutes from "./modules/chefRoutes";
+import expenseRoutes from "./modules/expenseRoutes";
+import supplierRoutes from "./modules/supplierRoutes";
+import purchaseRoutes from "./modules/purchaseRoutes";
+import kitchenGoodsRoutes from "./modules/kitchenGoodsRoutes";
+import sendToKitchenRoutes from "./modules/sendToKitchenRoutes";
+import profitLossReportRoutes from "./modules/profitLossReportRoutes";
 
 
 const baseRoutes = [
@@ -81,7 +87,13 @@ export const routes = baseRoutes.concat(
     kitchenDisplaySystemRoutes,
     orderStatusScreenRoutes,
     waiterRoutes,
-    chefRoutes
+    chefRoutes,
+    expenseRoutes,
+    supplierRoutes,
+    purchaseRoutes,
+    kitchenGoodsRoutes,
+    sendToKitchenRoutes,
+    profitLossReportRoutes
 );
 
 const permission = store.getters.authPermission;

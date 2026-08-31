@@ -2,37 +2,37 @@
 
 namespace App\Services;
 
-use Exception;
-use Carbon\Carbon;
-use App\Models\Item;
-use App\Models\User;
-use App\Models\Order;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
-use Illuminate\Http\Request;
-use App\Libraries\AppLibrary;
 use App\Enums\Role as EnumRole;
-use Illuminate\Support\Facades\Log;
+use App\Libraries\AppLibrary;
 use App\Libraries\QueryExceptionLibrary;
+use App\Models\Expense;
+use App\Models\Order;
+use App\Models\Purchase;
+use App\Models\User;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DashboardService
 {
-
     public function salesSummary(Request $request)
     {
         $order = new Order;
         if ($request->first_date && $request->last_date) {
-            $first_date = Date('Y-m-d', strtotime($request->first_date));
-            $last_date  = Date('Y-m-d', strtotime($request->last_date));
+            $first_date = date('Y-m-d', strtotime($request->first_date));
+            $last_date = date('Y-m-d', strtotime($request->last_date));
         } else {
-            $first_date = Date('Y-m-01', strtotime(Carbon::today()->toDateString()));
-            $last_date  = Date('Y-m-t', strtotime(Carbon::today()->toDateString()));
+            $first_date = date('Y-m-01', strtotime(Carbon::today()->toDateString()));
+            $last_date = date('Y-m-t', strtotime(Carbon::today()->toDateString()));
         }
 
         $date = date_diff(date_create($first_date), date_create($last_date), false);
-        $date_diff = (int)$date->format("%a");
+        $date_diff = (int) $date->format('%a');
 
-        $total_sales     = AppLibrary::flatAmountFormat($order->whereDate('order_datetime', '>=', $first_date)->whereDate('order_datetime', '<=', $last_date)->where('payment_status', PaymentStatus::PAID)->sum('total'));
+        $total_sales = AppLibrary::flatAmountFormat($order->whereDate('order_datetime', '>=', $first_date)->whereDate('order_datetime', '<=', $last_date)->where('payment_status', PaymentStatus::PAID)->sum('total'));
 
         $dateRangeArray = [];
         for ($currentDate = strtotime($first_date); $currentDate <= strtotime($last_date); $currentDate += (86400)) {
@@ -43,19 +43,18 @@ class DashboardService
 
         $dateRangeValueArray = [];
         for ($i = 0; $i <= count($dateRangeArray) - 1; $i++) {
-            $per_day     = AppLibrary::flatAmountFormat($order->whereDate('order_datetime', $dateRangeArray[$i])->where('payment_status', PaymentStatus::PAID)->sum('total'));
+            $per_day = AppLibrary::flatAmountFormat($order->whereDate('order_datetime', $dateRangeArray[$i])->where('payment_status', PaymentStatus::PAID)->sum('total'));
             $dateRangeValueArray[] = floatval($per_day);
         }
 
-
         $salesSummaryArray = [];
         if ($date_diff > 0) {
-            $salesSummaryArray['total_sales']   = AppLibrary::currencyAmountFormat($total_sales);
-            $salesSummaryArray['avg_per_day']   = AppLibrary::currencyAmountFormat($total_sales / $date_diff);
+            $salesSummaryArray['total_sales'] = AppLibrary::currencyAmountFormat($total_sales);
+            $salesSummaryArray['avg_per_day'] = AppLibrary::currencyAmountFormat($total_sales / $date_diff);
             $salesSummaryArray['per_day_sales'] = $dateRangeValueArray;
         } else {
-            $salesSummaryArray['total_sales']   = AppLibrary::currencyAmountFormat($total_sales);
-            $salesSummaryArray['avg_per_day']   = AppLibrary::currencyAmountFormat($total_sales);
+            $salesSummaryArray['total_sales'] = AppLibrary::currencyAmountFormat($total_sales);
+            $salesSummaryArray['avg_per_day'] = AppLibrary::currencyAmountFormat($total_sales);
             $salesSummaryArray['per_day_sales'] = $dateRangeValueArray;
         }
 
@@ -66,24 +65,24 @@ class DashboardService
     {
         $order = new Order;
         if ($request->first_date && $request->last_date) {
-            $first_date = Date('Y-m-d', strtotime($request->first_date));
-            $last_date  = Date('Y-m-d', strtotime($request->last_date));
+            $first_date = date('Y-m-d', strtotime($request->first_date));
+            $last_date = date('Y-m-d', strtotime($request->last_date));
         } else {
-            $first_date = Date('Y-m-01', strtotime(Carbon::today()->toDateString()));
-            $last_date  = Date('Y-m-t', strtotime(Carbon::today()->toDateString()));
+            $first_date = date('Y-m-01', strtotime(Carbon::today()->toDateString()));
+            $last_date = date('Y-m-t', strtotime(Carbon::today()->toDateString()));
         }
 
-        $timeArray = ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"];
+        $timeArray = ['06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
 
         $customerSateArray = [];
         $totalCustomerArray = [];
-        $first_time = "";
-        $last_time = "";
+        $first_time = '';
+        $last_time = '';
         for ($i = 0; $i <= count($timeArray) - 1; $i++) {
             $first_time = date('H:i', strtotime($timeArray[$i]));
-            $last_time = date('H:i', strtotime($timeArray[$i] . ' +59 minutes'));
+            $last_time = date('H:i', strtotime($timeArray[$i].' +59 minutes'));
 
-            $total_customer     = $order->whereDate('order_datetime', '>=', $first_date)->whereDate('order_datetime', '<=', $last_date)->whereTime('order_datetime', '>=', Carbon::parse($first_time))->whereTime('order_datetime', '<=', Carbon::parse($last_time))->get()->count();
+            $total_customer = $order->whereDate('order_datetime', '>=', $first_date)->whereDate('order_datetime', '<=', $last_date)->whereTime('order_datetime', '>=', Carbon::parse($first_time))->whereTime('order_datetime', '<=', Carbon::parse($last_time))->get()->count();
             $totalCustomerArray[] = $total_customer;
         }
 
@@ -97,12 +96,13 @@ class DashboardService
     {
         try {
             if ($request->first_date && $request->last_date) {
-                $first_date = Date('Y-m-d', strtotime($request->first_date));
-                $last_date  = Date('Y-m-d', strtotime($request->last_date));
+                $first_date = date('Y-m-d', strtotime($request->first_date));
+                $last_date = date('Y-m-d', strtotime($request->last_date));
             } else {
-                $first_date = Date('Y-m-01', strtotime(Carbon::today()->toDateString()));
-                $last_date  = Date('Y-m-t', strtotime(Carbon::today()->toDateString()));
+                $first_date = date('Y-m-01', strtotime(Carbon::today()->toDateString()));
+                $last_date = date('Y-m-t', strtotime(Carbon::today()->toDateString()));
             }
+
             return Order::where('payment_status', PaymentStatus::PAID)->whereDate('order_datetime', '>=', $first_date)->whereDate('order_datetime', '<=', $last_date)->sum('total');
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
@@ -114,12 +114,13 @@ class DashboardService
     {
         try {
             if ($request->first_date && $request->last_date) {
-                $first_date = Date('Y-m-d', strtotime($request->first_date));
-                $last_date  = Date('Y-m-d', strtotime($request->last_date));
+                $first_date = date('Y-m-d', strtotime($request->first_date));
+                $last_date = date('Y-m-d', strtotime($request->last_date));
             } else {
-                $first_date = Date('Y-m-01', strtotime(Carbon::today()->toDateString()));
-                $last_date  = Date('Y-m-t', strtotime(Carbon::today()->toDateString()));
+                $first_date = date('Y-m-01', strtotime(Carbon::today()->toDateString()));
+                $last_date = date('Y-m-t', strtotime(Carbon::today()->toDateString()));
             }
+
             return Order::where('status', OrderStatus::DELIVERED)->whereDate('order_datetime', '>=', $first_date)->whereDate('order_datetime', '<=', $last_date)->count();
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
@@ -131,12 +132,13 @@ class DashboardService
     {
         try {
             if ($request->first_date && $request->last_date) {
-                $first_date = Date('Y-m-d', strtotime($request->first_date));
-                $last_date  = Date('Y-m-d', strtotime($request->last_date));
+                $first_date = date('Y-m-d', strtotime($request->first_date));
+                $last_date = date('Y-m-d', strtotime($request->last_date));
             } else {
-                $first_date = Date('Y-m-01', strtotime(Carbon::today()->toDateString()));
-                $last_date  = Date('Y-m-t', strtotime(Carbon::today()->toDateString()));
+                $first_date = date('Y-m-01', strtotime(Carbon::today()->toDateString()));
+                $last_date = date('Y-m-t', strtotime(Carbon::today()->toDateString()));
             }
+
             return User::role(EnumRole::CUSTOMER)->whereDate('created_at', '>=', $first_date)->whereDate('created_at', '<=', $last_date)->count();
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
@@ -144,17 +146,88 @@ class DashboardService
         }
     }
 
-    public function totalMenuItems(Request $request)
+    public function totalExpenses(Request $request)
     {
         try {
             if ($request->first_date && $request->last_date) {
-                $first_date = Date('Y-m-d', strtotime($request->first_date));
-                $last_date  = Date('Y-m-d', strtotime($request->last_date));
+                $first_date = date('Y-m-d', strtotime($request->first_date));
+                $last_date = date('Y-m-d', strtotime($request->last_date));
             } else {
-                $first_date = Date('Y-m-01', strtotime(Carbon::today()->toDateString()));
-                $last_date  = Date('Y-m-t', strtotime(Carbon::today()->toDateString()));
+                $first_date = date('Y-m-01', strtotime(Carbon::today()->toDateString()));
+                $last_date = date('Y-m-t', strtotime(Carbon::today()->toDateString()));
             }
-            return Item::whereDate('created_at', '>=', $first_date)->whereDate('created_at', '<=', $last_date)->count();
+
+            $purchaseTotal = Purchase::whereDate('date', '>=', $first_date)->whereDate('date', '<=', $last_date)->sum('total_amount');
+            $expenseTotal = Expense::whereDate('date', '>=', $first_date)->whereDate('date', '<=', $last_date)->sum('amount');
+
+            return (float) ($purchaseTotal + $expenseTotal);
+        } catch (Exception $exception) {
+            Log::info($exception->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
+
+    public function totalNetProfit(Request $request)
+    {
+        try {
+            $totalSales = (float) $this->totalSales($request);
+            $totalExpenses = (float) $this->totalExpenses($request);
+
+            return (float) ($totalSales - $totalExpenses);
+        } catch (Exception $exception) {
+            Log::info($exception->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
+
+    public function profitSummary(Request $request)
+    {
+        try {
+            if ($request->first_date && $request->last_date) {
+                $first_date = date('Y-m-d', strtotime($request->first_date));
+                $last_date = date('Y-m-d', strtotime($request->last_date));
+            } else {
+                $first_date = date('Y-m-01', strtotime(Carbon::today()->toDateString()));
+                $last_date = date('Y-m-t', strtotime(Carbon::today()->toDateString()));
+            }
+
+            $dateRangeArray = [];
+            for ($currentDate = strtotime($first_date); $currentDate <= strtotime($last_date); $currentDate += 86400) {
+                $dateRangeArray[] = date('Y-m-d', $currentDate);
+            }
+
+            $incomePerDay = [];
+            $expensePerDay = [];
+            $profitPerDay = [];
+
+            $totalSales = (float) $this->totalSales($request);
+            $totalExpenses = (float) $this->totalExpenses($request);
+            $netProfit = $totalSales - $totalExpenses;
+
+            foreach ($dateRangeArray as $date) {
+                $daySales = (float) Order::where('payment_status', PaymentStatus::PAID)->whereDate('order_datetime', $date)->sum('total');
+                $dayPurchase = (float) Purchase::whereDate('date', $date)->sum('total_amount');
+                $dayExpense = (float) Expense::whereDate('date', $date)->sum('amount');
+                $dayTotalExp = $dayPurchase + $dayExpense;
+                $dayProfit = $daySales - $dayTotalExp;
+
+                $incomePerDay[] = $daySales;
+                $expensePerDay[] = $dayTotalExp;
+                $profitPerDay[] = $dayProfit;
+            }
+
+            return [
+                'total_income' => (float) $totalSales,
+                'currency_total_income' => AppLibrary::currencyAmountFormat($totalSales),
+                'total_expense' => (float) $totalExpenses,
+                'currency_total_expense' => AppLibrary::currencyAmountFormat($totalExpenses),
+                'net_profit' => (float) $netProfit,
+                'currency_net_profit' => AppLibrary::currencyAmountFormat($netProfit),
+                'dates' => $dateRangeArray,
+                'income_per_day' => $incomePerDay,
+                'expense_per_day' => $expensePerDay,
+                'profit_per_day' => $profitPerDay,
+            ];
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
             throw new Exception(QueryExceptionLibrary::message($exception), 422);
