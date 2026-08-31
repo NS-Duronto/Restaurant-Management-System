@@ -105,6 +105,61 @@
     padding: 0.4375rem 0.875rem !important;
 }
 
+/* Dark Mode vue-select styles */
+html.dark .vue-select {
+    background-color: #030712 !important;
+    border-color: #1f2937 !important;
+    color: #f3f4f6 !important;
+}
+html.dark .vue-input input {
+    color: #f3f4f6 !important;
+}
+html.dark .vue-input input::placeholder {
+    color: #6b7280 !important;
+}
+html.dark .vue-dropdown {
+    background-color: #111827 !important;
+    border-color: #374151 !important;
+    color: #f3f4f6 !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.6) !important;
+}
+html.dark .vue-dropdown-item {
+    color: #e5e7eb !important;
+}
+html.dark .vue-dropdown-item.highlighted,
+html.dark .vue-dropdown-item:hover {
+    background-color: #1f2937 !important;
+    color: #f97316 !important;
+}
+html.dark .vue-dropdown-item.selected {
+    background-color: rgba(249, 115, 22, 0.18) !important;
+    color: #f97316 !important;
+}
+
+/* Datepicker dark mode */
+html.dark .dp__input {
+    background-color: #030712 !important;
+    border-color: #1f2937 !important;
+    color: #f3f4f6 !important;
+}
+html.dark .dp__menu {
+    background-color: #111827 !important;
+    border-color: #374151 !important;
+    color: #f3f4f6 !important;
+}
+html.dark .dp__theme_light {
+    --dp-background-color: #111827 !important;
+    --dp-text-color: #f3f4f6 !important;
+    --dp-hover-color: #1f2937 !important;
+    --dp-hover-text-color: #f97316 !important;
+    --dp-hover-icon-color: #f97316 !important;
+    --dp-primary-color: #f97316 !important;
+    --dp-primary-text-color: #ffffff !important;
+    --dp-secondary-color: #6b7280 !important;
+    --dp-border-color: #374151 !important;
+    --dp-menu-border-color: #374151 !important;
+}
+
 /* Select code close */
 
 
@@ -209,7 +264,7 @@
 }
 
 .font-fill-pos {
-    color: #FF8A26;
+    color: #f97316;
 }
 
 .add-btn:hover .font-fill-primary {

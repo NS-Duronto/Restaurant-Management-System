@@ -7,10 +7,10 @@
             </div>
             <div class="db-card-body">
                 <ul class="grid grid-cols-2 sm:grid-cols-4 gap-[18px]">
-                    <li class="w-full rounded-xl border border-[#D9DBE9]" v-if="featured_items.length > 0"
+                    <li class="w-full rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/40 overflow-hidden hover:border-orange-500/50 transition-colors shadow-sm" v-if="featured_items.length > 0"
                         v-for="featured_item in featured_items" :key="featured_item">
-                        <img class="w-full rounded-t-[11px]" :src="featured_item.thumb" alt="product">
-                        <h4 class="text-xs p-2 font-medium capitalize">{{ featured_item.name }}</h4>
+                        <img class="w-full h-24 object-cover rounded-t-2xl" :src="featured_item.thumb" alt="product">
+                        <h4 class="text-xs p-2.5 font-bold capitalize text-heading dark:text-gray-100 truncate">{{ featured_item.name }}</h4>
                     </li>
                 </ul>
             </div>

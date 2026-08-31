@@ -15,20 +15,20 @@
                 </div>
             </div>
             <div class="db-card-body">
-                <ul class="flex gap-11">
+                <ul class="flex gap-11 mb-4">
                     <li>
                         <div class="flex items-center gap-2.5">
-                            <i class="lab lab-sale-summary lab-font-size-20 lab-font-color-2"></i>
-                            <h3 class="font-bold text-[22px] leading-[34px]">{{ total_sales }}</h3>
+                            <i class="lab lab-sale-summary lab-font-size-20 text-orange-500"></i>
+                            <h3 class="font-bold text-[22px] leading-[34px] text-heading dark:text-gray-100">{{ total_sales }}</h3>
                         </div>
-                        <p class="text-xs capitalize">{{ $t("label.total_sales") }}</p>
+                        <p class="text-xs capitalize text-gray-500 dark:text-gray-400">{{ $t("label.total_sales") }}</p>
                     </li>
                     <li>
                         <div class="flex items-center gap-2.5">
-                            <i class="lab lab-sale-summary lab-font-size-20 lab-font-color-2"></i>
-                            <h3 class="font-bold text-[22px] leading-[34px]">{{ avg_per_day }}</h3>
+                            <i class="lab lab-sale-summary lab-font-size-20 text-amber-500"></i>
+                            <h3 class="font-bold text-[22px] leading-[34px] text-heading dark:text-gray-100">{{ avg_per_day }}</h3>
                         </div>
-                        <p class="text-xs capitalize">{{ $t("label.avg_sales_per_day") }}</p>
+                        <p class="text-xs capitalize text-gray-500 dark:text-gray-400">{{ $t("label.avg_sales_per_day") }}</p>
                     </li>
                 </ul>
 

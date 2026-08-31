@@ -9,7 +9,7 @@
         }
         return hexdec(substr($hex, 0, 2)) . ' ' . hexdec(substr($hex, 2, 2)) . ' ' . hexdec(substr($hex, 4, 2));
     };
-    $themePrimary = $hexToChannels(Settings::group('theme')->get('theme_primary_color'), '23 114 255');
+    $themePrimary = $hexToChannels(Settings::group('theme')->get('theme_primary_color'), '249 115 22');
 @endphp
 <!DOCTYPE html>
 {{-- DYNAMIC THEME COLOR: set as an inline style attribute (not a <style> block) so it always
@@ -28,17 +28,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('themes/default/fonts/fontawesome/fontawesome.css') }}">
     <link rel="stylesheet" href="{{ asset('themes/default/fonts/lab/lab.css') }}">
     <link rel="stylesheet" href="{{ asset('themes/default/fonts/typography/public/public.css') }}">
     <link rel="stylesheet" href="{{ asset('themes/default/fonts/typography/rubik/rubik.css') }}">
+
+    <!-- THEME RESTORATION SCRIPT -->
+    <script>
+        if (localStorage.getItem('rms_theme') === 'dark' || (!('rms_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
 
     <!-- CUSTOM STYLE -->
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="{{ asset('themes/default/css/custom.css') }}">
     <!-- PAGE TITLE -->
 
-    <title>{{ Settings::group('company')->get('company_name') }}</title>
+    <title>{{ is_array($companyName = Settings::group('company')->get('company_name')) ? (reset($companyName) ?: config('app.name')) : ($companyName ?: config('app.name')) }}</title>
 
     <!-- FAV ICON -->
     <link rel="icon" type="image" href="{{ $favicon }}">

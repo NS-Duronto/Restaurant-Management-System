@@ -22,7 +22,7 @@ class PageTableSeeder extends Seeder
                 [
                     'title'           => 'Cookies Policy',
                     'slug'            => 'cookies-policy',
-                    'description'     => "This Cookies Policy explains how FoodScan (“us”, “we” or “our”) collects, uses, stores, shares and uses cookies on its website. We provide information on how cookies and similar technologies work, their purpose, use, and duration, how We process and store them, and how you can control them. You can also find all the necessary information regarding your rights on the use of Cookies on this website and how you can exercise them.
+                    'description'     => "This Cookies Policy explains how Sohoj RMS (“us”, “we” or “our”) collects, uses, stores, shares and uses cookies on its website. We provide information on how cookies and similar technologies work, their purpose, use, and duration, how We process and store them, and how you can control them. You can also find all the necessary information regarding your rights on the use of Cookies on this website and how you can exercise them.
 
 COOKIES AND SIMILAR TECHNOLOGIES
 
@@ -61,7 +61,7 @@ Session cookies are temporary cookies and are automatically deleted when the use
 
 HOW TO CONTROL COOKIES ON THIS WEBSITE
 
-FoodScan will only set cookies after you have provided your consent to the use of cookies through the cookies banner upon your visit to our website. For Necessary cookies, we do not need your consent.
+Sohoj RMS will only set cookies after you have provided your consent to the use of cookies through the cookies banner upon your visit to our website. For Necessary cookies, we do not need your consent.
 
 You have the right to withdraw your consent or change your preferences regarding the use of cookies at any time. You can do this by accessing our Cookies banner through the “Cookie Settings” button.
 
@@ -79,7 +79,7 @@ If you have a concern about the way we are collecting or using cookies, you shou
                 [
                     'title'           => 'About Us',
                     'slug'            => 'about-us',
-                    'description'     => "Who We Are iNiLabs is the maker of GoSchool Education ERP, iTest Online Exam, FoodExpress Multi Vendor eCommerce, QuickPass Visitor Management and many other exclusive Web and Mobile Applications. Our existence depends on making ERPs and SaaS products that help to scale your business.Our Goal We create Innovative Tools to Empower Small Businesses Around the World Our main focus is to deliver high quality and scalable custom PHP applications using Latest Web and Mobile Technologies. We mostly focus our psychic coding abilities, latest development trends and best practices.Origin Story iNiLabs initially began its journey back in 2014. After gathering enough experience, we launched our company in August 2016 as a small web development startup with a renewed confidence and larger vision. We worked our way through many challenges and established ourselves as a Software Development company. iNiLabs now has many amazing products including GoSchool Education ERP, iTest Online Exam, FoodExpress Multi Vendor eCommerce, QuickPass Visitor Management and many other exclusive Web and Mobile Applications ERP and many more. We have 100, 000+ users and businesses using our solutions.",
+                    'description'     => "Who We Are Sohoj RMS is a comprehensive Restaurant Management System offering smart POS, Live Table Tracking, Kitchen Display System (KDS), Dual Slips (KOT vs Invoice), Raw Goods Inventory, and Net Profit Analytics for modern food businesses.",
                     'menu_section_id' => 2,
                     'template_id'     => 0,
                     'status'          => Status::ACTIVE,
@@ -89,7 +89,7 @@ If you have a concern about the way we are collecting or using cookies, you shou
                 [
                     'title'           => 'Contact Us',
                     'slug'            => 'contact-us',
-                    'description'     => "Every day, more than 1000 guests visit FoodScan restaurants around the city. And they do so because our restaurants are known for serving high-quality, great-tasting, and affordable food. Our commitment to premium ingredients, signature recipes, and friendly dining experiences is what has defined our brand for more than 5 successful years.",
+                    'description'     => "Every day, guests visit restaurants powered by Sohoj RMS. Our mission is to streamline restaurant operations with cutting-edge technology.",
                     'menu_section_id' => 2,
                     'template_id'     => 1,
                     'status'          => Status::ACTIVE,

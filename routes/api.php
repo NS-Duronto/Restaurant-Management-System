@@ -51,14 +51,12 @@ use App\Http\Controllers\Auth\RefreshTokenController;
 use App\Http\Controllers\Admin\ItemCategoryController;
 use App\Http\Controllers\Admin\MenuTemplateController;
 use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\AiAgentController;
 use App\Http\Controllers\Admin\AdministratorController;
 use App\Http\Controllers\Admin\DefaultAccessController;
 use App\Http\Controllers\Admin\ItemAttributeController;
 use App\Http\Controllers\Admin\ItemVariationController;
 use App\Http\Controllers\Admin\WaiterAddressController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Admin\AiController;
 use App\Http\Controllers\Frontend\TokenStoreController;
 use App\Http\Controllers\Admin\MyOrderDetailsController;
 use App\Http\Controllers\Admin\PaymentGatewayController;
@@ -307,11 +305,6 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::prefix('notification-alert')->name('notification-alert.')->group(function () {
             Route::get('/', [NotificationAlertController::class, 'index']);
             Route::match(['put', 'patch'], '/', [NotificationAlertController::class, 'update']);
-        });
-
-        Route::prefix('ai-agent')->name('aiAgent.')->group(function () {
-            Route::get('/', [AiAgentController::class, 'index']);
-            Route::post('update/', [AiAgentController::class, 'update']);
         });
 
         Route::prefix('notification')->name('notification.')->group(function () {
@@ -569,17 +562,6 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::post('/address/{chef}', [ChefAddressController::class, 'store']);
         Route::match(['put', 'patch'], '/address/{chef}/{address}', [ChefAddressController::class, 'update']);
         Route::delete('/address/{chef}/{address}', [ChefAddressController::class, 'destroy']);
-    });
-
-    Route::prefix('ai')->name('ai.')->group(function () {
-        Route::get('/status', [AiController::class, 'status']);
-        Route::post('/name', [AiController::class, 'name']);
-        Route::post('/description', [AiController::class, 'description']);
-        Route::post('/caution', [AiController::class, 'caution']);
-        Route::post('/chat', [AiController::class, 'chat']);
-        Route::post('/chat-response/{aiChatHistory}', [AiController::class, 'chatResponse']);
-        Route::get('/chat-history', [AiController::class, 'chatHistory']);
-        Route::delete('/delete-chat-history/{branch}', [AiController::class, 'deleteChatHistory']);
     });
 });
 

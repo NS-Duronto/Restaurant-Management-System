@@ -1,8 +1,8 @@
 <template>
     <LoadingComponent :props="loading" />
     <div class="mb-9">
-        <div class="flex items-center justify-between mb-4">
-            <h4 class="font-semibold text-[22px] leading-[34px] mb-3 capitalize">{{ $t("menu.overview") }}</h4>
+        <div class="flex items-center justify-between mb-6">
+            <h4 class="font-bold text-[24px] leading-[34px] capitalize text-heading dark:text-gray-100">{{ $t("menu.overview") }}</h4>
             <div class="relative cursor-pointer custom-datepicker">
                 <Datepicker hideInputIcon autoApply :enableTimePicker="false" utc="false"
                     @update:modelValue="handleDate" v-model="date" range :preset-ranges="presetRanges">
@@ -14,46 +14,46 @@
         </div>
         <div class="row">
             <div class="col-12 sm:col-6 xl:col-3">
-                <div class="p-4 rounded-lg flex items-center gap-4 bg-[#FF4F99]">
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center bg-white">
-                        <i class="lab lab-total-sale lab-font-size-24 lab-color-pink"></i>
+                <div class="p-5 rounded-2xl flex items-center gap-4 bg-orange-500 text-white shadow-md shadow-orange-500/20 transition-transform hover:-translate-y-1 duration-300">
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
+                        <i class="fa-solid fa-chart-line"></i>
                     </div>
                     <div>
-                        <h3 class="font-medium text-white">{{ $t('label.total_sales') }}</h3>
-                        <h4 class="font-semibold text-[22px] leading-[34px] text-white">{{ total_sales }}</h4>
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-orange-100">{{ $t('label.total_sales') }}</h3>
+                        <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ total_sales }}</h4>
                     </div>
                 </div>
             </div>
             <div class="col-12 sm:col-6 xl:col-3">
-                <div class="p-4 rounded-lg flex items-center gap-4 bg-[#8262FE]">
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center bg-white">
-                        <i class="lab lab-total-orders lab-font-size-24 lab-color-portage"></i>
+                <div class="p-5 rounded-2xl flex items-center gap-4 bg-blue-600 text-white shadow-md shadow-blue-500/20 transition-transform hover:-translate-y-1 duration-300">
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
+                        <i class="fa-solid fa-receipt"></i>
                     </div>
                     <div>
-                        <h3 class="font-medium text-white">{{ $t('label.total_orders') }}</h3>
-                        <h4 class="font-semibold text-[22px] leading-[34px] text-white">{{ total_orders }}</h4>
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-blue-100">{{ $t('label.total_orders') }}</h3>
+                        <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ total_orders }}</h4>
                     </div>
                 </div>
             </div>
             <div class="col-12 sm:col-6 xl:col-3">
-                <div class="p-4 rounded-lg flex items-center gap-4 bg-[#567DFF]">
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center bg-white">
-                        <i class="lab lab-total-customers lab-font-size-24 lab-color-cornflower-blue"></i>
+                <div class="p-5 rounded-2xl flex items-center gap-4 bg-emerald-600 text-white shadow-md shadow-emerald-500/20 transition-transform hover:-translate-y-1 duration-300">
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
+                        <i class="fa-solid fa-users"></i>
                     </div>
                     <div>
-                        <h3 class="font-medium text-white">{{ $t('label.total_customers') }}</h3>
-                        <h4 class="font-semibold text-[22px] leading-[34px] text-white">{{ total_customers }}</h4>
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-emerald-100">{{ $t('label.total_customers') }}</h3>
+                        <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ total_customers }}</h4>
                     </div>
                 </div>
             </div>
             <div class="col-12 sm:col-6 xl:col-3">
-                <div class="p-4 rounded-lg flex items-center gap-4 bg-[#A953FF]">
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center bg-white">
-                        <i class="lab lab-total-menu-items lab-font-size-24 lab-color-heliotrope"></i>
+                <div class="p-5 rounded-2xl flex items-center gap-4 bg-purple-600 text-white shadow-md shadow-purple-500/20 transition-transform hover:-translate-y-1 duration-300">
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
+                        <i class="fa-solid fa-burger"></i>
                     </div>
                     <div>
-                        <h3 class="font-medium text-white">{{ $t('label.total_menu_items') }}</h3>
-                        <h4 class="font-semibold text-[22px] leading-[34px] text-white">{{ total_menu_items }}</h4>
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-purple-100">{{ $t('label.total_menu_items') }}</h3>
+                        <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ total_menu_items }}</h4>
                     </div>
                 </div>
             </div>

@@ -18,10 +18,10 @@ class CompanyTableSeeder extends Seeder
     public function run()
     {
         Settings::group('company')->set([
-            'company_name'         => 'FoodScan - QrCode Restaurant Menu Maker and Contactless Menu Ordering system',
-            'company_email'        => 'info@inilabs.net',
-            'company_phone'        => '+13333846282',
-            'company_website'      => 'https://foodscan.xyz',
+            'company_name'         => 'সহজ রেস্টুরেন্ট - Sohoj RMS',
+            'company_email'        => 'info@sohojrms.com',
+            'company_phone'        => '+8801700000000',
+            'company_website'      => 'https://sohojrms.com',
             'company_city'         => 'Mirpur 1',
             'company_state'        => 'Dhaka',
             'company_country_code' => 'BGD',
@@ -31,7 +31,7 @@ class CompanyTableSeeder extends Seeder
 
         $envService = new EnvEditor();
         $envService->addData([
-            'APP_NAME' => "FoodScan - QrCode Restaurant Menu Maker and Contactless Menu Ordering system"
+            'APP_NAME' => "Sohoj RMS - Restaurant Management System"
         ]);
         Artisan::call('optimize:clear');
     }

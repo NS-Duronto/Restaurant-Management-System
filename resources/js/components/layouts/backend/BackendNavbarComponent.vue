@@ -1,12 +1,12 @@
 <template>
-    <div class="backdrop"></div>
+    <div class="backdrop" @click="handleSidebar"></div>
     <header class="db-header">
         <router-link class="w-40 flex-shrink-0" :to="{ name: 'admin.dashboard' }" @click="closeFullScreen">
             <img class="w-full" :src="setting.theme_logo" alt="logo">
         </router-link>
         <div class="flex items-center justify-end w-full gap-4">
             <div
-                class="sub-header flex items-center gap-4 transition xh:justify-between xh:fixed xh:left-0 xh:w-full xh:p-4 xh:border-y xh:border-[#EFF0F6] xh:bg-white">
+                class="sub-header flex items-center gap-4 transition xh:justify-between xh:fixed xh:left-0 xh:w-full xh:p-4 xh:border-y xh:border-[#EFF0F6] dark:xh:border-gray-800 xh:bg-white dark:xh:bg-gray-900">
                 <button v-if="$route.path.includes('order-status-screen')" type="button" @click="fullScreen"
                     class="hidden db-header-toggle lg:flex items-center justify-center w-9 h-9 px-3 rounded-lg bg-[#E0FFED]">
                     <i class="lab lab-maximize lab-font-size-24 text-[#1AB759]"></i>
@@ -14,21 +14,21 @@
                 <div v-if="authBranch === 0" class="relative dropdown-group">
                     <button class="flex items-center text-left gap-2 dropdown-btn">
                         <i class="lab lab-shop lab-font-size-24 font-fill-primary"></i>
-                        <h3 class="capitalize text-xs font-medium text-heading">
-                            <span class="block font-normal mb-0.5">{{ $t('label.branch') }}</span>
+                        <h3 class="capitalize text-xs font-medium text-heading dark:text-gray-100">
+                            <span class="block font-normal mb-0.5 text-gray-500 dark:text-gray-400">{{ $t('label.branch') }}</span>
                             <b class="font-semibold whitespace-nowrap">{{ branch.name }}</b>
                         </h3>
-                        <i class="lab lab-arrow-down text-xs ml-1.5 lab-font-size-14"></i>
+                        <i class="lab lab-arrow-down text-xs ml-1.5 lab-font-size-14 dark:text-gray-400"></i>
                     </button>
                     <ul v-if="branches.length > 0"
-                        class="p-2 w-fit rounded-lg shadow-xl absolute top-14 left-0 z-10 border border-gray-200 bg-white dropdown-list transition-all duration-300 scale-y-0 origin-top">
+                        class="p-2 w-fit rounded-xl shadow-xl absolute top-14 left-0 z-10 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 dropdown-list transition-all duration-300 scale-y-0 origin-top">
                         <li v-for="branch in branches"
-                            class="flex items-center gap-2 w-full px-2.5 rounded-md transition hover:bg-gray-100">
+                            class="flex items-center gap-2 w-full px-2.5 rounded-lg transition hover:bg-gray-100 dark:hover:bg-gray-800">
                             <input @click="changeBranch(branch.id)" v-model="defaultBranch" type="radio"
                                 :id="'branch_id_' + branch.id" :value="branch.id" name="branch"
                                 class="w-3 cursor-pointer mb-[1px] accent-primary">
                             <label :for="'branch_id_' + branch.id"
-                                class="capitalize leading-8 text-sm min-w-[150px] cursor-pointer text-heading">
+                                class="capitalize leading-8 text-sm min-w-[150px] cursor-pointer text-heading dark:text-gray-200">
                                 {{ branch.name }}
                             </label>
                         </li>
@@ -42,68 +42,68 @@
                             class="flex items-center gap-2 h-9 px-3 rounded-lg bg-primary-light">
                             <i class="lab-font-size-17 text-primary" :class="defaultMenu?.icon"></i>
                             <span
-                                class=" md:block hidden whitespace-nowrap text-xs font-medium capitalize text-heading">{{
+                                class=" md:block hidden whitespace-nowrap text-xs font-medium capitalize text-heading dark:text-gray-200">{{
                                     $t('menu.' + defaultMenu?.language) }}</span>
                         </router-link>
                     </div>
                     <div v-if="setting.site_language_switch === enums.activityEnum.ENABLE"
                         class="dropdown-group relative">
-                        <button class="dropdown-btn flex items-center gap-2 h-9 px-3 rounded-lg bg-primary-light">
+                        <button class="dropdown-btn flex items-center gap-2 h-9 px-3 rounded-lg bg-orange-500/10 dark:bg-gray-800">
                             <img :src="language.image" alt="flag" class="w-4 h-4 rounded-full">
-                            <span class="hidden md:block whitespace-nowrap text-xs font-medium capitalize text-heading">
+                            <span class="hidden md:block whitespace-nowrap text-xs font-medium capitalize text-heading dark:text-gray-200">
                                 {{ language.name }}
                             </span>
                         </button>
                         <ul v-if="languages.length > 0"
-                            class="p-2 min-w-[180px] rounded-lg shadow-xl absolute top-14 right-0 z-10 border border-gray-200 bg-white transition-all duration-300 origin-top scale-y-0 dropdown-list">
+                            class="p-2 min-w-[180px] rounded-xl shadow-xl absolute top-14 right-0 z-10 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 transition-all duration-300 origin-top scale-y-0 dropdown-list">
                             <li @click="changeLanguage(language.id, language.code)" v-for="language in languages"
-                                class="flex items-center gap-2 py-1.5 px-2.5 rounded-md cursor-pointer hover:bg-gray-100">
+                                class="flex items-center gap-2 py-1.5 px-2.5 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
                                 <img :src="language.image" alt="flag" class="w-4 h-4 rounded-full">
-                                <span class="text-heading capitalize text-sm">{{ language.name }}</span>
+                                <span class="text-heading dark:text-gray-200 capitalize text-sm">{{ language.name }}</span>
                             </li>
                         </ul>
                     </div>
 
+                    <span class="hidden xl:flex items-center gap-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-emerald-500/20">
+                        <i class="fa-solid fa-circle-dot text-[10px] animate-pulse"></i> {{ $t('label.pos_terminal_active') }}
+                    </span>
+
+                    <button @click="toggleTheme" type="button" class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-orange-400 border border-gray-300 dark:border-gray-700 flex items-center justify-center transition shadow-sm" title="থিম পরিবর্তন করুন">
+                        <i :class="isDarkMode ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-gray-700'" class="text-sm"></i>
+                    </button>
+
                     <router-link
                         v-if="pos.permission && !$route.path.includes('kitchen-display-system') && !$route.path.includes('order-status-screen')"
-                        class="w-9 h-9 rounded-lg flex items-center justify-center bg-[#FFEBD8]"
-                        :to="{ path: '/admin/' + pos.url }">
+                        class="w-9 h-9 rounded-lg flex items-center justify-center bg-orange-500/10 dark:bg-orange-500/20 text-orange-500 border border-orange-500/30"
+                        :to="{ path: '/admin/' + pos.url }"
+                        title="POS">
                         <i class="lab lab-pos-bold lab-font-size-16 font-fill-pos"></i>
                     </router-link>
-
-                    <button
-                        v-if="aiStatus"
-                        @click="openCanvas('ai-sidebar')"
-                        type="button"
-                        class="w-9 h-9 rounded-lg flex items-center justify-center bg-primary-light"
-                    >
-                        <i class="lab lab-fill-ai lab-font-size-16 text-primary"></i>
-                    </button>
                 </div>
             </div>
             <button @click.prevent="handleSidebar"
                 v-if="!$route.path.includes('kitchen-display-system') && !$route.path.includes('order-status-screen')"
-                class="fa-solid db-header-nav w-9 h-9 rounded-lg text-primary bg-primary/5"
+                class="fa-solid db-header-nav w-9 h-9 rounded-lg text-primary bg-primary/5 dark:bg-primary/20"
                 :class="sidebar ? 'fa-align-left' : 'fa-bars'"></button>
 
             <div class="dropdown-group">
                 <button class="dropdown-btn flex items-center gap-2">
                     <img class="flex-shrink-0 w-9 h-9 object-cover rounded-lg" :src="authInfo.image" alt="avatar">
-                    <h3 class="whitespace-nowrap text-sm capitalize text-left leading-[17px]">{{ $t('label.hello') }} <b
-                            class="block font-semibold">{{ textShortener(authInfo.name, 15) }}</b></h3>
-                    <i class="lab lab-arrow-down text-xs ml-1.5 lab-font-size-14"></i>
+                    <h3 class="whitespace-nowrap text-sm capitalize text-left leading-[17px] text-heading dark:text-gray-200">{{ $t('label.hello') }} <b
+                            class="block font-semibold text-gray-900 dark:text-white">{{ textShortener(authInfo.name, 15) }}</b></h3>
+                    <i class="lab lab-arrow-down text-xs ml-1.5 lab-font-size-14 dark:text-gray-400"></i>
                 </button>
                 <div
-                    class="dropdown-list fixed sm:absolute top-[75px] sm:top-12 ltr:right-0 rtl:left-0 z-[60] rounded-xl w-full h-[calc(100vh_-_75px)] overflow-y-auto sm:h-auto sm:w-[360px] p-4 shadow-paper bg-white transition-all duration-300 scale-y-0 origin-top">
+                    class="dropdown-list fixed sm:absolute top-[75px] sm:top-12 ltr:right-0 rtl:left-0 z-[60] rounded-2xl w-full h-[calc(100vh_-_75px)] overflow-y-auto sm:h-auto sm:w-[360px] p-4 shadow-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 transition-all duration-300 scale-y-0 origin-top">
                     <div class="w-fit mx-auto text-center mb-5">
                         <figure
-                            class="relative z-10 w-[98px] h-[98px] border-2 border-dashed rounded-full inline-flex items-center justify-center border-white bg-gradient-to-t from-[#FF7A00] to-[#FF016C] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-24 before:h-24 before:rounded-full before:-z-10 before:bg-white">
+                            class="relative z-10 w-[98px] h-[98px] border-2 border-dashed rounded-full inline-flex items-center justify-center border-white bg-orange-500 before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-24 before:h-24 before:rounded-full before:-z-10 before:bg-white dark:before:bg-gray-900">
                             <img class="w-[90px] h-[90px] rounded-full shadow-avatar" :src="authInfo.image"
                                 alt="avatar">
                         </figure>
 
                         <label for="imageProperty"
-                            class="block w-11 h-11 mx-auto -mt-7 mb-3 relative z-10 rounded-full border-2 cursor-pointer bg-heading border-white">
+                            class="block w-11 h-11 mx-auto -mt-7 mb-3 relative z-10 rounded-full border-2 cursor-pointer bg-heading dark:bg-gray-800 border-white dark:border-gray-700">
                             <input @change="saveImage" accept="image/png, image/jpeg, image/jpg" ref="imageProperty"
                                 type="file" id="imageProperty"
                                 class="w-full h-full rounded-full opacity-0 cursor-pointer">
@@ -111,28 +111,26 @@
                                 class="lab lab-edit-2 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 -z-10 lab-font-size-24 lab-font-color-1"></i>
                         </label>
 
-                        <h3 class="font-medium text-sm leading-6 capitalize mb-0.5">{{ textShortener(authInfo.name, 20)
-                            }}
-                        </h3>
-                        <p class="text-xs mb-0.5">{{ authInfo.email }}</p>
-                        <p dir="ltr" class="text-xs">{{ authInfo.country_code }}{{ authInfo.phone }}</p>
-                        <h3 class="font-medium text-sm leading-6 capitalize mb-0.5">{{ authInfo.currency_balance }}</h3>
+                        <h3 class="font-bold text-sm leading-6 capitalize mb-0.5 text-heading dark:text-gray-100">{{ textShortener(authInfo.name, 20) }}</h3>
+                        <p class="text-xs mb-0.5 text-gray-500 dark:text-gray-400">{{ authInfo.email }}</p>
+                        <p dir="ltr" class="text-xs text-gray-500 dark:text-gray-400">{{ authInfo.country_code }}{{ authInfo.phone }}</p>
+                        <h3 class="font-semibold text-sm leading-6 capitalize mb-0.5 text-orange-500">{{ authInfo.currency_balance }}</h3>
                     </div>
                     <nav>
                         <router-link :to="{ name: 'admin.profile.editProfile' }"
-                            class="paper-link transition w-full flex items-center gap-3.5 py-3 border-b last:border-none border-[#EFF0F6]">
+                            class="paper-link transition w-full flex items-center gap-3.5 py-3 border-b last:border-none border-[#EFF0F6] dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-primary">
                             <i class="lab lab-edit lab-font-size-17"></i>
                             <span class="text-sm leading-6 capitalize">{{ $t('button.edit_profile') }}</span>
                         </router-link>
 
                         <router-link :to="{ name: 'admin.profile.changePassword' }"
-                            class="paper-link transition w-full flex items-center gap-3.5 py-3 border-b last:border-none border-[#EFF0F6]">
+                            class="paper-link transition w-full flex items-center gap-3.5 py-3 border-b last:border-none border-[#EFF0F6] dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-primary">
                             <i class="lab lab-key lab-font-size-17"></i>
                             <span class="text-sm leading-6 capitalize">{{ $t('button.change_password') }}</span>
                         </router-link>
 
                         <button @click="logout()"
-                            class="paper-link transition w-full flex items-center gap-3.5 py-3 border-b last:border-none border-[#EFF0F6]">
+                            class="paper-link transition w-full flex items-center gap-3.5 py-3 border-b last:border-none border-[#EFF0F6] dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-red-500">
                             <i class="lab lab-logout lab-font-size-17"></i>
                             <span class="text-sm leading-6 capitalize">{{ $t('button.logout') }}</span>
                         </button>
@@ -208,6 +206,7 @@ export default {
                 permission: false,
                 url: ""
             },
+            isDarkMode: localStorage.getItem('rms_theme') === 'dark' || (!('rms_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
         }
     },
     setup() {
@@ -247,9 +246,6 @@ export default {
         },
         sidebar() {
             return this.$store.getters['globalState/lists'].topSidebar;
-        },
-        aiStatus() {
-            return this.$store.getters['ai/status'];
         }
     },
     mounted() {
@@ -264,7 +260,6 @@ export default {
 
         this.orderPermissionCheck();
         this.posPermissionCheck();
-        this.$store.dispatch('ai/status').then().catch();
 
 
 
@@ -337,6 +332,16 @@ export default {
         }, 5000);
     },
     methods: {
+        toggleTheme: function () {
+            this.isDarkMode = !this.isDarkMode;
+            if (this.isDarkMode) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('rms_theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('rms_theme', 'light');
+            }
+        },
         textShortener: function (text, number = 30) {
             return appService.textShortener(text, number);
         },
@@ -352,9 +357,11 @@ export default {
             if (document?.querySelector(".db-sidebar")?.classList?.contains("active")) {
                 document?.querySelector(".db-main")?.classList?.remove("expand");
                 document?.querySelector(".db-sidebar")?.classList?.remove("active");
+                document?.querySelector(".backdrop")?.classList?.remove("active");
             } else {
                 document?.querySelector(".db-sidebar")?.classList?.add("active");
                 document?.querySelector(".db-main")?.classList?.add("expand");
+                document?.querySelector(".backdrop")?.classList?.add("active");
             }
         },
         changeBranch: function (id) {

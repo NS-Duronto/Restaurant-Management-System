@@ -31,9 +31,11 @@ export default {
     data() {
         return {
             activeClass: [
-                "bg-blue-50",
-                "border-blue-500",
-                "text-primary"
+                "!bg-primary",
+                "!border-primary",
+                "!text-white",
+                "font-semibold",
+                "shadow-sm"
             ]
         }
     },

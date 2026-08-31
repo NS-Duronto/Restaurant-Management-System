@@ -97,6 +97,8 @@
         "zip_code": "Zip Code",
         "address": "Address",
         "add_label": "Add Label",
+        "pos_terminal_active": "POS Terminal Active",
+        "online": "Online",
         "status": "Status",
         "active": "Active",
         "inactive": "Inactive",

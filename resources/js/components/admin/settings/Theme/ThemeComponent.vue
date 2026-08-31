@@ -63,57 +63,6 @@
                 </form>
             </div>
         </div>
-
-        <!-- PRIMARY COLOR -->
-        <div class="db-card">
-            <div class="db-card-header">
-                <h3 class="db-card-title">{{ $t("label.primary_color") }}</h3>
-            </div>
-            <div class="db-card-body">
-                <form @submit.prevent="save">
-                    <div class="form-row">
-                        <div class="form-col-12">
-                            <div class="flex items-center gap-3 p-2.5 rounded-lg border border-[#D9DBE9] w-full max-w-[420px]">
-                                <!-- Clean filled swatch; the native picker is hidden behind it -->
-                                <label
-                                    class="relative w-11 h-11 flex-shrink-0 rounded-lg overflow-hidden cursor-pointer ring-1 ring-inset ring-black/10 shadow-sm">
-                                    <span class="block w-full h-full" :style="{ backgroundColor: theme_primary_color }"></span>
-                                    <input type="color" v-model="theme_primary_color"
-                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-                                </label>
-
-                                <input type="text" v-model="theme_primary_color"
-                                    v-bind:class="errors.theme_primary_color ? 'invalid' : ''"
-                                    class="flex-grow uppercase tracking-wide font-rubik text-sm text-heading bg-transparent focus:outline-none"
-                                    placeholder="#1772FF" maxlength="7" />
-                            </div>
-                            <small class="db-field-alert" v-if="errors.theme_primary_color">{{
-                                errors.theme_primary_color[0]
-                            }}</small>
-                        </div>
-
-                        <!-- Presets -->
-                        <div class="form-col-12">
-                            <label class="db-field-title">{{ $t("label.presets") }}</label>
-                            <div class="flex items-center flex-wrap gap-2">
-                                <button v-for="preset in colorPresets" :key="preset" type="button"
-                                    @click="theme_primary_color = preset" :title="preset"
-                                    class="w-7 h-7 rounded-full transition hover:scale-110 ring-1 ring-inset ring-black/10"
-                                    :class="theme_primary_color.toLowerCase() === preset.toLowerCase() ? 'ring-2 ring-offset-2 ring-heading' : ''"
-                                    :style="{ backgroundColor: preset }"></button>
-                            </div>
-                        </div>
-
-                        <div class="form-col-12">
-                            <button type="submit" class="db-btn text-white bg-primary">
-                                <i class="lab lab-save"></i>
-                                <span>{{ $t("button.save") }}</span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -135,8 +84,6 @@ export default {
             theme_favicon_logo_reader: "",
             theme_footer_logo: "",
             theme_footer_logo_reader: "",
-            theme_primary_color: "#1772FF",
-            colorPresets: ["#1772FF", "#FF006B", "#FF6B00", "#F5A623", "#16A34A", "#0D9488", "#7C3AED", "#1F1F39"],
             errors: {},
         };
     },
@@ -153,25 +100,6 @@ export default {
         changeFooterLogo: function (e) {
             this.theme_footer_logo = e.target.files[0];
         },
-        hexToChannels: function (hex) {
-            let value = (hex || "").replace("#", "");
-            if (value.length === 3) {
-                value = value.split("").map((c) => c + c).join("");
-            }
-            if (!/^[0-9A-Fa-f]{6}$/.test(value)) {
-                return null;
-            }
-            const r = parseInt(value.substring(0, 2), 16);
-            const g = parseInt(value.substring(2, 4), 16);
-            const b = parseInt(value.substring(4, 6), 16);
-            return `${r} ${g} ${b}`;
-        },
-        applyThemeColors: function () {
-            const primary = this.hexToChannels(this.theme_primary_color);
-            if (primary) {
-                document.documentElement.style.setProperty("--primary", primary);
-            }
-        },
         list: function () {
             this.loading.isActive = true;
             this.$store
@@ -180,9 +108,6 @@ export default {
                     this.theme_logo_reader = res.data.data.theme_logo;
                     this.theme_favicon_logo_reader = res.data.data.theme_favicon_logo;
                     this.theme_footer_logo_reader = res.data.data.theme_footer_logo;
-                    if (res.data.data.theme_primary_color) {
-                        this.theme_primary_color = res.data.data.theme_primary_color;
-                    }
                     this.loading.isActive = false;
                 })
                 .catch((err) => {
@@ -201,7 +126,6 @@ export default {
                 if (this.theme_footer_logo) {
                     fd.append("theme_footer_logo", this.theme_footer_logo);
                 }
-                fd.append("theme_primary_color", this.theme_primary_color);
                 this.loading.isActive = true;
                 this.$store
                     .dispatch("theme/save", {
@@ -210,7 +134,6 @@ export default {
                     .then((res) => {
                         this.loading.isActive = false;
                         alertService.successFlip(1, this.$t("menu.theme"));
-                        this.applyThemeColors();
                         this.list();
                         this.theme_logo = "";
                         this.theme_favicon_logo = "";

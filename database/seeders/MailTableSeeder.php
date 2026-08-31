@@ -21,24 +21,24 @@ class MailTableSeeder extends Seeder
 
         Settings::group('mail')->set([
             'mail_mailer'     => 'smtp',
-            'mail_host'       => $envService->getValue('DEMO') ? 'mail.inilabs.dev' : '',
+            'mail_host'       => $envService->getValue('DEMO') ? 'mail.sohojrms.com' : '',
             'mail_port'       => $envService->getValue('DEMO') ? '465' : '0',
-            'mail_username'   => $envService->getValue('DEMO') ? 'inilabsd@inilabs.dev' : '',
-            'mail_password'   => $envService->getValue('DEMO') ? 'rb-XO$3~dc4q' : '',
+            'mail_username'   => $envService->getValue('DEMO') ? 'info@sohojrms.com' : '',
+            'mail_password'   => $envService->getValue('DEMO') ? 'password123' : '',
             'mail_encryption' => $envService->getValue('DEMO') ? 'ssl' : '',
-            'mail_from_name'  => $envService->getValue('DEMO') ? 'FoodScan - Inilabs Food Manager' : '',
-            'mail_from_email' => $envService->getValue('DEMO') ? 'inilabsd@inilabs.dev' : ''
+            'mail_from_name'  => $envService->getValue('DEMO') ? 'Sohoj RMS - Restaurant Management System' : '',
+            'mail_from_email' => $envService->getValue('DEMO') ? 'info@sohojrms.com' : ''
         ]);
 
         $envService->addData([
             'MAIL_MAILER'       => 'smtp',
-            'MAIL_HOST'         => $envService->getValue('DEMO') ? 'mail.inilabs.dev' : '',
+            'MAIL_HOST'         => $envService->getValue('DEMO') ? 'mail.sohojrms.com' : '',
             'MAIL_PORT'         => $envService->getValue('DEMO') ? '465' : '0',
-            'MAIL_USERNAME'     => $envService->getValue('DEMO') ? 'inilabsd@inilabs.dev' : '',
-            'MAIL_PASSWORD'     => $envService->getValue('DEMO') ? 'rb-XO$3~dc4q' : '',
+            'MAIL_USERNAME'     => $envService->getValue('DEMO') ? 'info@sohojrms.com' : '',
+            'MAIL_PASSWORD'     => $envService->getValue('DEMO') ? 'password123' : '',
             'MAIL_ENCRYPTION'   => $envService->getValue('DEMO') ? 'ssl' : '',
-            'MAIL_FROM_NAME'    => $envService->getValue('DEMO') ? 'FoodScan - Inilabs Food Manager' : '',
-            'MAIL_FROM_ADDRESS' => $envService->getValue('DEMO') ? 'inilabsd@inilabs.dev' : ''
+            'MAIL_FROM_NAME'    => $envService->getValue('DEMO') ? 'Sohoj RMS - Restaurant Management System' : '',
+            'MAIL_FROM_ADDRESS' => $envService->getValue('DEMO') ? 'info@sohojrms.com' : ''
         ]);
         Artisan::call('optimize:clear');
     }

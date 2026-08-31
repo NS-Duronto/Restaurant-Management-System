@@ -33,7 +33,6 @@ import PaymentGatewayComponent from "../../components/admin/settings/PaymentGate
 import SmsGatewayComponent from "../../components/admin/settings/SmsGateway/SmsGatewayComponent";
 import NotificationAlertComponent from "../../components/admin/settings/NotificationAlert/NotificationAlertComponent";
 import NotificationComponent from "../../components/admin/settings/Notification/NotificationComponent";
-import AiAgentComponent from "../../components/admin/settings/AiAgent/AiAgentComponent";
 
 export default [
     {
@@ -448,17 +447,6 @@ export default [
                     auth: true,
                     permissionUrl: "settings",
                     breadcrumb: "notification",
-                },
-            },
-            {
-                path: "ai-agent",
-                component: AiAgentComponent,
-                name: "admin.settings.aiAgent",
-                meta: {
-                    isFrontend: false,
-                    auth: true,
-                    permissionUrl: "settings",
-                    breadcrumb: "ai_agent",
                 },
             },
         ],
