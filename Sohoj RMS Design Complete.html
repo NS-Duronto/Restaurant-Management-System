@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="bn" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সহজ রেস্টুরেন্ট - ফুল পেজ পিওএস সিস্টেম (POS)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+      body {
+        font-family: 'Hind Siliguri', sans-serif;
+      }
+      /* কাস্টম স্ক্রলবার */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(156, 163, 175, 0.4);
+        border-radius: 4px;
+      }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-950 text-gray-800 dark:text-gray-100 w-screen h-screen flex overflow-hidden transition-colors duration-300">
+
+    <aside class="w-72 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col justify-between shadow-2xl transition-colors duration-300 flex-shrink-0">
+        <div>
+            <div class="p-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-gradient-to-r from-orange-500 to-amber-500 text-white p-2.5 rounded-xl font-bold text-xl shadow-lg shadow-orange-500/20">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <div>
+                        <span class="text-lg font-bold text-orange-500 dark:text-orange-400 block leading-tight">সহজ রেস্টুরেন্ট</span>
+                        <span class="text-[11px] text-gray-500">রেস্টুরেন্ট পিওএস</span>
+                    </div>
+                </div>
+                <button onclick="toggleTheme()" class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-orange-400 w-9 h-9 rounded-xl border border-gray-300 dark:border-gray-700 flex items-center justify-center transition shadow-sm" title="থিম পরিবর্তন করুন">
+                    <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
+                </button>
+            </div>
+
+            <nav class="p-3 space-y-1 overflow-y-auto max-h-[calc(100vh-160px)]">
+                <a href="#" class="flex items-center space-x-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white px-4 py-2.5 rounded-xl font-medium transition text-sm">
+                    <i class="fa-solid fa-chart-pie text-orange-500 dark:text-orange-400"></i>
+                    <span>ড্যাশবোর্ড</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 bg-orange-500 text-white px-4 py-2.5 rounded-xl font-medium shadow-lg shadow-orange-500/20 text-sm">
+                    <i class="fa-solid fa-cash-register"></i>
+                    <span>পিওএস (POS)</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white px-4 py-2.5 rounded-xl font-medium transition text-sm">
+                    <i class="fa-solid fa-clipboard-list text-orange-500 dark:text-orange-400"></i>
+                    <span>অর্ডার ম্যানেজমেন্ট</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white px-4 py-2.5 rounded-xl font-medium transition text-sm">
+                    <i class="fa-solid fa-book-open text-orange-500 dark:text-orange-400"></i>
+                    <span>খাবার ক্যাটাগরি ও মেনু</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white px-4 py-2.5 rounded-xl font-medium transition text-sm">
+                    <i class="fa-solid fa-chair text-orange-500 dark:text-orange-400"></i>
+                    <span>টেবিল ম্যানেজমেন্ট</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white px-4 py-2.5 rounded-xl font-medium transition text-sm">
+                    <i class="fa-solid fa-fire-burner text-orange-500 dark:text-orange-400"></i>
+                    <span>কিচেন (KDS)</span>
+                </a>
+
+                <div class="space-y-1 pt-1 pb-1">
+                    <div class="flex items-center justify-between px-4 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 font-semibold text-sm border border-gray-200 dark:border-gray-800">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-wallet text-orange-500"></i> এক্সপেন্স ম্যানেজমেন্ট</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>
+                    </div>
+                    <div class="pl-6 space-y-1">
+                        <a href="#" class="flex items-center space-x-2.5 text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 px-3 py-2 rounded-lg text-xs font-medium transition">
+                            <i class="fa-solid fa-circle text-[6px] text-orange-500"></i> স্টাফ স্যালারি
+                        </a>
+                        <a href="#" class="flex items-center space-x-2.5 text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 px-3 py-2 rounded-lg text-xs font-medium transition">
+                            <i class="fa-solid fa-circle text-[6px] text-orange-500"></i> ইলেকট্রিক বিল
+                        </a>
+                        <a href="#" class="flex items-center space-x-2.5 text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 px-3 py-2 rounded-lg text-xs font-medium transition">
+                            <i class="fa-solid fa-circle text-[6px] text-orange-500"></i> স্পেইস রেন্ট
+                        </a>
+                        <a href="#" class="flex items-center space-x-2.5 text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 px-3 py-2 rounded-lg text-xs font-medium transition">
+                            <i class="fa-solid fa-circle text-[6px] text-orange-500"></i> সার্ভিস চার্জ
+                        </a>
+                    </div>
+                </div>
+
+                <a href="#" class="flex items-center space-x-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white px-4 py-2.5 rounded-xl font-medium transition text-sm">
+                    <i class="fa-solid fa-truck-field text-orange-500 dark:text-orange-400"></i>
+                    <span>এড সাপ্লায়ার</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white px-4 py-2.5 rounded-xl font-medium transition text-sm">
+                    <i class="fa-solid fa-chart-line text-orange-500 dark:text-orange-400"></i>
+                    <span>সেলস রিপোর্ট</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white px-4 py-2.5 rounded-xl font-medium transition text-sm">
+                    <i class="fa-solid fa-boxes-stacked text-orange-500 dark:text-orange-400"></i>
+                    <span>ইনভেন্টরি</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-3 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-gray-900/50">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-orange-600/20 border border-orange-500/30 flex items-center justify-center font-bold text-orange-500 dark:text-orange-400 text-sm">ম</div>
+                <div>
+                    <h4 class="text-xs font-semibold text-gray-800 dark:text-gray-200">ম্যানেজার</h4>
+                    <p class="text-[10px] text-green-500 dark:text-green-400 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> অনলাইন</p>
+                </div>
+            </div>
+            <button class="text-gray-500 hover:text-red-500 transition p-2 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-lg"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col bg-gray-100 dark:bg-gray-950 transition-colors duration-300 overflow-hidden">
+        <header class="h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-6 shadow-sm flex-shrink-0">
+            <div class="flex items-center space-x-4">
+                <span class="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold px-3.5 py-1.5 rounded-full border border-emerald-500/20 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-dot text-[10px]"></i> পিওএস টার্মিনাল সচল
+                </span>
+                <span class="text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700/50"><i class="fa-regular fa-clock text-orange-500 dark:text-orange-400 mr-1"></i> ৩০ আগস্ট, ২০২৬</span>
+            </div>
+            <div class="relative">
+                <input type="text" placeholder="খাবার খুঁজুন..." class="bg-gray-100 dark:bg-gray-800 text-sm text-gray-800 dark:text-gray-200 px-4 py-2 pl-9 rounded-xl border border-gray-300 dark:border-gray-700 focus:outline-none focus:border-orange-500 w-80 transition">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-gray-400 text-xs"></i>
+            </div>
+        </header>
+
+        <div class="flex-1 p-6 overflow-y-auto">
+            
+            <div class="mb-5">
+                <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 block flex items-center gap-1.5">
+                    <i class="fa-solid fa-chair text-orange-500"></i> ডাইনিং টেবিল সিলেক্ট করুন:
+                </label>
+                <div class="flex space-x-3 overflow-x-auto pb-1">
+                    <button class="bg-orange-500 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-md shadow-orange-500/20 whitespace-nowrap flex items-center gap-2 transition">
+                        <i class="fa-solid fa-utensils text-sm"></i> টেবিল নং-০১ (রানিং)
+                    </button>
+                    <button class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-gray-100 dark:hover:bg-gray-800 whitespace-nowrap flex items-center gap-2 transition">
+                        <i class="fa-solid fa-chair text-gray-400 text-sm"></i> টেবিল নং-০২ (খালি)
+                    </button>
+                    <button class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-gray-100 dark:hover:bg-gray-800 whitespace-nowrap flex items-center gap-2 transition">
+                        <i class="fa-solid fa-chair text-gray-400 text-sm"></i> টেবিল নং-০৩ (খালি)
+                    </button>
+                    <button class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-gray-100 dark:hover:bg-gray-800 whitespace-nowrap flex items-center gap-2 transition">
+                        <i class="fa-solid fa-user-clock text-amber-500 text-sm"></i> টেবিল নং-০৪ (বুকড)
+                    </button>
+                    <button class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-gray-100 dark:hover:bg-gray-800 whitespace-nowrap flex items-center gap-2 transition">
+                        <i class="fa-solid fa-bag-shopping text-emerald-500 text-sm"></i> পার্সেল / টেক-অ্যাওয়ে
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2.5 block flex items-center gap-1.5">
+                    <i class="fa-solid fa-layer-group text-orange-500"></i> খাবারের ক্যাটাগরি (১০টি):
+                </label>
+                <div class="grid grid-cols-5 sm:grid-cols-10 gap-2.5">
+                    <div class="bg-orange-500 text-white rounded-xl p-2 text-center cursor-pointer shadow-md shadow-orange-500/20 flex flex-col items-center gap-1 border border-orange-400">
+                        <img src="https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=100&q=80" class="w-9 h-9 rounded-lg object-cover">
+                        <span class="text-[11px] font-bold">সব খাবার</span>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl p-2 text-center cursor-pointer flex flex-col items-center gap-1 transition">
+                        <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=100&q=80" class="w-9 h-9 rounded-lg object-cover">
+                        <span class="text-[10px] font-medium">রাইস ও বিরিয়ানি</span>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl p-2 text-center cursor-pointer flex flex-col items-center gap-1 transition">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=100&q=80" class="w-9 h-9 rounded-lg object-cover">
+                        <span class="text-[10px] font-medium">ফাস্ট ফুড</span>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl p-2 text-center cursor-pointer flex flex-col items-center gap-1 transition">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=100&q=80" class="w-9 h-9 rounded-lg object-cover">
+                        <span class="text-[10px] font-medium">পিজা ও পাস্তা</span>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl p-2 text-center cursor-pointer flex flex-col items-center gap-1 transition">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=100&q=80" class="w-9 h-9 rounded-lg object-cover">
+                        <span class="text-[10px] font-medium">গ্রিল ও বারবিকিউ</span>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl p-2 text-center cursor-pointer flex flex-col items-center gap-1 transition">
+                        <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=100&q=80" class="w-9 h-9 rounded-lg object-cover">
+                        <span class="text-[10px] font-medium">ডেজার্ট ও মিষ্টি</span>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl p-2 text-center cursor-pointer flex flex-col items-center gap-1 transition">
+                        <img src="https://images.unsplash.com/photo-1543253687-c931c8e01820?auto=format&fit=crop&w=100&q=80" class="w-9 h-9 rounded-lg object-cover">
+                        <span class="text-[10px] font-medium">জুস ও পানীয়</span>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl p-2 text-center cursor-pointer flex flex-col items-center gap-1 transition">
+                        <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=100&q=80" class="w-9 h-9 rounded-lg object-cover">
+                        <span class="text-[10px] font-medium">স্যুপ ও স্টার্টার</span>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl p-2 text-center cursor-pointer flex flex-col items-center gap-1 transition">
+                        <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=100&q=80" class="w-9 h-9 rounded-lg object-cover">
+                        <span class="text-[10px] font-medium">সি ফুড</span>
+                    </div>
+                    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl p-2 text-center cursor-pointer flex flex-col items-center gap-1 transition">
+                        <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=100&q=80" class="w-9 h-9 rounded-lg object-cover">
+                        <span class="text-[10px] font-medium">ব্রেকফাস্ট</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-6">
+                <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 hover:border-orange-500/50 transition cursor-pointer shadow-lg group">
+                    <div class="h-32 rounded-xl mb-3 overflow-hidden relative bg-gray-100 dark:bg-gray-800">
+                        <img src="https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    </div>
+                    <h3 class="font-semibold text-base text-gray-800 dark:text-gray-200">কাচ্চি বিরিয়ানি স্পেশাল</h3>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-orange-500 dark:text-orange-400 font-bold text-lg">৳ ৩৫০</span>
+                        <button class="bg-orange-500/10 text-orange-500 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition">যোগ করুন</button>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 hover:border-orange-500/50 transition cursor-pointer shadow-lg group">
+                    <div class="h-32 rounded-xl mb-3 overflow-hidden relative bg-gray-100 dark:bg-gray-800">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    </div>
+                    <h3 class="font-semibold text-base text-gray-800 dark:text-gray-200">চিকেন চিজ বার্গার</h3>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-orange-500 dark:text-orange-400 font-bold text-lg">৳ ২২০</span>
+                        <button class="bg-orange-500/10 text-orange-500 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition">যোগ করুন</button>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 hover:border-orange-500/50 transition cursor-pointer shadow-lg group">
+                    <div class="h-32 rounded-xl mb-3 overflow-hidden relative bg-gray-100 dark:bg-gray-800">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    </div>
+                    <h3 class="font-semibold text-base text-gray-800 dark:text-gray-200">চিকেন পিজা (১২")</h3>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-orange-500 dark:text-orange-400 font-bold text-lg">৳ ৬৫০</span>
+                        <button class="bg-orange-500/10 text-orange-500 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold transition">যোগ করুন</button>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 hover:border-orange-500/50 transition cursor-pointer shadow-lg group">
+                    <div class="h-32 rounded-xl mb-3 overflow-hidden relative bg-gray-100 dark:bg-gray-800">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    </div>
+                    <h3 class="font-semibold text-base text-gray-800 dark:text-gray-200">চিকেন বারবিকিউ গ্রিল</h3>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-orange-500 dark:text-orange-400 font-bold text-lg">৳ ২৮০</span>
+                        <button class="bg-orange-500/10 text-orange-500 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition">যোগ করুন</button>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 hover:border-orange-500/50 transition cursor-pointer shadow-lg group">
+                    <div class="h-32 rounded-xl mb-3 overflow-hidden relative bg-gray-100 dark:bg-gray-800">
+                        <img src="https://images.unsplash.com/photo-1621996346565-e3d5d6283258?auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    </div>
+                    <h3 class="font-semibold text-base text-gray-800 dark:text-gray-200">হোয়াইট সস পাস্তা</h3>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-orange-500 dark:text-orange-400 font-bold text-lg">৳ ৩২০</span>
+                        <button class="bg-orange-500/10 text-orange-500 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition">যোগ করুন</button>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 hover:border-orange-500/50 transition cursor-pointer shadow-lg group">
+                    <div class="h-32 rounded-xl mb-3 overflow-hidden relative bg-gray-100 dark:bg-gray-800">
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    </div>
+                    <h3 class="font-semibold text-base text-gray-800 dark:text-gray-200">থাই চিলি সালাদ</h3>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-orange-500 dark:text-orange-400 font-bold text-lg">৳ ১৮০</span>
+                        <button class="bg-orange-500/10 text-orange-500 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition">যোগ করুন</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section class="w-[420px] bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 flex flex-col justify-between shadow-2xl transition-colors duration-300 flex-shrink-0 h-full">
+        <div class="overflow-y-auto flex-1 p-4 space-y-3">
+            <div class="flex justify-between items-center pb-2 border-b border-gray-200 dark:border-gray-800">
+                <h2 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-orange-500"></i> চলমান অর্ডার (টেবিল নং-০১)</h2>
+                <span class="bg-orange-500/20 text-orange-600 dark:text-orange-400 text-xs px-2.5 py-0.5 rounded-full font-bold border border-orange-500/30">২ টি আইটেম</span>
+            </div>
+
+            <div class="p-3 bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-800 rounded-xl space-y-2">
+                <div class="flex justify-between items-center">
+                    <label class="text-[11px] font-semibold text-orange-500 dark:text-orange-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-users"></i> কাস্টমার অপশন:
+                    </label>
+                    <span class="text-[10px] text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700">অ্যাক্টিভ</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <button class="bg-orange-500 hover:bg-orange-600 text-white py-1.5 px-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 shadow-sm">
+                        <i class="fa-solid fa-user-plus text-[10px]"></i> কাস্টমার যোগ করুন
+                    </button>
+                    <button class="bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-700 py-1.5 px-2 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-user-clock text-orange-500 dark:text-orange-400 text-[10px]"></i> চলমান কাস্টমার
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 pt-1 border-t border-gray-200 dark:border-gray-700/60">
+                    <div>
+                        <label class="text-[10px] text-gray-500 dark:text-gray-400 block mb-0.5">কাস্টমার নাম</label>
+                        <input type="text" value="রাহিম আহমেদ" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-500 dark:text-gray-400 block mb-0.5">মোবাইল নম্বর</label>
+                        <input type="text" value="01711-XXXXXX" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded-lg focus:outline-none focus:border-orange-500">
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-800/40 p-2 rounded-xl border border-gray-200 dark:border-gray-800">
+                    <div class="flex items-center space-x-2.5">
+                        <img src="https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=50&q=80" class="w-8 h-8 rounded-lg object-cover">
+                        <div>
+                            <h4 class="font-semibold text-xs text-gray-800 dark:text-gray-200">কাচ্চি বিরিয়ানি</h4>
+                            <span class="text-[10px] text-orange-500 dark:text-orange-400">৳ ৩৫০ x ১</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <button class="w-5 h-5 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded flex items-center justify-center text-xs">-</button>
+                        <span class="text-xs font-bold w-3 text-center">১</span>
+                        <button class="w-5 h-5 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded flex items-center justify-center text-xs">+</button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center bg-gray-50 dark:bg-gray-800/40 p-2 rounded-xl border border-gray-200 dark:border-gray-800">
+                    <div class="flex items-center space-x-2.5">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=50&q=80" class="w-8 h-8 rounded-lg object-cover">
+                        <div>
+                            <h4 class="font-semibold text-xs text-gray-800 dark:text-gray-200">চিকেন বার্গার</h4>
+                            <span class="text-[10px] text-orange-500 dark:text-orange-400">৳ ২২০ x ২</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <button class="w-5 h-5 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded flex items-center justify-center text-xs">-</button>
+                        <span class="text-xs font-bold w-3 text-center">২</span>
+                        <button class="w-5 h-5 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded flex items-center justify-center text-xs">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2.5 bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-800/90 dark:to-gray-800/50 border border-orange-500/30 rounded-xl shadow-inner">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-[11px] font-bold text-orange-500 dark:text-orange-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-money-bill-wave"></i> ক্যাশ রিসিভ ও খুচরা হিসাব
+                    </span>
+                    <span class="text-[9px] bg-green-500/20 text-green-600 dark:text-green-400 px-2 py-0.5 rounded font-medium">অটো</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2 text-xs mb-1">
+                    <div>
+                        <label class="text-gray-500 dark:text-gray-400 block text-[10px] mb-0.5">নোট দিল (টাকা)</label>
+                        <input type="number" value="1000" class="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 text-orange-500 dark:text-orange-400 font-bold px-2 py-1 rounded-lg text-xs focus:outline-none focus:border-orange-500">
+                    </div>
+                    <div>
+                        <label class="text-gray-500 dark:text-gray-400 block text-[10px] mb-0.5">মোট বিল</label>
+                        <input type="text" value="৳ ৯৫০.০০" readonly class="w-full bg-gray-200/50 dark:bg-gray-950/50 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 rounded-lg text-xs font-semibold cursor-not-allowed">
+                    </div>
+                </div>
+                
+                <div class="pt-1 border-t border-gray-200 dark:border-gray-700/60 flex justify-between items-center text-[11px]">
+                    <span class="text-gray-600 dark:text-gray-300">খুচরা ফেরত (Change):</span>
+                    <span class="font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">৳ ৫০.০০</span>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1.5 block flex items-center gap-1">
+                    <i class="fa-solid fa-wallet text-orange-500"></i> পেমেন্ট মেথড:
+                </label>
+                <div class="grid grid-cols-4 gap-1.5">
+                    <button class="bg-orange-500 text-white p-2 rounded-xl text-center border border-orange-400 shadow-sm transition flex flex-col items-center justify-center gap-1">
+                        <i class="fa-solid fa-money-bill-1-wave text-xs"></i>
+                        <span class="text-[10px] font-bold">ক্যাশ</span>
+                    </button>
+                    <button class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 p-2 rounded-xl text-center border border-gray-300 dark:border-gray-700/80 transition flex flex-col items-center justify-center gap-1">
+                        <span class="w-3.5 h-3.5 rounded-full bg-pink-600 text-white font-bold text-[9px] flex items-center justify-center">৳</span>
+                        <span class="text-[10px] font-medium">বিকাশ</span>
+                    </button>
+                    <button class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 p-2 rounded-xl text-center border border-gray-300 dark:border-gray-700/80 transition flex flex-col items-center justify-center gap-1">
+                        <span class="w-3.5 h-3.5 rounded-full bg-purple-600 text-white font-bold text-[9px] flex items-center justify-center">₹</span>
+                        <span class="text-[10px] font-medium">রকেট</span>
+                    </button>
+                    <button class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 p-2 rounded-xl text-center border border-gray-300 dark:border-gray-700/80 transition flex flex-col items-center justify-center gap-1">
+                        <i class="fa-solid fa-credit-card text-blue-500 dark:text-blue-400 text-xs"></i>
+                        <span class="text-[10px] font-medium">কার্ড</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/90 flex-shrink-0">
+            <div class="space-y-1 mb-3 text-xs text-gray-600 dark:text-gray-300">
+                <div class="flex justify-between">
+                    <span>সাবটোটাল:</span>
+                    <span class="font-semibold text-gray-800 dark:text-white">৳ ৭৯০.০০</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>ভ্যাট (৫%):</span>
+                    <span class="font-semibold text-gray-800 dark:text-white">৳ ৩৯.৫০</span>
+                </div>
+                <div class="flex justify-between items-center py-1 border-y border-gray-200 dark:border-gray-800">
+                    <span class="text-orange-500 dark:text-orange-400 font-medium flex items-center gap-1"><i class="fa-solid fa-tag"></i> ডিসকাউন্ট (%):</span>
+                    <input type="number" value="5" class="w-16 bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-700 text-orange-500 dark:text-orange-400 text-right font-bold px-2 py-0.5 rounded text-xs focus:outline-none focus:border-orange-500">
+                </div>
+                <div class="flex justify-between pt-1 text-sm font-bold text-orange-500 dark:text-orange-400">
+                    <span>প্রদেয় মোট বিল:</span>
+                    <span>৳ ৯৫০.০০</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <button class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 transition text-xs flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-print"></i> কিচেন কিপ
+                </button>
+                <button class="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-orange-500/25 transition text-xs flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-circle-check"></i> পেমেন্ট সম্পন্ন
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                html.classList.add('dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+    </script>
+</body>
+</html>
