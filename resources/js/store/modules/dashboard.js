@@ -12,6 +12,9 @@ export const dashboard = {
         customerStates: [],
         featuredItems: [],
         mostPopularItems: [],
+        totalExpenses: [],
+        totalNetProfit: [],
+        profitSummary: [],
     },
 
     getters: {
@@ -38,6 +41,15 @@ export const dashboard = {
         },
         mostPopularItems: function (state) {
             return state.mostPopularItems;
+        },
+        totalExpenses: function (state) {
+            return state.totalExpenses;
+        },
+        totalNetProfit: function (state) {
+            return state.totalNetProfit;
+        },
+        profitSummary: function (state) {
+            return state.profitSummary;
         },
     },
 
@@ -161,6 +173,48 @@ export const dashboard = {
                     });
             });
         },
+        totalExpenses: function (context, payload) {
+            return new Promise((resolve, reject) => {
+                let url = "admin/dashboard/total-expenses";
+                if (payload) {
+                    url = url + appService.requestHandler(payload);
+                }
+                axios.get(url).then((res) => {
+                    context.commit("totalExpenses", res.data.data);
+                    resolve(res);
+                }).catch((err) => {
+                    reject(err);
+                });
+            });
+        },
+        totalNetProfit: function (context, payload) {
+            return new Promise((resolve, reject) => {
+                let url = "admin/dashboard/total-net-profit";
+                if (payload) {
+                    url = url + appService.requestHandler(payload);
+                }
+                axios.get(url).then((res) => {
+                    context.commit("totalNetProfit", res.data.data);
+                    resolve(res);
+                }).catch((err) => {
+                    reject(err);
+                });
+            });
+        },
+        profitSummary: function (context, payload) {
+            return new Promise((resolve, reject) => {
+                let url = "admin/dashboard/profit-summary";
+                if (payload) {
+                    url = url + appService.requestHandler(payload);
+                }
+                axios.get(url).then((res) => {
+                    context.commit("profitSummary", res.data.data);
+                    resolve(res);
+                }).catch((err) => {
+                    reject(err);
+                });
+            });
+        },
     },
 
     mutations: {
@@ -187,6 +241,15 @@ export const dashboard = {
         },
         mostPopularItems: function (state, payload) {
             state.mostPopularItems = payload;
+        },
+        totalExpenses: function (state, payload) {
+            state.totalExpenses = payload;
+        },
+        totalNetProfit: function (state, payload) {
+            state.totalNetProfit = payload;
+        },
+        profitSummary: function (state, payload) {
+            state.profitSummary = payload;
         },
     },
 };
