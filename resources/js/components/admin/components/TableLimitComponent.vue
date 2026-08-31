@@ -1,5 +1,5 @@
 <template>
-    <div class="dropdown-group" v-if="page.total > 10">
+    <div class="dropdown-group" v-if="page && page.total > 10">
         <button class="db-card-filter-btn dropdown-btn">
             <span>{{ pageSearch.per_page }}</span>
             <i class="lab lab-arrow-down-2 lab-font-size-17"></i>

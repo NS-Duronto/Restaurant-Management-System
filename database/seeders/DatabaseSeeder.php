@@ -53,5 +53,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DiningTableTableSeeder::class);
         $this->call(KdsOrderTableSeeder::class);
         $this->call(PermissionTableSeederVersionThree::class);
+        $this->call(RmsDemoDataSeeder::class);
     }
 }

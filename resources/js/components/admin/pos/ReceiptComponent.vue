@@ -1,168 +1,167 @@
 <template>
     <div id="receiptModal" class="modal">
-        <div class="modal-dialog max-w-[340px] rounded-none" id="print" :dir="direction">
-            <div class="modal-header hidden-print">
-                <button type="button" @click="reset"
-                    class="modal-close flex items-center justify-center gap-1.5 py-2 px-4 rounded bg-[#FB4E4E]">
-                    <i class="lab lab-back-bold lab-font-size-16 text-white"></i>
-                    <span class="text-xs leading-5 capitalize text-white">{{ $t('button.close') }}</span>
-                </button>
-                <button type="button" v-print="printObj"
-                    class="flex items-center justify-center gap-1.5 py-2 px-4 rounded bg-[#1AB759]">
-                    <i class="lab lab-print-bold lab-font-size-16 text-white"></i>
-                    <span class="text-xs leading-5 capitalize text-white">{{ $t('button.print_invoice') }}</span>
-                </button>
+        <div class="modal-dialog max-w-[380px] rounded-2xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800" :dir="direction">
+            <!-- Modal Header Actions (Non-print) -->
+            <div class="modal-header p-3.5 bg-gray-50 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between hidden-print">
+                <!-- Slip Switcher -->
+                <div class="flex bg-gray-200 dark:bg-gray-700 p-0.5 rounded-lg text-xs font-bold">
+                    <button type="button" @click="activeSlip = 'customer'"
+                        class="px-2.5 py-1 rounded-md transition"
+                        :class="activeSlip === 'customer' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-600 dark:text-gray-300'">
+                        {{ $t('label.customer_invoice') || 'বিল রিসিট' }}
+                    </button>
+                    <button type="button" @click="activeSlip = 'kot'"
+                        class="px-2.5 py-1 rounded-md transition"
+                        :class="activeSlip === 'kot' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-600 dark:text-gray-300'">
+                        {{ $t('label.kot_slip') || 'KOT স্লিপ' }}
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="button" v-print="printObj"
+                        class="flex items-center gap-1.5 py-1.5 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold shadow-sm transition">
+                        <i class="fa-solid fa-print"></i>
+                        <span>{{ $t('button.print') || 'প্রিন্ট' }}</span>
+                    </button>
+                    <button type="button" @click="reset"
+                        class="p-1.5 text-gray-400 hover:text-red-500 text-base">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="text-center pb-3.5 border-b border-dashed border-gray-400">
-                    <h3 class="text-2xl font-bold mb-1">{{ company.company_name }}</h3>
-                    <h4 class="text-sm font-normal">{{ branch.address }}</h4>
-                    <h5 class="text-sm font-normal">Tel: {{ branch.phone }}</h5>
+
+            <!-- Printable Body -->
+            <div class="modal-body p-4 text-gray-800 dark:text-gray-100" id="print">
+                <!-- ================= 1. CUSTOMER INVOICE SLIP ================= -->
+                <div v-if="activeSlip === 'customer'">
+                    <div class="text-center pb-3 border-b border-dashed border-gray-400">
+                        <h3 class="text-xl font-extrabold text-orange-500 mb-0.5">{{ company.company_name || 'সহজ রেস্টুরেন্ট' }}</h3>
+                        <h4 class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ branch.address }}</h4>
+                        <h5 class="text-xs font-medium text-gray-500 dark:text-gray-400">মোবাইল: {{ branch.phone }}</h5>
+                    </div>
+
+                    <div class="py-2 border-b border-dashed border-gray-400 text-xs">
+                        <div class="flex justify-between items-center font-bold mb-1">
+                            <span>অর্ডার: #{{ order.order_serial_no }}</span>
+                            <span v-if="order.table_name || order.dining_table_name" class="px-2 py-0.5 bg-orange-100 dark:bg-gray-800 text-orange-600 rounded text-[11px]">
+                                {{ order.table_name || order.dining_table_name }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between text-gray-500 text-[11px]">
+                            <span>তারিখ: {{ order.order_date }}</span>
+                            <span>সময়: {{ order.order_time }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Items Table -->
+                    <table class="w-full my-2 text-xs">
+                        <thead class="border-b border-dashed border-gray-400 font-bold">
+                            <tr>
+                                <th class="py-1 text-left w-8">পরিমাণ</th>
+                                <th class="py-1 text-left">খাবারের বিবরণ</th>
+                                <th class="py-1 text-right">মূল্য</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-dashed divide-gray-200 dark:divide-gray-800">
+                            <tr v-for="(item, idx) in orderItems" :key="idx" class="py-1">
+                                <td class="py-1 align-top font-bold text-gray-700 dark:text-gray-300">{{ item.quantity }}x</td>
+                                <td class="py-1 align-top">
+                                    <div class="font-semibold">{{ item.item_name }}</div>
+                                    <div v-if="item.item_variations && Object.keys(item.item_variations).length" class="text-[10px] text-gray-500">
+                                        <span v-for="(v, vIdx) in item.item_variations" :key="vIdx">{{ v.variation_name }}: {{ v.name }} </span>
+                                    </div>
+                                </td>
+                                <td class="py-1 align-top text-right font-semibold">{{ item.total_without_tax_currency_price }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Calculation Summary -->
+                    <div class="py-2 border-t border-dashed border-gray-400 text-xs space-y-1">
+                        <div class="flex justify-between text-gray-600 dark:text-gray-400">
+                            <span>সাবটোটাল:</span>
+                            <span>{{ order.subtotal_without_tax_currency_price }}</span>
+                        </div>
+                        <div v-if="order.total_tax > 0" class="flex justify-between text-gray-600 dark:text-gray-400">
+                            <span>ভ্যাট / ট্যাক্স:</span>
+                            <span>{{ order.total_tax_currency_price }}</span>
+                        </div>
+                        <div v-if="order.discount > 0" class="flex justify-between text-emerald-600 font-semibold">
+                            <span>ডিসকাউন্ট:</span>
+                            <span>-{{ order.discount_currency_price }}</span>
+                        </div>
+                        <div class="flex justify-between font-black text-sm pt-1 border-t border-dashed border-gray-300 text-gray-900 dark:text-white">
+                            <span>সর্বমোট বিল:</span>
+                            <span class="text-orange-500">{{ order.total_currency_price }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment Note & Change Return -->
+                    <div class="py-2 border-t border-b border-dashed border-gray-400 text-xs space-y-0.5">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">পেমেন্ট মেথড:</span>
+                            <span class="font-bold">{{ posPaymentMethodEnumArray[order.pos_payment_method] || 'ক্যাশ' }}</span>
+                        </div>
+                        <div v-if="order.pos_received_amount > 0" class="flex justify-between">
+                            <span class="text-gray-500">গৃহীত টাকা (Received):</span>
+                            <span class="font-bold">{{ order.pos_received_currency_amount || order.pos_received_amount }}</span>
+                        </div>
+                        <div v-if="order.change_return > 0 || order.cash_back_amount > 0" class="flex justify-between text-emerald-600 font-black">
+                            <span>খুচরা ফেরত (Change Return):</span>
+                            <span>{{ order.change_return || order.cash_back_currency_amount }}</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center pt-3 pb-1">
+                        <p class="text-xs font-bold text-gray-700 dark:text-gray-300">আমাদের রেস্টুরেন্টে আসার জন্য ধন্যবাদ!</p>
+                        <p class="text-[10px] text-gray-400">আবার আসবেন</p>
+                    </div>
                 </div>
 
-                <table class="w-full my-1.5">
-                    <tbody>
-                        <tr>
-                            <td class="text-xs text-left py-0.5 text-heading">{{ $t('button.order') }}
-                                #{{ order.order_serial_no }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-xs text-left py-0.5 text-heading">{{ order.order_date }}</td>
-                            <td class="text-xs text-right py-0.5 text-heading">{{ order.order_time }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <!-- ================= 2. KOT (KITCHEN ORDER TICKET) ================= -->
+                <div v-else class="kot-section">
+                    <div class="text-center pb-2 border-b-2 border-dashed border-black">
+                        <h2 class="text-lg font-black tracking-wider uppercase">*** KOT (KITCHEN TICKET) ***</h2>
+                        <div class="text-xs font-bold mt-1">অর্ডার নং: #{{ order.order_serial_no }}</div>
+                    </div>
 
-                <table class="w-full">
-                    <thead class="border-t border-b border-dashed border-gray-400">
-                        <tr>
-                            <th scope="col" class="py-1 font-normal text-xs capitalize text-left text-heading w-8">
-                                {{ $t('label.qty') }}
-                            </th>
-                            <th scope="col"
-                                class="py-1 font-normal text-xs capitalize flex items-center justify-between text-heading">
-                                <span>{{ $t('label.item_description') }}</span>
-                                <span>{{ $t('label.price') }}</span>
-                            </th>
-                        </tr>
-                    </thead>
+                    <div class="py-2 border-b border-dashed border-black text-xs font-bold flex justify-between">
+                        <div>
+                            <span>টেবিল: </span>
+                            <span class="text-sm underline">{{ order.table_name || order.dining_table_name || 'ডাইনিং টেবিল' }}</span>
+                        </div>
+                        <div>
+                            <span v-if="order.token">টোকেন: #{{ order.token }}</span>
+                            <span v-else>{{ order.order_time }}</span>
+                        </div>
+                    </div>
 
-                    <tbody class="border-b border-dashed border-gray-400">
-                        <tr v-if="orderItems.length > 0" v-for="item in orderItems" :key="item">
-                            <td class="text-left font-normal align-top py-1">
-                                <p class="text-xs leading-5 text-heading">{{ item.quantity }}</p>
-                            </td>
-                            <td class="text-left font-normal align-top py-1">
-                                <div class="flex items-center justify-between">
-                                    <h4 class="text-sm font-normal capitalize">{{ item.item_name }}</h4>
-                                    <p class="text-xs leading-5 text-heading">{{ item.total_without_tax_currency_price
-                                    }}
-                                    </p>
-                                </div>
-                                <p v-if="Object.keys(item.item_variations).length !== 0"
-                                    class="text-xs leading-5 font-normal text-heading max-w-[200px]">
-                                    <span v-for="(variation, index) in item.item_variations">
-                                        {{ variation.variation_name }}: {{ variation.name }}
-                                        <span v-if="index + 1 < Object.keys(item.item_variations).length">, </span>
-                                    </span>
-                                </p>
-                                <p v-if="item.item_extras.length > 0"
-                                    class="text-xs leading-5 font-normal text-heading max-w-[200px]">
-                                    {{ $t('label.extras') }}:
-                                    <span v-for="(extra, index) in item.item_extras">
-                                        {{ extra.name }}
-                                        <span v-if="index + 1 < item.item_extras.length">, </span>
-                                    </span>
-                                </p>
-                                <p v-if="item.instruction"
-                                    class="text-xs leading-5 font-normal text-heading max-w-[200px]">
-                                    {{ $t('label.instruction') }}: {{ item.instruction }}
-                                </p>
-
-                                <div class="flex items-center justify-between" v-if="item.tax_rate > 0">
-                                    <p class="text-xs leading-5 font-normal text-heading">
-                                        {{ item.tax_name }} ({{ item.tax_currency_rate }} {{ item.tax_type }})</p>
-                                    <p class="text-xs leading-5 font-normal text-heading">
-                                        {{ item.tax_currency_amount }}
-                                    </p>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="py-2 pl-7">
-                    <table class="w-full">
-                        <tbody>
+                    <table class="w-full my-2 text-xs">
+                        <thead class="border-b border-black font-black">
                             <tr>
-                                <td class="text-xs text-left py-0.5 uppercase text-heading">{{ $t('label.subtotal') }}:
-                                </td>
-                                <td class="text-xs text-right py-0.5 text-heading">{{
-                                    order.subtotal_without_tax_currency_price
-                                    }}</td>
+                                <th class="py-1 text-left w-12">পরিমাণ</th>
+                                <th class="py-1 text-left">রান্নার আইটেম</th>
                             </tr>
-                            <tr>
-                                <td class="text-xs text-left py-0.5 uppercase text-heading">
-                                    {{ $t('label.total_tax') }}:
-                                </td>
-                                <td class="text-xs text-right py-0.5 text-heading">
-                                    {{ order.total_tax_currency_price }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-xs text-left py-0.5 uppercase text-heading">{{ $t('label.discount') }}:
-                                </td>
-                                <td class="text-xs text-right py-0.5 text-heading">{{ order.discount_currency_price }}
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="text-xs text-left py-0.5 font-bold uppercase text-heading">
-                                    {{ $t('label.total') }}:
-                                </td>
-                                <td class="text-xs text-right py-0.5 font-bold text-heading">
-                                    {{ order.total_currency_price }}
+                        </thead>
+                        <tbody class="divide-y divide-dashed divide-gray-300">
+                            <tr v-for="(item, idx) in orderItems" :key="idx" class="py-1.5">
+                                <td class="py-1.5 text-base font-black align-top">{{ item.quantity }} x</td>
+                                <td class="py-1.5 align-top">
+                                    <div class="font-bold text-sm">{{ item.item_name }}</div>
+                                    <div v-if="item.item_variations && Object.keys(item.item_variations).length" class="text-xs text-gray-600">
+                                        <span v-for="(v, vIdx) in item.item_variations" :key="vIdx">[{{ v.name }}] </span>
+                                    </div>
+                                    <div v-if="item.instruction" class="text-xs text-red-600 font-bold">
+                                        নোট: {{ item.instruction }}
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="text-xs py-2 border-t border-b border-dashed border-gray-400 text-heading">
-                    <table class="w-full">
-                        <tbody>
-                            <tr>
-                                <td class="pt-1 pb-1 pr-1"> {{ $t('label.order_type') }}: {{
-                                    enums.orderTypeEnumArray[order.order_type] }}</td>
-                            </tr>
-                            <tr>
-                                <td class="pt-1 pb-1 pr-1 align-top text-start">{{ $t('label.payment_type') }}: {{
-                                    posPaymentMethodEnumArray[order.pos_payment_method] }}</td>
-                                <td class="pt-1 pb-1 text-end" v-if="order.cash_back_amount > 0">
-                                    <div>{{ $t('label.cash') }}: {{ order.pos_received_currency_amount }}</div>
-                                    <span>{{ $t('label.change') }} : {{ order.cash_back_currency_amount }}</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <h4 v-if="order.token"
-                    class="py-2 capitalize text-xl font-bold text-center border-b border-dashed border-gray-400">
-                    {{ $t('label.token') }} #{{ order.token }}
-                </h4>
-                <div class="text-center pt-2 pb-4">
-                    <p class="text-[11px] leading-[14px] capitalize text-heading">
-                        {{ $t('message.thank_you') }}
-                    </p>
-                    <p class="text-[11px] leading-[14px] capitalize text-heading">
-                        {{ $t('message.please_come_again') }}
-                    </p>
-                </div>
-                <div class="flex flex-col items-end">
-                    <h5 class="text-[8px] font-normal text-left w-[46px] leading-[10px]">
-                        {{ $t('label.powered_by') }}
-                    </h5>
-                    <h6 class="text-xs font-normal leading-4">{{ company.company_name }}</h6>
+
+                    <div class="text-center pt-2 border-t border-black text-[10px] font-bold">
+                        সময়: {{ order.order_date }} {{ order.order_time }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -183,37 +182,32 @@ export default {
     },
     data() {
         return {
+            activeSlip: 'customer',
             printObj: {
                 id: "print",
-                popTitle: this.$t("menu.order_receipt"),
+                popTitle: this.$t("menu.order_receipt") || "Receipt",
             },
             posPaymentMethodEnumArray: {
-                [posPaymentMethodEnum.CASH]: this.$t("label.cash"),
-                [posPaymentMethodEnum.CARD]: this.$t("label.card"),
-                [posPaymentMethodEnum.MOBILE_BANKING]: this.$t("label.mobile_banking"),
-                [posPaymentMethodEnum.OTHER]: this.$t("label.other"),
+                [posPaymentMethodEnum.CASH]: this.$t("label.cash") || "ক্যাশ",
+                [posPaymentMethodEnum.CARD]: this.$t("label.card") || "কার্ড",
+                [posPaymentMethodEnum.MOBILE_BANKING]: this.$t("label.mobile_banking") || "মোবাইল ব্যাংকিং",
+                [posPaymentMethodEnum.OTHER]: this.$t("label.other") || "অন্যান্য",
             },
             orderTypeEnum: orderTypeEnum,
-            enums: {
-                orderTypeEnumArray: {
-                    [orderTypeEnum.TAKEAWAY]: this.$t("label.takeaway"),
-                    [orderTypeEnum.DINING_TABLE]: this.$t("label.dining_table")
-                }
-            }
         }
     },
     computed: {
         company: function () {
-            return this.$store.getters['company/lists'];
+            return this.$store.getters['company/lists'] || {};
         },
         branch: function () {
-            return this.$store.getters['backendGlobalState/branchShow'];
+            return this.$store.getters['backendGlobalState/branchShow'] || {};
         },
         orderItems: function () {
-            return this.$store.getters['posOrder/orderItems'];
+            return this.$store.getters['posOrder/orderItems'] || [];
         },
         direction: function () {
-            return this.$store.getters['frontendLanguage/show'].display_mode === displayModeEnum.RTL ? 'rtl' : 'ltr';
+            return this.$store.getters['frontendLanguage/show']?.display_mode === displayModeEnum.RTL ? 'rtl' : 'ltr';
         },
     },
     mounted() {
@@ -221,7 +215,7 @@ export default {
     },
     methods: {
         reset: function () {
-            appService.modalHide();
+            appService.modalHide('#receiptModal');
         },
     },
     directives: {
@@ -229,6 +223,7 @@ export default {
     },
 }
 </script>
+
 <style scoped>
 @media print {
     .hidden-print {

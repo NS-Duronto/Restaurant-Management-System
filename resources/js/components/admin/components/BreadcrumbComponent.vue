@@ -1,18 +1,18 @@
 <template>
-    <div class="db-breadcrumb">
+    <div class="db-breadcrumb" v-if="breadcrumbs && breadcrumbs.length > 0">
         <ul class="db-breadcrumb-list">
-            <li v-if="Object.keys(authDefaultPermission).length > 0" class="db-breadcrumb-item">
+            <li v-if="authDefaultPermission && Object.keys(authDefaultPermission).length > 0" class="db-breadcrumb-item">
                 <router-link class="db-breadcrumb-link" :to="'/admin/'+authDefaultPermission.url">
                     {{ $t('menu.'+authDefaultPermission.name) }}
                 </router-link>
             </li>
-            <li class="db-breadcrumb-item" v-for="(val, key) of breadcrumbs">
-                <span v-if="key !== Object.keys(breadcrumbs).length - 1">
+            <li class="db-breadcrumb-item" v-for="(val, key) of breadcrumbs" :key="key">
+                <span v-if="val && val.meta && key !== breadcrumbs.length - 1">
                     <router-link class="db-breadcrumb-link" :to="val.path">
                         {{ $t('menu.'+val.meta.breadcrumb) }}
                     </router-link>
                 </span>
-                <span v-else class="text-heading dark:text-gray-200 font-semibold">
+                <span v-else-if="val && val.meta" class="text-heading dark:text-gray-200 font-semibold">
                     {{ $t('menu.'+val.meta.breadcrumb) }}
                 </span>
             </li>
@@ -43,12 +43,10 @@ export default {
     },
     methods: {
         route: function () {
-            let i, routeArray = [], filterBreadCrumbs = this.$route.matched;
-            if (filterBreadCrumbs.length > 0) {
-                for (i = 0; i < filterBreadCrumbs.length; i++) {
-                    if (filterBreadCrumbs[i].meta.breadcrumb) {
-                        routeArray[i] = filterBreadCrumbs[i];
-                    }
+            let routeArray = [], filterBreadCrumbs = this.$route.matched || [];
+            for (let i = 0; i < filterBreadCrumbs.length; i++) {
+                if (filterBreadCrumbs[i] && filterBreadCrumbs[i].meta && filterBreadCrumbs[i].meta.breadcrumb) {
+                    routeArray.push(filterBreadCrumbs[i]);
                 }
             }
             this.breadcrumbs = routeArray;

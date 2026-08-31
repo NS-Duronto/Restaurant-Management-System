@@ -1,82 +1,88 @@
 <?php
 
-
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\OtpController;
-use App\Http\Controllers\Admin\PosController;
-use App\Http\Controllers\Admin\TaxController;
-use App\Http\Controllers\Admin\ChefController;
-use App\Http\Controllers\Admin\ItemController;
-use App\Http\Controllers\Admin\MailController;
-use App\Http\Controllers\Admin\PageController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\SiteController;
-use App\Http\Controllers\Admin\SettingMenuController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Admin\OfferController;
-use App\Http\Controllers\Admin\ThemeController;
-use App\Http\Controllers\Auth\SignupController;
-use App\Http\Controllers\Admin\BranchController;
-use App\Http\Controllers\Admin\WaiterController;
-use App\Http\Controllers\Admin\CompanyController;
-use App\Http\Controllers\Admin\LicenseController;
+use App\Http\Controllers\Admin\AdministratorAddressController;
+use App\Http\Controllers\Admin\AdministratorController;
 use App\Http\Controllers\Admin\AnalyticController;
+use App\Http\Controllers\Admin\AnalyticSectionController;
+use App\Http\Controllers\Admin\BranchController;
+use App\Http\Controllers\Admin\ChefAddressController;
+use App\Http\Controllers\Admin\ChefController;
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\CountryCodeController;
+use App\Http\Controllers\Admin\CreditBalanceReportController;
 use App\Http\Controllers\Admin\CurrencyController;
+use App\Http\Controllers\Admin\CustomerAddressController;
 use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Admin\EmployeeController;
-use App\Http\Controllers\Admin\LanguageController;
-use App\Http\Controllers\Admin\PosOrderController;
-use App\Http\Controllers\Admin\TimezoneController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DefaultAccessController;
+use App\Http\Controllers\Admin\DiningTableController;
+use App\Http\Controllers\Admin\EmployeeAddressController;
+use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\ExpenseCategoryController;
+use App\Http\Controllers\Admin\ExpenseController;
 use App\Http\Controllers\Admin\ItemAddonController;
+use App\Http\Controllers\Admin\ItemAttributeController;
+use App\Http\Controllers\Admin\ItemCategoryController;
+use App\Http\Controllers\Admin\ItemController;
 use App\Http\Controllers\Admin\ItemExtraController;
+use App\Http\Controllers\Admin\ItemsReportController;
+use App\Http\Controllers\Admin\ItemVariationController;
+use App\Http\Controllers\Admin\KitchenDisplaySystemController;
+use App\Http\Controllers\Admin\KitchenGoodsCategoryController;
+use App\Http\Controllers\Admin\KitchenGoodsController;
+use App\Http\Controllers\Admin\LanguageController;
+use App\Http\Controllers\Admin\LicenseController;
+use App\Http\Controllers\Admin\MailController;
+use App\Http\Controllers\Admin\MenuSectionController;
+use App\Http\Controllers\Admin\MenuTemplateController;
+use App\Http\Controllers\Admin\MyOrderDetailsController;
+use App\Http\Controllers\Admin\NotificationAlertController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\OfferController;
 use App\Http\Controllers\Admin\OfferItemController;
-use App\Http\Controllers\Auth\DeactivateController;
+use App\Http\Controllers\Admin\OrderStatusScreenController;
+use App\Http\Controllers\Admin\OtpController;
+use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PaymentGatewayController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\PosCategoryController;
+use App\Http\Controllers\Admin\PosController;
+use App\Http\Controllers\Admin\PosOrderController;
+use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SalesReportController;
+use App\Http\Controllers\Admin\SendToKitchenController;
+use App\Http\Controllers\Admin\SettingMenuController;
 use App\Http\Controllers\Admin\SimpleUserController;
+use App\Http\Controllers\Admin\SiteController;
 use App\Http\Controllers\Admin\SmsGatewayController;
+use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\TableOrderController as AdminTableOrderController;
+use App\Http\Controllers\Admin\TaxController;
+use App\Http\Controllers\Admin\ThemeController;
+use App\Http\Controllers\Admin\TimezoneController;
+use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\WaiterAddressController;
+use App\Http\Controllers\Admin\WaiterController;
+use App\Http\Controllers\Auth\DeactivateController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\GuestSignupController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RefreshTokenController;
+use App\Http\Controllers\Auth\SignupController;
+use App\Http\Controllers\Frontend\BranchController as FrontendBranchController;
+use App\Http\Controllers\Frontend\ItemController as FrontendItemController;
+use App\Http\Controllers\Frontend\LanguageController as FrontendLanguageController;
+use App\Http\Controllers\Frontend\PageController as FrontendPageController;
 use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\SettingController;
-use App\Http\Controllers\Admin\ChefAddressController;
-use App\Http\Controllers\Admin\CountryCodeController;
-use App\Http\Controllers\Admin\DiningTableController;
-use App\Http\Controllers\Admin\ItemsReportController;
-use App\Http\Controllers\Admin\MenuSectionController;
-use App\Http\Controllers\Admin\PosCategoryController;
-use App\Http\Controllers\Admin\SalesReportController;
-use App\Http\Controllers\Admin\TransactionController;
-use App\Http\Controllers\Auth\RefreshTokenController;
-use App\Http\Controllers\Admin\ItemCategoryController;
-use App\Http\Controllers\Admin\MenuTemplateController;
-use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\AdministratorController;
-use App\Http\Controllers\Admin\DefaultAccessController;
-use App\Http\Controllers\Admin\ItemAttributeController;
-use App\Http\Controllers\Admin\ItemVariationController;
-use App\Http\Controllers\Admin\WaiterAddressController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Frontend\TokenStoreController;
-use App\Http\Controllers\Admin\MyOrderDetailsController;
-use App\Http\Controllers\Admin\PaymentGatewayController;
-use App\Http\Controllers\Admin\AnalyticSectionController;
-use App\Http\Controllers\Admin\CustomerAddressController;
-use App\Http\Controllers\Admin\EmployeeAddressController;
-use App\Http\Controllers\Admin\NotificationAlertController;
-use App\Http\Controllers\Admin\OrderStatusScreenController;
-use App\Http\Controllers\Admin\CreditBalanceReportController;
-use App\Http\Controllers\Admin\AdministratorAddressController;
-use App\Http\Controllers\Admin\KitchenDisplaySystemController;
-use App\Http\Controllers\Table\OrderController as TableOrderController;
-use App\Http\Controllers\Frontend\ItemController as FrontendItemController;
-use App\Http\Controllers\Frontend\PageController as FrontendPageController;
-use App\Http\Controllers\Frontend\BranchController as FrontendBranchController;
-use App\Http\Controllers\Admin\TableOrderController as AdminTableOrderController;
-use App\Http\Controllers\Frontend\LanguageController as FrontendLanguageController;
 use App\Http\Controllers\Table\DiningTableController as TableDiningTableController;
 use App\Http\Controllers\Table\ItemCategoryController as TableItemCategoryController;
-
+use App\Http\Controllers\Table\OrderController as TableOrderController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,7 +94,6 @@ use App\Http\Controllers\Table\ItemCategoryController as TableItemCategoryContro
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 
 Route::match(['get', 'post'], '/login', function () {
     return response()->json(['errors' => 'unauthenticated'], 401);
@@ -127,11 +132,12 @@ Route::prefix('auth')->middleware(['installed', 'apiKey', 'localization'])->name
         if (Auth::check()) {
             return response()->json(['status' => true]);
         }
+
         return response()->json(['status' => false]);
     });
 });
 
-/* all routes must be singular word*/
+/* all routes must be singular word */
 Route::prefix('profile')->name('profile.')->middleware(['installed', 'apiKey', 'auth:sanctum', 'localization'])->group(function () {
     Route::get('/', [ProfileController::class, 'profile']);
     Route::match(['put', 'patch'], '/', [ProfileController::class, 'update']);
@@ -289,7 +295,6 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
             Route::match(['put', 'patch'], '/{role}', [PermissionController::class, 'update']);
         });
 
-
         Route::prefix('language')->name('language.')->group(function () {
             Route::get('/', [LanguageController::class, 'index']);
             Route::post('/', [LanguageController::class, 'store']);
@@ -356,7 +361,6 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::match(['put', 'patch'], '/address/{employee}/{address}', [EmployeeAddressController::class, 'update']);
         Route::delete('/address/{employee}/{address}', [EmployeeAddressController::class, 'destroy']);
     });
-
 
     Route::prefix('offer')->name('offer.')->group(function () {
         Route::get('/', [OfferController::class, 'index']);
@@ -428,7 +432,6 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::post('/token-create/{order}', [AdminTableOrderController::class, 'tokenCreate']);
     });
 
-
     Route::prefix('administrator')->name('administrator.')->group(function () {
         Route::get('/', [AdministratorController::class, 'index']);
         Route::get('/show/{administrator}', [AdministratorController::class, 'show']);
@@ -466,6 +469,9 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::get('/customer-states', [DashboardController::class, 'customerStates']);
         Route::get('/featured-items', [DashboardController::class, 'featuredItems']);
         Route::get('/popular-items', [DashboardController::class, 'mostPopularItems']);
+        Route::get('/total-expenses', [DashboardController::class, 'totalExpenses']);
+        Route::get('/total-net-profit', [DashboardController::class, 'totalNetProfit']);
+        Route::get('/profit-summary', [DashboardController::class, 'profitSummary']);
     });
 
     Route::prefix('sales-report')->name('sales-report.')->group(function () {
@@ -485,7 +491,6 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::get('/', [CreditBalanceReportController::class, 'index']);
         Route::get('/export', [CreditBalanceReportController::class, 'export']);
     });
-
 
     Route::prefix('country-code')->name('country-code.')->group(function () {
         Route::get('/', [CountryCodeController::class, 'index']);
@@ -562,6 +567,68 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::post('/address/{chef}', [ChefAddressController::class, 'store']);
         Route::match(['put', 'patch'], '/address/{chef}/{address}', [ChefAddressController::class, 'update']);
         Route::delete('/address/{chef}/{address}', [ChefAddressController::class, 'destroy']);
+    });
+
+    Route::prefix('unit')->name('unit.')->group(function () {
+        Route::get('/', [UnitController::class, 'index']);
+        Route::get('/show/{unit}', [UnitController::class, 'show']);
+        Route::post('/', [UnitController::class, 'store']);
+        Route::match(['put', 'patch'], '/{unit}', [UnitController::class, 'update']);
+        Route::delete('/{unit}', [UnitController::class, 'destroy']);
+    });
+
+    Route::prefix('kitchen-goods-category')->name('kitchen-goods-category.')->group(function () {
+        Route::get('/', [KitchenGoodsCategoryController::class, 'index']);
+        Route::get('/show/{kitchenGoodsCategory}', [KitchenGoodsCategoryController::class, 'show']);
+        Route::post('/', [KitchenGoodsCategoryController::class, 'store']);
+        Route::match(['post', 'put', 'patch'], '/{kitchenGoodsCategory}', [KitchenGoodsCategoryController::class, 'update']);
+        Route::delete('/{kitchenGoodsCategory}', [KitchenGoodsCategoryController::class, 'destroy']);
+    });
+
+    Route::prefix('kitchen-goods')->name('kitchen-goods.')->group(function () {
+        Route::get('/', [KitchenGoodsController::class, 'index']);
+        Route::get('/show/{kitchenGood}', [KitchenGoodsController::class, 'show']);
+        Route::post('/', [KitchenGoodsController::class, 'store']);
+        Route::match(['put', 'patch'], '/{kitchenGood}', [KitchenGoodsController::class, 'update']);
+        Route::delete('/{kitchenGood}', [KitchenGoodsController::class, 'destroy']);
+    });
+
+    Route::prefix('supplier')->name('supplier.')->group(function () {
+        Route::get('/', [SupplierController::class, 'index']);
+        Route::get('/show/{supplier}', [SupplierController::class, 'show']);
+        Route::post('/', [SupplierController::class, 'store']);
+        Route::match(['put', 'patch'], '/{supplier}', [SupplierController::class, 'update']);
+        Route::delete('/{supplier}', [SupplierController::class, 'destroy']);
+    });
+
+    Route::prefix('purchase')->name('purchase.')->group(function () {
+        Route::get('/', [PurchaseController::class, 'index']);
+        Route::get('/show/{purchase}', [PurchaseController::class, 'show']);
+        Route::post('/', [PurchaseController::class, 'store']);
+        Route::delete('/{purchase}', [PurchaseController::class, 'destroy']);
+    });
+
+    Route::prefix('send-to-kitchen')->name('send-to-kitchen.')->group(function () {
+        Route::get('/', [SendToKitchenController::class, 'index']);
+        Route::get('/show/{sendToKitchen}', [SendToKitchenController::class, 'show']);
+        Route::post('/', [SendToKitchenController::class, 'store']);
+        Route::delete('/{sendToKitchen}', [SendToKitchenController::class, 'destroy']);
+    });
+
+    Route::prefix('expense-category')->name('expense-category.')->group(function () {
+        Route::get('/', [ExpenseCategoryController::class, 'index']);
+        Route::get('/show/{expenseCategory}', [ExpenseCategoryController::class, 'show']);
+        Route::post('/', [ExpenseCategoryController::class, 'store']);
+        Route::match(['put', 'patch'], '/{expenseCategory}', [ExpenseCategoryController::class, 'update']);
+        Route::delete('/{expenseCategory}', [ExpenseCategoryController::class, 'destroy']);
+    });
+
+    Route::prefix('expense')->name('expense.')->group(function () {
+        Route::get('/', [ExpenseController::class, 'index']);
+        Route::get('/show/{expense}', [ExpenseController::class, 'show']);
+        Route::post('/', [ExpenseController::class, 'store']);
+        Route::match(['post', 'put', 'patch'], '/{expense}', [ExpenseController::class, 'update']);
+        Route::delete('/{expense}', [ExpenseController::class, 'destroy']);
     });
 });
 
