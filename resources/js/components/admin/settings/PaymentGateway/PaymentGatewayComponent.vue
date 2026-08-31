@@ -3,31 +3,13 @@
     <div id="payment" class="db-tab-div active">
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-5">
             <button @click="selectActive(index)"
-                class="db-tab-sub-btn w-full flex items-center gap-3 h-10 px-4 rounded-lg transition bg-white hover:text-primary hover:bg-primary/5"
-                :data-tab="'#' + paymentGateway.slug" v-for="(paymentGateway, index) in paymentGateways.slice(0, 3)"
-                :key="paymentGateway" :class="index === selectIndex ? 'active' : ''">
+                class="db-tab-sub-btn w-full flex items-center justify-center gap-3 h-11 px-4 rounded-xl font-medium transition bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary hover:border-primary/30"
+                :data-tab="'#' + paymentGateway.slug" v-for="(paymentGateway, index) in paymentGateways"
+                :key="paymentGateway" :class="index === selectIndex ? '!text-white !bg-primary !border-primary font-bold shadow-md shadow-orange-500/20' : ''">
                 <span class="capitalize whitespace-nowrap text-[15px]">
                     {{ paymentGateway.name }}
                 </span>
             </button>
-
-            <div v-if="paymentGateways.length > 3" class="dropdown-group w-full custom-dropdown">
-                <button
-                    class="dropdown-btn w-full flex items-center gap-3 h-10 px-4 rounded-lg transition bg-white hover:text-primary hover:bg-primary/5">
-                    <i class="fa-solid fa-circle-chevron-down text-sm"></i>
-                    <span class="capitalize whitespace-nowrap text-[15px]"> {{ $t('label.more_gateway') }}</span>
-                </button>
-                <div
-                    class="w-full dropdown-list absolute top-[42px] right-0 z-30 p-2 rounded-md bg-white shadow-lg transition-all duration-300 scale-y-0 origin-top">
-                    <button @click="selectActive(index + 3)"
-                        class="db-tab-sub-btn w-full flex items-center whitespace-nowrap justify-start my-0.5 gap-2.5 pl-3 pr-6 py-1.5 text-sm rounded-md capitalize transition text-gray-500 hover:text-primary hover:bg-primary/5"
-                        :data-tab="'#' + paymentGateway.slug"
-                        v-for="(paymentGateway, index) in paymentGateways.slice(3, paymentGateways.length)"
-                        :key="paymentGateway" :class="index + 3 === selectIndex ? 'active' : ''">
-                        {{ paymentGateway.name }}
-                    </button>
-                </div>
-            </div>
         </div>
         <div :id="paymentGateway.slug" class="db-card db-tab-sub-div" v-for="(paymentGateway, index) in paymentGateways"
             :key="paymentGateway" :class="index === selectIndex ? 'active' : ''">

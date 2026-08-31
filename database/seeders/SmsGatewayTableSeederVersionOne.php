@@ -19,6 +19,33 @@ class SmsGatewayTableSeederVersionOne extends Seeder
 
     public array $gateways = [
         [
+            "name" => "Bulksmsbd",
+            "slug" => "bulksmsbd",
+            "misc" => null,
+            "status" => Activity::ENABLE,
+            "options" => [
+                [
+                    "option" => 'bulksmsbd_api_key',
+                    "type" => InputType::TEXT,
+                    "activities" => '',
+                ],
+                [
+                    "option" => 'bulksmsbd_sender_id',
+                    "type" => InputType::TEXT,
+                    "activities" => '',
+                ],
+                [
+                    "option" => 'bulksmsbd_status',
+                    "value" => Activity::ENABLE,
+                    "type" => InputType::SELECT,
+                    "activities" => [
+                        Activity::ENABLE => "enable",
+                        Activity::DISABLE => "disable",
+                    ]
+                ]
+            ]
+        ],
+        [
             "name" => "Twilio",
             "slug" => "twilio",
             "misc" => null,
@@ -47,215 +74,7 @@ class SmsGatewayTableSeederVersionOne extends Seeder
                         Activity::ENABLE => "enable",
                         Activity::DISABLE => "disable",
                     ],
-
                 ],
-            ]
-        ],
-        [
-            "name" => "Clickatell",
-            "slug" => "clickatell",
-            "misc" => null,
-            "status" => Activity::DISABLE,
-            "options" => [
-                [
-                    "option" => 'clickatell_apikey',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'clickatell_status',
-                    "value" => Activity::DISABLE,
-                    "type" => InputType::SELECT,
-                    "activities" => [
-                        Activity::ENABLE => "enable",
-                        Activity::DISABLE => "disable",
-                    ]
-                ]
-            ]
-        ],
-        [
-            "name" => "Nexmo",
-            "slug" => "nexmo",
-            "misc" => null,
-            "status" => Activity::DISABLE,
-            "options" => [
-                [
-                    "option" => 'nexmo_key',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'nexmo_secret',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'nexmo_status',
-                    "value" => Activity::DISABLE,
-                    "type" => InputType::SELECT,
-                    "activities" => [
-                        Activity::ENABLE => "enable",
-                        Activity::DISABLE => "disable",
-                    ],
-
-                ],
-            ]
-        ],
-        [
-            "name" => "Msg91",
-            "slug" => "msg91",
-            "misc" => null,
-            "status" => Activity::DISABLE,
-            "options" => [
-                [
-                    "option" => 'msg91_key',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'msg91_sender_id',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'msg91_template_id',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option"     => 'msg91_template_variable',
-                    "type"       => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'msg91_status',
-                    "value" => Activity::DISABLE,
-                    "type" => InputType::SELECT,
-                    "activities" => [
-                        Activity::ENABLE => "enable",
-                        Activity::DISABLE => "disable",
-                    ],
-
-                ],
-            ]
-        ],
-        [
-            "name" => "2Factor",
-            "slug" => "twofactor",
-            "misc" => null,
-            "status" => Activity::DISABLE,
-            "options" => [
-                [
-                    "option" => 'twofactor_module',
-                    "value" => 'PROMO_SMS',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'twofactor_from',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'twofactor_api_key',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'twofactor_status',
-                    "value" => Activity::DISABLE,
-                    "type" => InputType::SELECT,
-                    "activities" => [
-                        Activity::ENABLE => "enable",
-                        Activity::DISABLE => "disable",
-                    ]
-                ]
-            ]
-        ],
-        [
-            "name" => "Bulksms",
-            "slug" => "bulksms",
-            "misc" => null,
-            "status" => Activity::DISABLE,
-            "options" => [
-                [
-                    "option" => 'bulksms_username',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'bulksms_password',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'bulksms_status',
-                    "value" => Activity::DISABLE,
-                    "type" => InputType::SELECT,
-                    "activities" => [
-                        Activity::ENABLE => "enable",
-                        Activity::DISABLE => "disable",
-                    ]
-                ]
-            ]
-        ],
-        [
-            "name" => "Bulksmsbd",
-            "slug" => "bulksmsbd",
-            "misc" => null,
-            "status" => Activity::DISABLE,
-            "options" => [
-                [
-                    "option" => 'bulksmsbd_api_key',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'bulksmsbd_sender_id',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'bulksmsbd_status',
-                    "value" => Activity::DISABLE,
-                    "type" => InputType::SELECT,
-                    "activities" => [
-                        Activity::ENABLE => "enable",
-                        Activity::DISABLE => "disable",
-                    ]
-                ]
-            ]
-        ],
-        [
-            "name" => "Telesign",
-            "slug" => "telesign",
-            "misc" => null,
-            "status" => Activity::DISABLE,
-            "options" => [
-                [
-                    "option" => 'telesign_api_key',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'telesign_customer_id',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'telesign_sender_id',
-                    "type" => InputType::TEXT,
-                    "activities" => '',
-                ],
-                [
-                    "option" => 'telesign_status',
-                    "value" => Activity::DISABLE,
-                    "type" => InputType::SELECT,
-                    "activities" => [
-                        Activity::ENABLE => "enable",
-                        Activity::DISABLE => "disable",
-                    ]
-                ]
             ]
         ],
     ];

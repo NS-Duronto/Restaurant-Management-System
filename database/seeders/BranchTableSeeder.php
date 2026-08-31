@@ -18,8 +18,8 @@ class BranchTableSeeder extends Seeder
     {
         Branch::create([
             'name'      => 'Mirpur-1 (main)',
-            'email'     => 'mirpur@inilabs.xyz',
-            'phone'     => '+536464646464',
+            'email'     => 'mirpur@sohojrms.com',
+            'phone'     => '+8801700000001',
             'latitude'  => 23.8042375,
             'longitude' => 90.3525979,
             'city'      => 'Mirpur-1',
@@ -33,8 +33,8 @@ class BranchTableSeeder extends Seeder
         if ($envService->getValue('DEMO')) {
             Branch::create([
                 'name'      => 'Gulshan-1',
-                'email'     => 'gulshan@inilabs.xyz',
-                'phone'     => '+1243535366',
+                'email'     => 'gulshan@sohojrms.com',
+                'phone'     => '+8801700000002',
                 'latitude'  => 23.7948597,
                 'longitude' => 90.4083123,
                 'city'      => 'Gulshan-1',

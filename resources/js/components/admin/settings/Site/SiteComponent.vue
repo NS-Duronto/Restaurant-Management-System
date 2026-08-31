@@ -93,17 +93,6 @@
                             errors.site_default_sms_gateway[0]
                         }}</small>
                     </div>
-                    <div class="form-col-12 sm:form-col-6">
-                        <label for="site_default_ai_agent" class="db-field-title">{{ $t('label.default_ai_agent') }}</label>
-                        <vue-select class="db-field-control f-b-custom-select" id="site_default_ai_agent"
-                            v-bind:class="errors.site_default_ai_agent ? 'invalid' : ''" v-model="form.site_default_ai_agent"
-                            :options="aiAgents" label-by="name" value-by="id" :closeOnSelect="true" :searchable="true"
-                            :clearOnClose="true" placeholder="--" search-placeholder="--" />
-                        <small class="db-field-alert" v-if="errors.site_default_ai_agent">{{
-                            errors.site_default_ai_agent[0]
-                        }}</small>
-                    </div>
-
 
                     <div class="form-col-12 sm:form-col-6">
                         <label for="site_copyright" class="db-field-title required">
@@ -395,7 +384,6 @@ export default {
                 site_copyright: null,
                 site_online_payment_gateway: null,
                 site_default_sms_gateway: null,
-                site_default_ai_agent: null,
                 site_food_preparation_time: null,
             },
             enums: {
@@ -422,9 +410,6 @@ export default {
         },
         smsGateways: function () {
             return this.$store.getters["smsGateway/lists"];
-        },
-        aiAgents: function () {
-            return this.$store.getters['aiAgent/lists'];
         },
     },
     mounted() {
@@ -456,9 +441,6 @@ export default {
                     order_type: 'asc',
                     status: statusEnum.ACTIVE
                 });
-                await this.$store.dispatch('aiAgent/fetch', {
-                    status: statusEnum.ACTIVE
-                });
 
                 this.list();
 
@@ -487,7 +469,6 @@ export default {
                     site_copyright: res.data.data.site_copyright,
                     site_online_payment_gateway: res.data.data.site_online_payment_gateway,
                     site_default_sms_gateway: res.data.data.site_default_sms_gateway === 0 || res.data.data.site_default_sms_gateway === undefined ? null : res.data.data.site_default_sms_gateway,
-                    site_default_ai_agent: res.data.data.site_default_ai_agent === 0 || res.data.data.site_default_ai_agent === undefined ? null : res.data.data.site_default_ai_agent,
                     site_food_preparation_time: res.data.data.site_food_preparation_time,
                 }
                 this.loading.isActive = false;

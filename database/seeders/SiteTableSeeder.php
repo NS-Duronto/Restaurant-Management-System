@@ -38,13 +38,13 @@ class SiteTableSeeder extends Seeder
             ) ? 'Fake-map-key' : '',
             'site_copyright'                 => $envService->getValue(
                 'DEMO'
-            ) ? '© FoodScan by iNiLabs 2025, All Rights Reserved' : '',
+            ) ? '© সহজ রেস্টুরেন্ট - Sohoj RMS 2026, All Rights Reserved' : '',
             'site_language_switch'        => Activity::ENABLE,
             'site_app_debug'              => Activity::DISABLE,
             'site_auto_update'            => Activity::DISABLE,
             'site_online_payment_gateway' => $envService->getValue('DEMO') ? Activity::ENABLE : Activity::DISABLE,
             'site_default_sms_gateway'    => 0,
-            'site_default_ai_agent'       => $envService->getValue('DEMO') ? 1 : 0, 
+            'site_default_ai_agent'       => 0,
             'site_food_preparation_time'  => "30",
         ]);
 

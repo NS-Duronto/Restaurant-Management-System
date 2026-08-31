@@ -8,7 +8,6 @@
             <main class="db-main" v-if="logged">
                 <BackendNavbarComponent />
                 <BackendMenuComponent />
-                <BackendAiSidebarComponent />
                 <router-view></router-view>
             </main>
 
@@ -29,7 +28,6 @@
 <script>
 import BackendNavbarComponent from "./layouts/backend/BackendNavbarComponent";
 import BackendMenuComponent from "./layouts/backend/BackendMenuComponent";
-import BackendAiSidebarComponent from "./layouts/backend/BackendAiSidebarComponent.vue";
 import TableNavbarComponent from "./layouts/table/TableNavBarComponent.vue";
 import TableFooterComponent from "./layouts/table/TableFooterComponent.vue";
 import TableCartComponent from "./layouts/table/TableCartComponent.vue";
@@ -44,8 +42,7 @@ export default {
         TableNavbarComponent,
 
         BackendNavbarComponent,
-        BackendMenuComponent,
-        BackendAiSidebarComponent
+        BackendMenuComponent
     },
     data() {
         return {

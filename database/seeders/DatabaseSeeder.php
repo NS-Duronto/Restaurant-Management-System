@@ -21,8 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleTableSeeder::class);
         $this->call(CompanyTableSeeder::class);
         $this->call(SiteTableSeeder::class);
-        $this->call(AiAgentTableSeeder::class);
-        $this->call(AiAgentDataTableSeeder::class);
         $this->call(NotificationTableSeeder::class);
         $this->call(NotificationAlertTableSeeder::class);
         $this->call(PaymentGatewayTableSeederVersionOne::class);

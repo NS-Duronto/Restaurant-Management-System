@@ -2,15 +2,15 @@
     <LoadingComponent :props="loading" />
 
     <div class="col-12" v-if="Object.entries(employee).length > 0">
-        <div class="p-6 rounded-xl mb-8 shadow-xs bg-white">
+        <div class="p-6 rounded-xl mb-8 shadow-xs bg-white dark:bg-gray-900 border border-transparent dark:border-gray-800">
             <div class="flex flex-wrap gap-4 sm:gap-6">
                 <img class="w-[120px] h-[120px] object-cover rounded-lg" :src="previewImage" alt="avatar" />
                 <div>
-                    <h3 class="text-[26px] font-semibold font-rubik leading-[40px] capitalize">
+                    <h3 class="text-[26px] font-semibold font-rubik leading-[40px] capitalize text-heading dark:text-gray-100">
                         {{ textShortener(employee.name, 20) }}
                     </h3>
                     <label
-                        class="p-0.5 px-2 rounded text-[10px] leading-4 font-medium font-rubik uppercase mb-[22px] text-[#E89806] bg-[#FFF5DE]">
+                        class="p-0.5 px-2 rounded text-[10px] leading-4 font-medium font-rubik uppercase mb-[22px] text-[#E89806] bg-[#FFF5DE] dark:bg-amber-950/40 dark:text-amber-400">
                         {{ employee.role }}
                     </label>
                     <form @submit.prevent="saveImage">

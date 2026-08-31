@@ -5,11 +5,10 @@
             <i class="lab lab-arrow-down-2 lab-font-size-17"></i>
         </button>
         <ul
-            class="p-2 rounded-lg shadow-xl absolute top-9 ltr:right-0 rtl:left-0 z-10 bg-white transition-all duration-300 origin-top scale-y-0 dropdown-list">
-            <li class="flex items-center gap-2 py-1 px-2.5 rounded-md cursor-pointer hover:bg-gray-100"
+            class="p-2 rounded-xl shadow-2xl absolute top-9 ltr:right-0 rtl:left-0 z-10 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 transition-all duration-300 origin-top scale-y-0 dropdown-list">
+            <li class="flex items-center gap-2 py-1 px-2.5 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
                 v-for="option in perPageOptions" :key="option" @click="selectPerPage(option)">
-                <span class="text-heading capitalize text-sm">{{ option }}</span>
-
+                <span class="text-heading dark:text-gray-200 capitalize text-sm">{{ option }}</span>
             </li>
         </ul>
     </div>

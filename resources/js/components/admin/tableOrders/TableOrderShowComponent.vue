@@ -5,9 +5,9 @@
             <div class="flex flex-wrap gap-y-5 items-end justify-between">
                 <div>
                     <div class="flex flex-wrap items-start gap-y-2 gap-x-6 mb-5">
-                        <p class="text-2xl font-medium">
+                        <p class="text-2xl font-medium text-gray-800 dark:text-gray-200">
                             {{ $t("label.order_id") }}:
-                            <span class="text-heading"> #{{ order.order_serial_no }} </span>
+                            <span class="text-primary font-bold"> #{{ order.order_serial_no }} </span>
                         </p>
                         <div class="flex items-center gap-2 mt-1.5">
                             <span :class="'text-xs capitalize h-5 leading-5 px-2 rounded-3xl text-[#FB4E4E] bg-[#FFDADA]' +
@@ -26,41 +26,41 @@
                             </span>
                         </div>
                     </div>
-                    <ul class="flex flex-col gap-2">
+                    <ul class="flex flex-col gap-2 text-gray-700 dark:text-gray-300">
                         <li class="flex items-center gap-2">
                             <i class="lab lab-calendar-line lab-font-size-16"></i>
                             <span class="text-xs">{{ order.order_datetime }}</span>
                         </li>
                         <li class="text-xs">
                             {{ $t("label.payment_type") }}:
-                            <span class="text-heading" v-if="order.transaction">
+                            <span class="text-heading dark:text-gray-100 font-medium" v-if="order.transaction">
                                 {{ order.transaction.payment_method }}
                             </span>
-                            <span v-else class="text-heading">
+                            <span v-else class="text-heading dark:text-gray-100 font-medium">
                                 {{ paymentTypeEnumArray[order.payment_method] }}
                             </span>
                         </li>
                         <li class="text-xs">
                             {{ $t("label.order_type") }}:
-                            <span class="text-heading">
+                            <span class="text-heading dark:text-gray-100 font-medium">
                                 {{ orderTypeEnumArray[order.order_type] }}
                             </span>
                         </li>
                         <li class="text-xs">
                             {{ $t("label.delivery_time") }}:
-                            <span class="text-heading">
+                            <span class="text-heading dark:text-gray-100 font-medium">
                                 {{ order.delivery_date }} {{ order.delivery_time }}
                             </span>
                         </li>
                         <li class="text-xs" v-if="order.table_name">
                             {{ $t("label.table_name") }}:
-                            <span class="text-heading">
+                            <span class="text-heading dark:text-gray-100 font-medium">
                                 {{ order.table_name }}
                             </span>
                         </li>
                         <li class="text-xs" v-if="order.token">
                             {{ $t("label.token_no") }}:
-                            <span class="text-heading">
+                            <span class="text-heading dark:text-gray-100 font-medium">
                                 #{{ order.token }}
                             </span>
                         </li>
@@ -85,18 +85,18 @@
 
                     <div class="dropdown-group" v-if="order.transaction === null">
                         <button
-                            class="min-w-[97px] flex items-center gap-4 justify-start text-sm capitalize appearance-none pl-2 h-[38px] rounded border border-primary bg-white text-primary dropdown-btn">
+                            class="min-w-[97px] flex items-center gap-4 justify-start text-sm capitalize appearance-none pl-2 h-[38px] rounded border border-primary bg-white dark:bg-gray-900 text-primary dropdown-btn font-medium">
                             <span class="flex-1 text-start">{{ paymentStatusEnumArray[order.payment_status]
                             }}</span>
                             <i class="lab lab-arrow-down-2 lab-font-size-17 mx-1"></i>
                         </button>
                         <ul
-                            class="p-2 rounded-lg shadow-xl absolute top-10 ltr:right-0 rtl:left-0 z-10 bg-white transition-all duration-300 origin-top scale-y-0 dropdown-list w-full">
-                            <li class="active flex items-center gap-2 py-1 px-2.5 rounded-md cursor-pointer hover:bg-gray-100"
+                            class="p-2 rounded-lg shadow-xl absolute top-10 ltr:right-0 rtl:left-0 z-10 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transition-all duration-300 origin-top scale-y-0 dropdown-list w-full">
+                            <li class="active flex items-center gap-2 py-1 px-2.5 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
                                 v-for="paymentStatus in paymentStatusObject" :key="paymentStatus.value"
                                 @click="changePaymentStatus(paymentStatus.value)">
-                                <span class="text-heading capitalize text-sm"
-                                    :class="order.payment_status === paymentStatus.value ? 'text-primary' : ''">{{
+                                <span class="capitalize text-sm text-gray-700 dark:text-gray-200"
+                                    :class="order.payment_status === paymentStatus.value ? '!text-primary font-bold' : ''">{{
                                         paymentStatus.name
                                     }}</span>
 
@@ -106,17 +106,17 @@
 
                     <div class="dropdown-group">
                         <button
-                            class="min-w-[150px] flex items-center justify-start text-sm capitalize appearance-none pl-2 h-[38px] rounded border border-primary bg-white text-primary dropdown-btn">
+                            class="min-w-[150px] flex items-center justify-start text-sm capitalize appearance-none pl-2 h-[38px] rounded border border-primary bg-white dark:bg-gray-900 text-primary dropdown-btn font-medium">
                             <span class="flex-1 text-start">{{ orderStatusEnumArray[order.status] }}</span>
                             <i class="lab lab-arrow-down-2 lab-font-size-17 mx-1"></i>
                         </button>
                         <ul
-                            class="p-2 rounded-lg shadow-xl absolute top-10 ltr:right-0 rtl:left-0 z-10 bg-white transition-all duration-300 origin-top scale-y-0 dropdown-list w-full">
-                            <li class="active flex items-center gap-2 py-1 px-2.5 rounded-md cursor-pointer hover:bg-gray-100"
+                            class="p-2 rounded-lg shadow-xl absolute top-10 ltr:right-0 rtl:left-0 z-10 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transition-all duration-300 origin-top scale-y-0 dropdown-list w-full">
+                            <li class="active flex items-center gap-2 py-1 px-2.5 rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
                                 v-for="status in orderStatusObject" :key="status.value"
                                 @click="orderStatus(status.value)">
-                                <span class="text-heading capitalize text-sm"
-                                    :class="order.status === status.value ? 'text-primary' : ''">{{ status.name
+                                <span class="capitalize text-sm text-gray-700 dark:text-gray-200"
+                                    :class="order.status === status.value ? '!text-primary font-bold' : ''">{{ status.name
                                     }}</span>
 
                             </li>
@@ -138,35 +138,35 @@
                     </div>
                     <div class="db-card-body">
                         <div class="pl-3">
-                            <div class="mb-3 pb-3 border-b last:mb-0 last:pb-0 last:border-b-0 border-gray-2"
+                            <div class="mb-3 pb-3 border-b last:mb-0 last:pb-0 last:border-b-0 border-gray-200 dark:border-gray-800"
                                 v-if="orderItems.length > 0" v-for="item in orderItems" :key="item">
                                 <div class="flex items-center gap-3 relative">
                                     <h3
-                                        class="absolute top-5 -left-3 text-sm w-[26px] h-[26px] leading-[26px] text-center rounded-full text-white bg-heading">
+                                        class="absolute top-5 -left-3 text-sm w-[26px] h-[26px] leading-[26px] text-center rounded-full text-white bg-primary font-bold shadow-sm">
                                         {{ item.quantity }}
                                     </h3>
-                                    <img class="w-16 h-16 rounded-lg flex-shrink-0" :src="item.item_image"
+                                    <img class="w-16 h-16 rounded-lg flex-shrink-0 object-cover" :src="item.item_image"
                                         alt="thumbnail" />
 
                                     <div class="w-full">
                                         <a href="#"
-                                            class="text-sm font-medium capitalize transition text-heading hover:underline">
+                                            class="text-sm font-semibold capitalize transition text-heading dark:text-gray-100 hover:underline">
                                             {{ item.item_name }}
                                         </a>
-                                        <p v-if="item.item_variations.length !== 0" class="capitalize text-xs mb-1.5">
+                                        <p v-if="item.item_variations.length !== 0" class="capitalize text-xs mb-1.5 text-gray-500 dark:text-gray-400">
                                             <span v-for="(variation, index) in item.item_variations">
                                                 {{ variation.variation_name }}: {{ variation.name
                                                 }}<span v-if="index + 1 < item.item_variations.length">,&nbsp;</span>
                                             </span>
                                         </p>
-                                        <h3 class="text-xs font-semibold">{{ item.total_currency_price }}</h3>
+                                        <h3 class="text-xs font-bold text-primary dark:text-orange-400">{{ item.total_currency_price }}</h3>
                                     </div>
                                 </div>
 
                                 <ul v-if="item.item_extras.length > 0 || item.instruction !== ''"
-                                    class="flex flex-col gap-1.5 mt-2">
+                                    class="flex flex-col gap-1.5 mt-2 text-gray-600 dark:text-gray-300">
                                     <li class="flex gap-1" v-if="item.item_extras.length > 0">
-                                        <h3 class="capitalize text-xs w-fit whitespace-nowrap">
+                                        <h3 class="capitalize text-xs w-fit whitespace-nowrap font-medium">
                                             {{ $t("label.extras") }}:
                                         </h3>
                                         <p class="text-xs">
@@ -177,7 +177,7 @@
                                         </p>
                                     </li>
                                     <li class="flex gap-1" v-if="item.instruction !== ''">
-                                        <h3 class="capitalize text-xs w-fit whitespace-nowrap">
+                                        <h3 class="capitalize text-xs w-fit whitespace-nowrap font-medium">
                                             {{ $t("label.instruction") }}:
                                         </h3>
                                         <p class="text-xs">{{ item.instruction }}</p>
@@ -194,7 +194,7 @@
                         <h3 class="db-card-title">{{ $t("label.reason") }}</h3>
                     </div>
                     <div class="db-card-body">
-                        <p>{{ order.reason }}</p>
+                        <p class="text-gray-700 dark:text-gray-300">{{ order.reason }}</p>
                     </div>
                 </div>
             </div>
@@ -205,19 +205,19 @@
         <div class="row">
             <div class="col-12">
                 <div class="db-card p-1">
-                    <ul class="flex flex-col gap-2 p-3 border-b border-dashed border-[#EFF0F6]">
-                        <li class="flex items-center justify-between text-heading">
+                    <ul class="flex flex-col gap-2 p-3 border-b border-dashed border-gray-200 dark:border-gray-800">
+                        <li class="flex items-center justify-between text-gray-700 dark:text-gray-300">
                             <span class="text-sm leading-6 capitalize">{{ $t("label.subtotal") }}</span>
-                            <span class="text-sm leading-6 capitalize">{{
+                            <span class="text-sm leading-6 font-semibold">{{
                                 order.subtotal_currency_price
                             }}</span>
                         </li>
                     </ul>
                     <div class="flex items-center justify-between p-3">
-                        <h4 class="text-sm leading-6 font-bold capitalize">
+                        <h4 class="text-sm leading-6 font-bold capitalize text-heading dark:text-gray-100">
                             {{ $t("label.total") }}
                         </h4>
-                        <h5 class="text-sm leading-6 font-bold capitalize">
+                        <h5 class="text-base leading-6 font-bold capitalize text-primary dark:text-orange-400">
                             {{ order.total_currency_price }}
                         </h5>
                     </div>
@@ -231,20 +231,20 @@
                     <div class="db-card-body">
                         <div class="flex items-center gap-3 mb-4">
                             <img class="w-8 rounded-full" :src="orderUser.image" alt="avatar" />
-                            <h4 class="font-semibold text-sm capitalize text-[#374151]">
+                            <h4 class="font-semibold text-sm capitalize text-gray-800 dark:text-gray-100">
                                 {{ textShortener(orderUser.name, 20) }}
                             </h4>
                         </div>
-                        <ul class="flex flex-col gap-3 py-4 mb-4 border-t border-[#EFF0F6]">
+                        <ul class="flex flex-col gap-3 py-4 border-t border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300">
                             <li class="flex items-center gap-2.5">
-                                <i class="lab lab-mail lab-font-size-14"></i>
+                                <i class="lab lab-mail lab-font-size-14 text-primary"></i>
                                 <span class="text-xs">{{ orderUser.email }}</span>
                             </li>
-                            <li class="flex items-center gap-2.5" v-if="orderUser.phone">
-                                <i class="lab lab-call-calling-linear lab-font-size-14"></i>
-                                <span dir="ltr" class="text-xs">{{
-                                    orderUser.country_code + "" + orderUser.phone
-                                }}</span>
+                            <li v-if="orderUser.phone" class="flex items-center gap-2.5">
+                                <i class="lab lab-call-calling-linear lab-font-size-14 text-primary"></i>
+                                <span class="text-xs">
+                                    {{ orderUser.country_code + orderUser.phone }}
+                                </span>
                             </li>
                         </ul>
                     </div>

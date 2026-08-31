@@ -206,16 +206,6 @@ class SettingMenuTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now()
             ],
-            [
-                'name'       => 'AI Agent',
-                'language'   => 'ai_agent',
-                'url'        => 'ai-agent',
-                'icon'       => 'lab lab-line-ai-agent',
-                'priority'   => 905,
-                'status'     => Status::ACTIVE,
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
         ];
 
         SettingMenu::insert($menus);

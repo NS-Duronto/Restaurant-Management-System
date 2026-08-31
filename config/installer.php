@@ -117,6 +117,6 @@ return [
         'version'      => 1.3,
     ],
 
-    'url'            => 'https://support.inilabs.net',
+    'url'            => 'https://license.sohojrms.com',
     'productlicence' => '/api/check-product-license',
 ];

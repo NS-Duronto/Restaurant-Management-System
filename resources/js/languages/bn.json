@@ -98,6 +98,8 @@
         "zip_code": "জিপ কোড",
         "address": "ঠিকানা",
         "add_label": "লেবেল যোগ করুন",
+        "pos_terminal_active": "পিওএস টার্মিনাল সচল",
+        "online": "অনলাইন",
         "status": "স্ট্যাটাস",
         "active": "সক্রিয়",
         "inactive": "নিষ্ক্রিয়",

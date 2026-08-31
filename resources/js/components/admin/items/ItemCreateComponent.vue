@@ -11,22 +11,7 @@
             <form @submit.prevent="save">
                 <div class="form-row">
                     <div class="form-col-12 sm:form-col-6">
-                        <div class="flex items-center justify-between">
-                            <label for="name" class="db-field-title required">{{ $t("label.name") }}</label>
-                            <button v-if="aiStatus" type="button" @click="generateAiName"
-                                class="text-primary text-xs flex items-center cursor-pointer">
-                                <i class="lab lab-fill-ai text-[#8B5CF6]"></i>
-                                <span :class="aiNameLoading ? '' : 'hidden'" class="ai-text-animation" role="status">
-                                    {{ $t("label.just_a_second") }}
-                                </span>
-                                <span :class="!aiNameLoading && !props.form.name ? '' : 'hidden'" class="btn-text">
-                                    {{ $t("label.generate") }}
-                                </span>
-                                <span :class="!aiNameLoading && props.form.name ? '' : 'hidden'" class="btn-text">
-                                    {{ $t("label.regenerate") }}
-                                </span>
-                            </button>
-                        </div>
+                        <label for="name" class="db-field-title required">{{ $t("label.name") }}</label>
                         <input v-model="props.form.name" v-bind:class="errors.name ? 'invalid' : ''" type="text"
                             id="name" class="db-field-control">
                         <small class="db-field-alert" v-if="errors.name">{{ errors.name[0] }}</small>
@@ -135,22 +120,7 @@
                     </div>
 
                     <div class="form-col-12">
-                        <div class="flex items-center justify-between">
-                            <label for="caution" class="db-field-title">{{ $t("label.caution") }}</label>
-                            <button v-if="aiStatus" type="button" @click="generateAiCaution"
-                                class="text-primary text-xs flex items-center cursor-pointer">
-                                <i class="lab lab-fill-ai text-[#8B5CF6]"></i>
-                                <span :class="aiCautionLoading ? '' : 'hidden'" class="ai-text-animation" role="status">
-                                    {{ $t("label.just_a_second") }}
-                                </span>
-                                <span :class="!aiCautionLoading && !props.form.caution ? '' : 'hidden'" class="btn-text">
-                                    {{ $t("label.generate") }}
-                                </span>
-                                <span :class="!aiCautionLoading && props.form.caution ? '' : 'hidden'" class="btn-text">
-                                    {{ $t("label.regenerate") }}
-                                </span>
-                            </button>
-                        </div>
+                        <label for="caution" class="db-field-title">{{ $t("label.caution") }}</label>
                         <textarea v-model="props.form.caution" v-bind:class="errors.caution ? 'invalid' : ''"
                             id="caution" rows="2" class="db-field-control"></textarea>
                         <small class="db-field-alert" v-if="errors.caution">{{
@@ -159,25 +129,7 @@
                     </div>
 
                     <div class="form-col-12">
-                        <div class="flex items-center justify-between">
-                            <label for="description" class="db-field-title">{{ $t("label.description") }}</label>
-                            <button v-if="aiStatus" type="button" @click="generateAiDescription"
-                                class="text-primary text-xs flex items-center cursor-pointer">
-                                <i class="lab lab-fill-ai text-[#8B5CF6]"></i>
-                                <span :class="aiDescriptionLoading ? '' : 'hidden'" class="ai-text-animation"
-                                    role="status">
-                                    {{ $t("label.just_a_second") }}
-                                </span>
-                                <span :class="!aiDescriptionLoading && !props.form.description ? '' : 'hidden'"
-                                    class="btn-text">
-                                    {{ $t("label.generate") }}
-                                </span>
-                                <span :class="!aiDescriptionLoading && props.form.description ? '' : 'hidden'"
-                                    class="btn-text">
-                                    {{ $t("label.regenerate") }}
-                                </span>
-                            </button>
-                        </div>
+                        <label for="description" class="db-field-title">{{ $t("label.description") }}</label>
                         <textarea v-model="props.form.description" v-bind:class="errors.description ? 'invalid' : ''"
                             id="description" class="db-field-control"></textarea>
                         <small class="db-field-alert" v-if="errors.description">{{
@@ -189,7 +141,7 @@
                         <div class="flex flex-wrap gap-3 mt-4">
                             <button type="submit" class="db-btn py-2 text-white bg-primary">
                                 <i class="lab lab-save"></i>
-                                <span>{{ $t("label.save") }}</span>
+                                <span>{{ $t("button.save") }}</span>
                             </button>
                             <button type="button" class="modal-btn-outline modal-close" @click="reset">
                                 <i class="lab lab-close"></i>
@@ -221,9 +173,6 @@ export default {
             loading: {
                 isActive: false
             },
-            aiNameLoading: false,
-            aiDescriptionLoading: false,
-            aiCautionLoading: false,
             enums: {
                 statusEnum: statusEnum,
                 itemTypeEnum: itemTypeEnum,
@@ -252,9 +201,6 @@ export default {
         },
         taxes: function () {
             return this.$store.getters['tax/lists'];
-        },
-        aiStatus: function () {
-            return this.$store.getters['ai/status'];
         }
     },
     mounted() {
@@ -272,7 +218,6 @@ export default {
             order_column: 'id',
             order_type: 'asc'
         });
-        this.$store.dispatch('ai/status');
         this.loading.isActive = false;
     },
     methods: {
@@ -370,54 +315,6 @@ export default {
                 this.loading.isActive = false;
                 alertService.error(err)
             }
-        },
-        generateAiName: function () {
-            if (!this.props.form.name) {
-                alertService.warning(this.$t('message.item_name_is_required_to_generate_name'));
-                return;
-            }
-            this.aiNameLoading = true;
-            this.$store.dispatch('ai/name', { name: this.props.form.name }).then((res) => {
-                this.aiNameLoading = false;
-                if (res.data.data) {
-                    this.props.form.name = res.data.data;
-                }
-            }).catch((err) => {
-                this.aiNameLoading = false;
-                alertService.error(err.response?.data?.message || err.message);
-            });
-        },
-        generateAiDescription: function () {
-            if (!this.props.form.name) {
-                alertService.warning(this.$t('message.item_name_is_required_to_generate_description'));
-                return;
-            }
-            this.aiDescriptionLoading = true;
-            this.$store.dispatch('ai/description', { name: this.props.form.name }).then((res) => {
-                this.aiDescriptionLoading = false;
-                if (res.data.data) {
-                    this.props.form.description = res.data.data;
-                }
-            }).catch((err) => {
-                this.aiDescriptionLoading = false;
-                alertService.error(err.response?.data?.message || err.message);
-            });
-        },
-        generateAiCaution: function () {
-            if (!this.props.form.name) {
-                alertService.warning(this.$t('message.item_name_is_required_to_generate_caution'));
-                return;
-            }
-            this.aiCautionLoading = true;
-            this.$store.dispatch('ai/caution', { name: this.props.form.name }).then((res) => {
-                this.aiCautionLoading = false;
-                if (res.data.data) {
-                    this.props.form.caution = res.data.data;
-                }
-            }).catch((err) => {
-                this.aiCautionLoading = false;
-                alertService.error(err.response?.data?.message || err.message);
-            });
         }
     }
 }

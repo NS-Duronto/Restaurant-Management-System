@@ -6,7 +6,7 @@
                 <div class="w-full">
                     <div class="p-4 mb-6 rounded-2xl shadow-xs bg-white">
                         <h3 class="text-sm leading-6 mb-1 font-medium">{{ $t("label.order_id") }}: <span
-                                class="text-[#008BBA]">#{{ order.order_serial_no }}</span></h3>
+                                class="text-primary">#{{ order.order_serial_no }}</span></h3>
                         <p class="text-xs font-light mb-3">{{ order.order_datetime }}</p>
                         <div class="flex flex-wrap items-center gap-2 mb-1">
                             <span class="text-sm capitalize">{{ $t("label.order_type") }}:</span>

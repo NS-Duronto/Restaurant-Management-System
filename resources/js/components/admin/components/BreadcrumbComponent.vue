@@ -12,7 +12,7 @@
                         {{ $t('menu.'+val.meta.breadcrumb) }}
                     </router-link>
                 </span>
-                <span v-else>
+                <span v-else class="text-heading dark:text-gray-200 font-semibold">
                     {{ $t('menu.'+val.meta.breadcrumb) }}
                 </span>
             </li>

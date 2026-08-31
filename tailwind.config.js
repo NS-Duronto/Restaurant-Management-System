@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
       "./resources/**/*.blade.php",
       "./resources/**/*.js",
@@ -23,8 +24,9 @@ module.exports = {
               "80": "80",
           },
           fontFamily: {
-              "rubik": ["'Rubik', sans-serif"],
-              "public": ["'Public Sans', sans-serif"],
+              "rubik": ["'Rubik'", "'Hind Siliguri'", "sans-serif"],
+              "public": ["'Public Sans'", "'Hind Siliguri'", "sans-serif"],
+              "siliguri": ["'Hind Siliguri'", "sans-serif"],
               "awesome": ["'Font Awesome 6 Free'"],
               "lab": ["'Lab'"]
           },
@@ -34,6 +36,18 @@ module.exports = {
               "placeholder": "#A0A3BD",
               "primary": "rgb(var(--primary) / <alpha-value>)",
               "primary-light": "rgb(220 234 255 / <alpha-value>)",
+              brand: {
+                  50: '#fff7ed',
+                  100: '#ffedd5',
+                  200: '#fed7aa',
+                  300: '#fdba74',
+                  400: '#fb923c',
+                  500: '#f97316',
+                  600: '#ea580c',
+                  700: '#c2410c',
+                  800: '#9a3412',
+                  900: '#7c2d12',
+              }
           },
           boxShadow: {
               "sidebar": "15px 0px 25px 0px rgba(0, 0, 0, 0.08)",
