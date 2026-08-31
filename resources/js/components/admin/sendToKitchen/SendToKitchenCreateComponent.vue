@@ -28,20 +28,20 @@
                                 </button>
                             </div>
 
-                            <div class="space-y-2 max-h-[280px] overflow-y-auto pr-1">
+                            <div class="space-y-2.5">
                                 <div v-for="(row, index) in props.form.items" :key="index"
-                                    class="p-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 flex items-center gap-2">
-                                    <div class="flex-1">
+                                    class="p-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 flex flex-wrap sm:flex-nowrap items-center gap-2">
+                                    <div class="flex-1 min-w-[180px]">
                                         <vue-select class="db-field-control text-xs"
-                                            v-model="row.kitchen_goods_id" :options="kitchenGoods" label-by="name"
+                                            v-model="row.kitchen_goods_id" :options="kitchenGoodsOptions" label-by="name"
                                             value-by="id" :closeOnSelect="true" :searchable="true" :clearOnClose="true"
-                                            placeholder="কাঁচামাল নির্বাচন" />
+                                            placeholder="কাঁচামাল নির্বাচন করুন" />
                                     </div>
-                                    <div class="w-32">
+                                    <div class="w-28">
                                         <input v-model="row.quantity" type="number" step="0.01" min="0.01"
                                             placeholder="ইস্যুর পরিমাণ" class="db-field-control text-xs" required>
                                     </div>
-                                    <div class="w-32 text-xs text-gray-500 dark:text-gray-400 font-semibold" v-if="getStock(row.kitchen_goods_id) !== null">
+                                    <div class="w-28 text-xs text-gray-500 dark:text-gray-400 font-semibold text-right" v-if="getStock(row.kitchen_goods_id) !== null">
                                         স্টক: <span class="text-orange-500 font-bold">{{ getStock(row.kitchen_goods_id) }}</span>
                                     </div>
                                     <button type="button" @click="removeItemRow(index)" v-if="props.form.items.length > 1"
@@ -101,6 +101,13 @@ export default {
         },
         kitchenGoods: function () {
             return this.$store.getters['kitchenGoods/lists'] || [];
+        },
+        kitchenGoodsOptions: function () {
+            const list = this.$store.getters['kitchenGoods/lists'] || [];
+            return list.map(item => ({
+                id: item.id,
+                name: `${item.name} (স্টক: ${Number(item.current_stock || item.stock_quantity || 0).toFixed(2)} ${item.unit_name || item.unit_code || ''})`
+            }));
         },
     },
     mounted() {

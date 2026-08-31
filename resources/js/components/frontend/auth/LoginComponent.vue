@@ -1,81 +1,113 @@
 <template>
     <LoadingComponent :props="loading" />
-    <section class="pt-8 pb-16">
-        <div class="container max-w-[360px] py-6 p-4 mb-6 sm:px-6 shadow-xs rounded-2xl bg-white">
-            <h2 class="capitalize mb-6 text-center text-[22px] font-semibold leading-[34px] text-heading">
+    <section class="min-h-screen py-10 px-4 flex flex-col justify-center items-center bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
+        
+        <!-- Top Brand & Theme Switcher -->
+        <div class="w-full max-w-[380px] flex items-center justify-between mb-6 px-1">
+            <div class="flex items-center gap-2.5">
+                <div class="bg-orange-500 text-white p-2 rounded-xl font-bold text-sm shadow-md shadow-orange-500/20">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <span class="text-base font-bold text-orange-500 dark:text-orange-400">
+                    {{ setting.company_name || 'Sohoj RMS' }}
+                </span>
+            </div>
+            
+            <!-- Dark / Light Mode Toggle -->
+            <button @click="toggleTheme" type="button"
+                class="w-9 h-9 rounded-xl flex items-center justify-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 shadow-sm transition"
+                :title="isDarkMode ? 'লাইট মোডে পরিবর্তন' : 'ডার্ক মোডে পরিবর্তন'">
+                <i :class="isDarkMode ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-indigo-500'"></i>
+            </button>
+        </div>
+
+        <!-- Main Login Card -->
+        <div class="w-full max-w-[380px] p-6 sm:p-8 mb-4 shadow-xl rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transition-colors">
+            <h2 class="mb-6 text-center text-xl font-bold text-gray-900 dark:text-white">
                 {{ $t('label.welcome_back') }}
             </h2>
+
             <div v-if="errors.validation"
-                class="bg-red-100 border border-red-400 text-red-700 px-3 py-3 mb-5 rounded relative flex items-start gap-2"
+                class="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 mb-5 rounded-2xl flex items-start gap-2.5 text-sm"
                 role="alert">
-                <span class="block sm:inline text-sm flex-auto">{{ errors.validation }}</span>
-                <button type="button" @click="close" class="leading-none">
-                    <i class="lab lab-close-circle-line"></i>
+                <i class="fa-solid fa-triangle-exclamation text-red-500 mt-0.5"></i>
+                <span class="flex-auto">{{ errors.validation }}</span>
+                <button type="button" @click="close" class="leading-none text-red-400 hover:text-red-600">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form @submit.prevent="login">
-                <div class="mb-4">
-                    <label for="formEmail" class="text-sm capitalize mb-1 text-heading">{{ $t('label.email') }}</label>
-                    <input type="text" :class="errors.email ? 'invalid' : ''" v-model="form.email"
-                        class="w-full h-12 rounded-lg border px-4 border-[#D9DBE9]" id="formEmail">
-                    <small class="db-field-alert" v-if="errors.email">{{ errors.email[0] }}</small>
+
+            <form @submit.prevent="login" class="space-y-4">
+                <div>
+                    <label for="formEmail" class="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                        {{ $t('label.email') }}
+                    </label>
+                    <input type="text" :class="errors.email ? 'border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-700'"
+                        v-model="form.email"
+                        class="w-full h-12 rounded-xl border bg-gray-50/50 dark:bg-gray-800/80 px-4 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 outline-none transition"
+                        id="formEmail" placeholder="admin@example.com">
+                    <small class="text-xs text-red-500 mt-1 block" v-if="errors.email">{{ errors.email[0] }}</small>
                 </div>
-                <div class="mb-4">
-                    <label for="formPassword" class="text-sm capitalize mb-1 text-heading">{{
-                        $t('label.password')
-                        }}</label>
-                    <input autocomplete="off" type="password" :class="errors.password ? 'invalid' : ''"
-                        v-model="form.password" class="w-full h-12 rounded-lg border px-4 border-[#D9DBE9]"
-                        id="formPassword">
-                    <small class="db-field-alert" v-if="errors.password">{{ errors.password[0] }}</small>
+
+                <div>
+                    <label for="formPassword" class="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                        {{ $t('label.password') }}
+                    </label>
+                    <input autocomplete="off" type="password" :class="errors.password ? 'border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-700'"
+                        v-model="form.password"
+                        class="w-full h-12 rounded-xl border bg-gray-50/50 dark:bg-gray-800/80 px-4 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 outline-none transition"
+                        id="formPassword" placeholder="••••••••">
+                    <small class="text-xs text-red-500 mt-1 block" v-if="errors.password">{{ errors.password[0] }}</small>
                 </div>
-                <div class="flex items-center justify-between mb-6">
-                    <div class="db-field-checkbox p-0">
-                        <div class="custom-checkbox w-3 h-3">
-                            <input type="checkbox" id="checkbox2" class="custom-checkbox-field">
-                            <i
-                                class="fa-solid fa-check custom-checkbox-icon leading-[9px] text-[9px] rounded-[3px] border-[#6E7191]"></i>
-                        </div>
-                        <label for="checkbox2" class="db-field-label text-xs text-heading">
-                            {{ $t('label.remember_me') }}
-                        </label>
-                    </div>
+
+                <div class="flex items-center justify-between pt-1">
+                    <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-gray-600 dark:text-gray-400">
+                        <input type="checkbox" id="checkbox2" class="w-4 h-4 rounded text-orange-500 focus:ring-orange-500 border-gray-300 dark:border-gray-700 dark:bg-gray-800">
+                        <span>{{ $t('label.remember_me') }}</span>
+                    </label>
                     <router-link :to="{ name: 'auth.forgetPassword' }"
-                        class="capitalize text-xs font-medium transition text-primary">
+                        class="text-xs font-medium text-orange-500 hover:text-orange-600 dark:text-orange-400 transition">
                         {{ $t('button.forget_password') }}
                     </router-link>
                 </div>
+
                 <button type="submit"
-                    class="w-full h-12 text-center capitalize font-medium rounded-3xl mb-6 text-white bg-primary">
-                    {{ $t('button.login') }}
+                    class="w-full h-12 mt-2 font-semibold text-sm rounded-xl text-white bg-orange-500 hover:bg-orange-600 active:scale-[0.99] transition shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2">
+                    <span>{{ $t('button.login') }}</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
                 </button>
             </form>
         </div>
 
+        <!-- Demo Quick Login Card -->
         <div v-if="demo === 'true' || demo === 'TRUE' || demo === 'True' || demo === '1' || demo === 1"
-            class="container max-w-[360px] py-6 p-4 sm:px-6 shadow-xs rounded-2xl bg-white">
-            <h2 class="mb-6 text-center text-lg font-medium text-heading">{{ $t('message.for_quick_demo') }}</h2>
-            <nav class="grid grid-cols-2 gap-3">
+            class="w-full max-w-[380px] p-6 shadow-xl rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transition-colors">
+            <h2 class="mb-4 text-center text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                {{ $t('message.for_quick_demo') }}
+            </h2>
+            <nav class="grid grid-cols-1 gap-2.5">
                 <button @click.prevent="setupCredit('admin')"
-                    class="click-to-prop w-full h-10 leading-10 rounded-lg text-center text-sm capitalize text-white bg-orange-500"
+                    class="click-to-prop w-full h-10 rounded-xl text-center text-xs font-semibold capitalize text-white bg-orange-500 hover:bg-orange-600 active:scale-95 transition shadow-sm"
                     id="adminClick">
                     {{ $t('label.admin') }}
                 </button>
+                <!-- 
                 <button @click.prevent="setupCredit('branchManager')"
-                    class="click-to-prop w-full h-10 leading-10 rounded-lg text-center text-sm capitalize text-white bg-sky-600"
+                    class="click-to-prop w-full h-10 rounded-xl text-center text-xs font-semibold capitalize text-white bg-sky-600 hover:bg-sky-700 active:scale-95 transition shadow-sm"
                     id="branchManagerClick">
                     {{ $t('label.branch_manager') }}
                 </button>
                 <button @click.prevent="setupCredit('posOperator')"
-                    class="click-to-prop w-full h-10 leading-10 rounded-lg text-center text-sm capitalize text-white bg-purple-500"
+                    class="click-to-prop w-full h-10 rounded-xl text-center text-xs font-semibold capitalize text-white bg-purple-600 hover:bg-purple-700 active:scale-95 transition shadow-sm"
                     id="posOperatorClick">
                     {{ $t('label.pos_operator') }}
                 </button>
                 <button @click.prevent="setupCredit('chef')"
-                    class="click-to-prop w-full h-10 leading-10 rounded-lg text-center text-sm capitalize text-white bg-green-500"
+                    class="click-to-prop w-full h-10 rounded-xl text-center text-xs font-semibold capitalize text-white bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition shadow-sm"
                     id="chefClick">
                     {{ $t('label.chef_kitchen') }}
                 </button>
+                -->
             </nav>
         </div>
     </section>
@@ -104,15 +136,29 @@ export default {
             errors: {},
             permissions: {},
             firstMenu: null,
-            demo: ENV.DEMO
+            demo: ENV.DEMO,
+            isDarkMode: localStorage.getItem('rms_theme') === 'dark' || (!('rms_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
         }
     },
     computed: {
+        setting: function () {
+            return this.$store.getters['frontendSetting/lists'];
+        },
         permission: function () {
             return this.$store.getters.authPermission;
         }
     },
     methods: {
+        toggleTheme: function () {
+            this.isDarkMode = !this.isDarkMode;
+            if (this.isDarkMode) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('rms_theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('rms_theme', 'light');
+            }
+        },
         login: function () {
             try {
                 this.loading.isActive = true;

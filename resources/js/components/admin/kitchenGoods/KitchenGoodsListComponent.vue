@@ -44,7 +44,7 @@
                                 </td>
                                 <td class="db-table-body-td">
                                     <span :class="statusClass(item.status)">
-                                        {{ enums.statusEnumArray[item.status] }}
+                                        {{ (item.status == 5 || item.status == 1) ? ($t('label.active') || 'Active') : ($t('label.inactive') || 'Inactive') }}
                                     </span>
                                 </td>
                                 <td class="db-table-body-td">

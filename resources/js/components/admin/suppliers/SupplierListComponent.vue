@@ -35,7 +35,7 @@
                                 <td class="db-table-body-td">{{ supplier.email || '-' }}</td>
                                 <td class="db-table-body-td">
                                     <span :class="statusClass(supplier.status)">
-                                        {{ enums.statusEnumArray[supplier.status] }}
+                                        {{ (supplier.status == 5 || supplier.status == 1) ? ($t('label.active') || 'Active') : ($t('label.inactive') || 'Inactive') }}
                                     </span>
                                 </td>
                                 <td class="db-table-body-td">

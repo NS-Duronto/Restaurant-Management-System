@@ -1,24 +1,33 @@
 <template>
     <LoadingComponent :props="loading" />
-    <section class="pt-8 pb-16">
-        <div class="container max-w-[360px] py-6 p-4 sm:px-6 shadow-xs rounded-2xl bg-white">
-            <h2 class="capitalize mb-6 text-center text-[22px] font-semibold leading-[34px] text-heading">
-                {{ $t('label.verify_email') }}</h2>
-            <form @submit.prevent="verifyCode">
-                <label class="text-sm mb-1 first-letter:uppercase text-heading">{{
-                    $t('message.enter_the_code_sent_to')
-                    }} <span class="font-medium">{{ resetInfo.email }}</span></label>
-                <input :class="errors.code ? 'invalid' : ''" v-model="form.code" type="number"
-                    class="w-full h-12 rounded-lg border px-4 border-[#D9DBE9]">
-                <small class="db-field-alert" v-if="errors.code">{{ errors.code[0] }}</small>
-                <br>
-                <button @click.prevent="resendCode" type="button"
-                    class="capitalize mb-6 mt-2 text-xs font-medium transition text-primary hover:underline">
-                    {{ $t('button.resend_code') }}
-                </button>
+    <section class="min-h-screen py-10 px-4 flex flex-col justify-center items-center bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
+        <div class="w-full max-w-[380px] p-6 sm:p-8 shadow-xl rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transition-colors">
+            <h2 class="mb-6 text-center text-xl font-bold text-gray-900 dark:text-white">
+                {{ $t('label.verify_email') }}
+            </h2>
+            <form @submit.prevent="verifyCode" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
+                        {{ $t('message.enter_the_code_sent_to') }} <span class="font-bold text-orange-500">{{ resetInfo.email }}</span>
+                    </label>
+                    <input :class="errors.code ? 'border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-700'"
+                        v-model="form.code" type="number"
+                        class="w-full h-12 rounded-xl border bg-gray-50/50 dark:bg-gray-800/80 px-4 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 outline-none transition"
+                        placeholder="123456">
+                    <small class="text-xs text-red-500 mt-1 block" v-if="errors.code">{{ errors.code[0] }}</small>
+                </div>
+
+                <div class="text-right">
+                    <button @click.prevent="resendCode" type="button"
+                        class="text-xs font-medium text-orange-500 hover:text-orange-600 dark:text-orange-400 transition hover:underline">
+                        {{ $t('button.resend_code') }}
+                    </button>
+                </div>
+
                 <button type="submit"
-                    class="w-full h-12 text-center capitalize font-medium rounded-3xl text-white bg-primary">
-                    {{ $t('button.continue') }}
+                    class="w-full h-12 font-semibold text-sm rounded-xl text-white bg-orange-500 hover:bg-orange-600 active:scale-[0.99] transition shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2">
+                    <span>{{ $t('button.continue') }}</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
                 </button>
             </form>
         </div>

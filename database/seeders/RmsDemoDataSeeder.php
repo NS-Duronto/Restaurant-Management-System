@@ -25,12 +25,12 @@ class RmsDemoDataSeeder extends Seeder
 
         // 1. Units
         $unitsData = [
-            ['name' => 'Kilogram', 'code' => 'kg', 'status' => 1],
-            ['name' => 'Liter', 'code' => 'ltr', 'status' => 1],
-            ['name' => 'Gram', 'code' => 'gm', 'status' => 1],
-            ['name' => 'Piece', 'code' => 'pcs', 'status' => 1],
-            ['name' => 'Bag / বস্তা', 'code' => 'bag', 'status' => 1],
-            ['name' => 'Box / কার্টুন', 'code' => 'box', 'status' => 1],
+            ['name' => 'Kilogram', 'code' => 'kg', 'status' => Status::ACTIVE],
+            ['name' => 'Liter', 'code' => 'ltr', 'status' => Status::ACTIVE],
+            ['name' => 'Gram', 'code' => 'gm', 'status' => Status::ACTIVE],
+            ['name' => 'Piece', 'code' => 'pcs', 'status' => Status::ACTIVE],
+            ['name' => 'Bag / বস্তা', 'code' => 'bag', 'status' => Status::ACTIVE],
+            ['name' => 'Box / কার্টুন', 'code' => 'box', 'status' => Status::ACTIVE],
         ];
 
         $units = [];
@@ -52,7 +52,7 @@ class RmsDemoDataSeeder extends Seeder
         foreach ($categoriesData as $name => $desc) {
             $categories[$name] = KitchenGoodsCategory::firstOrCreate(
                 ['name' => $name],
-                ['slug' => Str::slug($name), 'description' => $desc, 'status' => 1]
+                ['slug' => Str::slug($name), 'description' => $desc, 'status' => Status::ACTIVE]
             );
         }
 
@@ -64,7 +64,7 @@ class RmsDemoDataSeeder extends Seeder
                 'phone' => '01711223344',
                 'email' => 'haquetraders@gmail.com',
                 'address' => 'বাবুবাজার চালের আড়ত, ঢাকা',
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
             [
                 'name' => 'গ্রিন ভ্যালি পোল্ট্রি ফার্ম',
@@ -72,7 +72,7 @@ class RmsDemoDataSeeder extends Seeder
                 'phone' => '01822334455',
                 'email' => 'greenvalley.agro@yahoo.com',
                 'address' => 'গাজীপুর সদর, ঢাকা',
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
             [
                 'name' => 'ফ্রেশ অ্যাগ্রো ভেজিটেবল',
@@ -80,7 +80,7 @@ class RmsDemoDataSeeder extends Seeder
                 'phone' => '01933445566',
                 'email' => 'freshagro.bd@gmail.com',
                 'address' => 'কাওরান বাজার পাইকারি মার্কেট, ঢাকা',
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
             [
                 'name' => 'সুরমা ডেইরি মিল্ক',
@@ -88,7 +88,7 @@ class RmsDemoDataSeeder extends Seeder
                 'phone' => '01755667788',
                 'email' => 'surmadairy@gmail.com',
                 'address' => 'সাভার, ঢাকা',
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
         ];
 
@@ -105,7 +105,7 @@ class RmsDemoDataSeeder extends Seeder
                 'unit_id' => $units['kg']->id,
                 'cost_per_unit' => 280,
                 'current_stock' => 150,
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
             [
                 'name' => 'চিনিগুঁড়া পোলাও চাল',
@@ -113,7 +113,7 @@ class RmsDemoDataSeeder extends Seeder
                 'unit_id' => $units['kg']->id,
                 'cost_per_unit' => 140,
                 'current_stock' => 120,
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
             [
                 'name' => 'সয়াবিন তেল (রূপচাঁদা ড্রাম)',
@@ -121,7 +121,7 @@ class RmsDemoDataSeeder extends Seeder
                 'unit_id' => $units['ltr']->id,
                 'cost_per_unit' => 170,
                 'current_stock' => 80,
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
             [
                 'name' => 'গাওয়া ঘি (খাঁটি বাঘাবাড়ী)',
@@ -129,7 +129,7 @@ class RmsDemoDataSeeder extends Seeder
                 'unit_id' => $units['kg']->id,
                 'cost_per_unit' => 1400,
                 'current_stock' => 15,
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
             [
                 'name' => 'ব্রয়লার মুরগির মাংস (ড্রেসড)',
@@ -137,7 +137,7 @@ class RmsDemoDataSeeder extends Seeder
                 'unit_id' => $units['kg']->id,
                 'cost_per_unit' => 195,
                 'current_stock' => 60,
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
             [
                 'name' => 'ফার্মের লাল ডিম',
@@ -145,7 +145,7 @@ class RmsDemoDataSeeder extends Seeder
                 'unit_id' => $units['pcs']->id,
                 'cost_per_unit' => 12.5,
                 'current_stock' => 300,
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
             [
                 'name' => 'দেশি পেঁয়াজ',
@@ -153,7 +153,7 @@ class RmsDemoDataSeeder extends Seeder
                 'unit_id' => $units['kg']->id,
                 'cost_per_unit' => 85,
                 'current_stock' => 70,
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
             [
                 'name' => 'আদা ও রসুন পেস্ট',
@@ -161,7 +161,7 @@ class RmsDemoDataSeeder extends Seeder
                 'unit_id' => $units['kg']->id,
                 'cost_per_unit' => 240,
                 'current_stock' => 25,
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
             [
                 'name' => 'খাঁটি তরল দুধ',
@@ -169,7 +169,7 @@ class RmsDemoDataSeeder extends Seeder
                 'unit_id' => $units['ltr']->id,
                 'cost_per_unit' => 90,
                 'current_stock' => 40,
-                'status' => 1,
+                'status' => Status::ACTIVE,
             ],
         ];
 
@@ -192,7 +192,7 @@ class RmsDemoDataSeeder extends Seeder
         foreach ($expCategoriesData as $name => $desc) {
             $expCategories[$name] = ExpenseCategory::firstOrCreate(
                 ['name' => $name],
-                ['description' => $desc, 'status' => 1]
+                ['description' => $desc, 'status' => \App\Enums\Status::ACTIVE]
             );
         }
 

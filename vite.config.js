@@ -18,11 +18,11 @@ export default defineConfig({
         include: ["quill"],
         exclude: ["swiper/vue", "swiper/types"]
     },
-    // server: {
-    //     host: '0.0.0.0',
-    //     hmr: {
-    //         host: 'localhost'
-    //     }
-    // }
+    server: {
+        host: '0.0.0.0',
+        hmr: {
+            host: 'localhost'
+        }
+    }
 });
 

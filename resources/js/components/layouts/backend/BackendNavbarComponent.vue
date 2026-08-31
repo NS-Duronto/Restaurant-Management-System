@@ -1,5 +1,5 @@
 <template>
-    <div class="backdrop" @click="handleSidebar"></div>
+    <div class="backdrop" @click="handleBackdropClick"></div>
     <header class="db-header">
         <router-link class="w-40 flex-shrink-0" :to="{ name: 'admin.dashboard' }" @click="closeFullScreen">
             <img class="w-full" :src="setting.theme_logo" alt="logo">
@@ -85,58 +85,6 @@
                 v-if="!$route.path.includes('kitchen-display-system') && !$route.path.includes('order-status-screen')"
                 class="fa-solid db-header-nav w-9 h-9 rounded-lg text-primary bg-primary/5 dark:bg-primary/20"
                 :class="sidebar ? 'fa-align-left' : 'fa-bars'"></button>
-
-            <div class="dropdown-group">
-                <button class="dropdown-btn flex items-center gap-2">
-                    <img class="flex-shrink-0 w-9 h-9 object-cover rounded-lg" :src="authInfo.image" alt="avatar">
-                    <h3 class="whitespace-nowrap text-sm capitalize text-left leading-[17px] text-heading dark:text-gray-200">{{ $t('label.hello') }} <b
-                            class="block font-semibold text-gray-900 dark:text-white">{{ textShortener(authInfo.name, 15) }}</b></h3>
-                    <i class="lab lab-arrow-down text-xs ml-1.5 lab-font-size-14 dark:text-gray-400"></i>
-                </button>
-                <div
-                    class="dropdown-list fixed sm:absolute top-[75px] sm:top-12 ltr:right-0 rtl:left-0 z-[60] rounded-2xl w-full h-[calc(100vh_-_75px)] overflow-y-auto sm:h-auto sm:w-[360px] p-4 shadow-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 transition-all duration-300 scale-y-0 origin-top">
-                    <div class="w-fit mx-auto text-center mb-5">
-                        <figure
-                            class="relative z-10 w-[98px] h-[98px] border-2 border-dashed rounded-full inline-flex items-center justify-center border-white bg-orange-500 before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-24 before:h-24 before:rounded-full before:-z-10 before:bg-white dark:before:bg-gray-900">
-                            <img class="w-[90px] h-[90px] rounded-full shadow-avatar" :src="authInfo.image"
-                                alt="avatar">
-                        </figure>
-
-                        <label for="imageProperty"
-                            class="block w-11 h-11 mx-auto -mt-7 mb-3 relative z-10 rounded-full border-2 cursor-pointer bg-heading dark:bg-gray-800 border-white dark:border-gray-700">
-                            <input @change="saveImage" accept="image/png, image/jpeg, image/jpg" ref="imageProperty"
-                                type="file" id="imageProperty"
-                                class="w-full h-full rounded-full opacity-0 cursor-pointer">
-                            <i
-                                class="lab lab-edit-2 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 -z-10 lab-font-size-24 lab-font-color-1"></i>
-                        </label>
-
-                        <h3 class="font-bold text-sm leading-6 capitalize mb-0.5 text-heading dark:text-gray-100">{{ textShortener(authInfo.name, 20) }}</h3>
-                        <p class="text-xs mb-0.5 text-gray-500 dark:text-gray-400">{{ authInfo.email }}</p>
-                        <p dir="ltr" class="text-xs text-gray-500 dark:text-gray-400">{{ authInfo.country_code }}{{ authInfo.phone }}</p>
-                        <h3 class="font-semibold text-sm leading-6 capitalize mb-0.5 text-orange-500">{{ authInfo.currency_balance }}</h3>
-                    </div>
-                    <nav>
-                        <router-link :to="{ name: 'admin.profile.editProfile' }"
-                            class="paper-link transition w-full flex items-center gap-3.5 py-3 border-b last:border-none border-[#EFF0F6] dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-primary">
-                            <i class="lab lab-edit lab-font-size-17"></i>
-                            <span class="text-sm leading-6 capitalize">{{ $t('button.edit_profile') }}</span>
-                        </router-link>
-
-                        <router-link :to="{ name: 'admin.profile.changePassword' }"
-                            class="paper-link transition w-full flex items-center gap-3.5 py-3 border-b last:border-none border-[#EFF0F6] dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-primary">
-                            <i class="lab lab-key lab-font-size-17"></i>
-                            <span class="text-sm leading-6 capitalize">{{ $t('button.change_password') }}</span>
-                        </router-link>
-
-                        <button @click="logout()"
-                            class="paper-link transition w-full flex items-center gap-3.5 py-3 border-b last:border-none border-[#EFF0F6] dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-red-500">
-                            <i class="lab lab-logout lab-font-size-17"></i>
-                            <span class="text-sm leading-6 capitalize">{{ $t('button.logout') }}</span>
-                        </button>
-                    </nav>
-                </div>
-            </div>
         </div>
     </header>
 
@@ -349,6 +297,16 @@ export default {
             this.$store.dispatch("logout").then(res => {
                 this.$router.push({ name: "auth.login" });
             }).catch();
+        },
+        handleBackdropClick: function () {
+            const activeDrawer = document?.querySelector(".drawer.active");
+            if (activeDrawer) {
+                appService.sideDrawerHide();
+            } else if (document?.querySelector(".db-sidebar")?.classList?.contains("active")) {
+                this.handleSidebar();
+            } else {
+                document?.querySelectorAll(".backdrop")?.forEach(drop => drop?.classList?.remove("active"));
+            }
         },
         handleSidebar: function () {
             this.sidebarOpen = !this.sidebar;

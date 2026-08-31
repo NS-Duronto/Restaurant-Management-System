@@ -23,12 +23,10 @@ export default {
     sideDrawerHide: function (id = 'sideDrawer') {
         const drawerDivs = document?.querySelectorAll(".drawer");
         const drawerSets = document?.querySelectorAll("[data-drawer]");
-        document?.querySelectorAll("#sidebar")?.forEach((closeBtn) => {
-            drawerSets?.forEach(drawerBtn => drawerBtn?.classList?.remove("active"));
-            drawerDivs?.forEach(drawerDiv => drawerDiv?.classList?.remove("active"));
-            document?.querySelector(".backdrop")?.classList?.remove("active");
-            document.body.style.overflowY = "auto"
-        });
+        drawerSets?.forEach(drawerBtn => drawerBtn?.classList?.remove("active"));
+        drawerDivs?.forEach(drawerDiv => drawerDiv?.classList?.remove("active"));
+        document?.querySelectorAll(".backdrop")?.forEach(drop => drop?.classList?.remove("active"));
+        document.body.style.overflowY = "auto";
     },
 
     modalShow: function (id = '.modal') {
@@ -166,10 +164,10 @@ export default {
         return text;
     },
     statusClass: function (status) {
-        if (status === statusEnum.ACTIVE) {
-            return "db-table-badge text-green-600 bg-green-100";
+        if (status === statusEnum.ACTIVE || status === 5 || status === 1 || status === '1' || status === 'Active' || status === true) {
+            return "db-table-badge text-emerald-600 bg-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-400 font-semibold";
         } else {
-            return "db-table-badge text-red-600 bg-red-100";
+            return "db-table-badge text-red-600 bg-red-100 dark:bg-red-950/50 dark:text-red-400 font-semibold";
         }
     },
 

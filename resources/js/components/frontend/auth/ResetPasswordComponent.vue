@@ -1,30 +1,37 @@
 <template>
     <LoadingComponent :props="loading"/>
-    <section class="pt-8 pb-16">
-        <div class="container max-w-[360px] py-6 p-4 sm:px-6 shadow-xs rounded-2xl bg-white">
-            <h2 class="capitalize mb-6 text-center text-[22px] font-semibold leading-[34px] text-heading">
-                {{ $t('label.create_new_password') }}</h2>
-            <form @submit.prevent="resetPassword">
-                <div class="mb-4">
-                    <label class="text-sm capitalize mb-1 text-heading">{{ $t('label.new_password') }}</label>
-                    <input :class="errors.password ? 'invalid' : ''" v-model="form.password" type="password"
-                           class="w-full h-12 rounded-lg border px-4 border-[#D9DBE9]">
-                    <small class="db-field-alert" v-if="errors.password">{{ errors.password[0] }}</small>
+    <section class="min-h-screen py-10 px-4 flex flex-col justify-center items-center bg-gray-50 dark:bg-gray-950 transition-colors duration-200">
+        <div class="w-full max-w-[380px] p-6 sm:p-8 shadow-xl rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 transition-colors">
+            <h2 class="mb-6 text-center text-xl font-bold text-gray-900 dark:text-white">
+                {{ $t('label.create_new_password') }}
+            </h2>
+            <form @submit.prevent="resetPassword" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                        {{ $t('label.new_password') }}
+                    </label>
+                    <input :class="errors.password ? 'border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-700'"
+                        v-model="form.password" type="password"
+                        class="w-full h-12 rounded-xl border bg-gray-50/50 dark:bg-gray-800/80 px-4 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 outline-none transition"
+                        placeholder="••••••••">
+                    <small class="text-xs text-red-500 mt-1 block" v-if="errors.password">{{ errors.password[0] }}</small>
                 </div>
 
-                <div class="mb-4">
-                    <label class="text-sm capitalize mb-1 text-heading">{{ $t('label.confirm_password') }}</label>
-                    <input :class="errors.password_confirmation ? 'invalid' : ''" v-model="form.password_confirmation"
-                           type="password"
-                           class="w-full h-12 rounded-lg border px-4 border-[#D9DBE9]">
-                    <small class="db-field-alert" v-if="errors.password_confirmation">{{
-                            errors.password_confirmation[0]
-                        }}</small>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                        {{ $t('label.confirm_password') }}
+                    </label>
+                    <input :class="errors.password_confirmation ? 'border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-700'"
+                        v-model="form.password_confirmation" type="password"
+                        class="w-full h-12 rounded-xl border bg-gray-50/50 dark:bg-gray-800/80 px-4 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:bg-white dark:focus:bg-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 outline-none transition"
+                        placeholder="••••••••">
+                    <small class="text-xs text-red-500 mt-1 block" v-if="errors.password_confirmation">{{ errors.password_confirmation[0] }}</small>
                 </div>
 
                 <button type="submit"
-                        class="w-full h-12 text-center capitalize font-medium rounded-3xl text-white bg-primary">
-                    {{ $t('button.submit') }}
+                    class="w-full h-12 font-semibold text-sm rounded-xl text-white bg-orange-500 hover:bg-orange-600 active:scale-[0.99] transition shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2">
+                    <span>{{ $t('button.submit') }}</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
                 </button>
             </form>
         </div>

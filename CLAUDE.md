@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> FoodScan — QR-code restaurant ordering & management platform (Laravel 12 + Vue 3 SPA).
+> Sohoj RMS — Restaurant Management System & POS platform (Laravel 12 + Vue 3 SPA).
 
 ---
 
