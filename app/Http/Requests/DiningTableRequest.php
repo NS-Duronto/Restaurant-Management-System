@@ -31,7 +31,7 @@ class DiningTableRequest extends FormRequest
                 'max:90',
                 Rule::unique('dining_tables', 'name')->where(function ($query) {
                     return $query->where('branch_id', $this->input('branch_id'));
-                })->ignore($this->route('diningTable.id')),
+                })->ignore($this->route('diningTable')?->id ?? $this->route('diningTable') ?? $this->route('diningTable.id')),
             ],
             'size'      => ['required', 'numeric'],
             'branch_id' => ['required', 'numeric'],

@@ -663,6 +663,8 @@
         "table_running": "রানিং",
         "table_booked": "বুকড",
         "kot_slip": "KOT স্লিপ",
+        "kitchen_slip": "(কিচেন স্লিপ) Kitchen Slip#",
+        "payment_invoice": "Payment Invoice#",
         "customer_invoice": "বিল রিসিট",
         "print_kot": "KOT প্রিন্ট",
         "print_customer_bill": "বিল প্রিন্ট",

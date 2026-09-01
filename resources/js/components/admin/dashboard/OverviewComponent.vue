@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 sm:col-6 xl:col-3 mb-4">
+            <div class="col-12 sm:col-6 xl:col-3 mb-4" v-if="permissionChecker('profit-loss-report')">
                 <div class="p-5 rounded-2xl flex items-center gap-4 bg-red-500 text-white shadow-md shadow-red-500/20 transition-transform hover:-translate-y-1 duration-300">
                     <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
                         <i class="fa-solid fa-arrow-trend-down"></i>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 sm:col-6 xl:col-3 mb-4">
+            <div class="col-12 sm:col-6 xl:col-3 mb-4" v-if="permissionChecker('profit-loss-report')">
                 <div class="p-5 rounded-2xl flex items-center gap-4 text-white shadow-md transition-transform hover:-translate-y-1 duration-300"
                     :class="net_profit_raw >= 0 ? 'bg-teal-600 shadow-teal-500/20' : 'bg-amber-600 shadow-amber-500/20'">
                     <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
@@ -91,6 +91,7 @@
 import LoadingComponent from "../components/LoadingComponent";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
+import appService from "../../../services/appService";
 import { ref } from 'vue';
 import { endOfMonth, endOfYear, startOfMonth, startOfYear, subMonths, subYears } from 'date-fns';
 export default {
@@ -149,8 +150,13 @@ export default {
             this.totalOrders();
             this.totalCustomers();
             this.totalMenuItems();
-            this.totalExpenses();
-            this.totalNetProfit();
+            if (this.permissionChecker('profit-loss-report')) {
+                this.totalExpenses();
+                this.totalNetProfit();
+            }
+        },
+        permissionChecker: function (permissionName) {
+            return appService.permissionChecker(permissionName);
         },
         totalSales: function () {
             this.loading.isActive = true;

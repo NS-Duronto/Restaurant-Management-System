@@ -80,6 +80,9 @@ class ExpenseCategoryService
     public function destroy(ExpenseCategory $expenseCategory): void
     {
         try {
+            if ($expenseCategory->expenses()->exists()) {
+                throw new Exception("Cannot delete category because expenses are associated with it.", 422);
+            }
             $expenseCategory->delete();
         } catch (Exception $exception) {
             Log::info($exception->getMessage());

@@ -45,6 +45,11 @@ class DiningTable extends Model
         return $this->belongsTo(Order::class, 'current_order_id');
     }
 
+    public function getDiningTableStatusAttribute(): int
+    {
+        return (int) ($this->attributes['table_status'] ?? $this->attributes['dining_table_status'] ?? 1);
+    }
+
     public function getQrAttribute(): ?string
     {
         if (! empty($this->qr_code)) {

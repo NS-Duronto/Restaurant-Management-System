@@ -29,7 +29,7 @@ class ItemAttributeRequest extends FormRequest
                 'required',
                 'string',
                 'max:190',
-                Rule::unique("item_attributes", "name")->ignore($this->route('itemAttribute.id'))
+                Rule::unique("item_attributes", "name")->ignore($this->route('itemAttribute')?->id ?? $this->route('itemAttribute') ?? $this->route('itemAttribute.id'))
             ],
             'status'      => ['required', 'numeric', 'max:24']
         ];

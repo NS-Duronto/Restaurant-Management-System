@@ -38,6 +38,11 @@
                         <h3 class="text-xl font-extrabold text-orange-500 mb-0.5">{{ company.company_name }}</h3>
                         <h4 class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ branch.address }}</h4>
                         <h5 class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ $t('label.mobile') }}: {{ branch.phone }}</h5>
+                        <div class="mt-2 text-center">
+                            <span class="text-xs font-black uppercase tracking-wider px-2 py-0.5 border border-dashed border-gray-600 dark:border-gray-400 rounded inline-block text-gray-900 dark:text-white">
+                                {{ $t('label.payment_invoice') }} {{ order.order_serial_no }}
+                            </span>
+                        </div>
                     </div>
 
                     <div class="py-2 border-b border-dashed border-gray-400 text-xs">
@@ -121,8 +126,7 @@
                 <!-- ================= 2. KOT (KITCHEN ORDER TICKET) ================= -->
                 <div v-else class="kot-section">
                     <div class="text-center pb-2 border-b-2 border-dashed border-black">
-                        <h2 class="text-lg font-black tracking-wider uppercase">*** {{ $t('label.kot_slip') }} ***</h2>
-                        <div class="text-xs font-bold mt-1">{{ $t('label.order_no') }}: #{{ order.order_serial_no }}</div>
+                        <h2 class="text-lg font-black tracking-wider uppercase leading-tight">*** {{ $t('label.kitchen_slip') }} {{ order.order_serial_no }} ***</h2>
                     </div>
 
                     <div class="py-2 border-b border-dashed border-black text-xs font-bold flex justify-between">

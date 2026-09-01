@@ -668,6 +668,8 @@
         "table_running": "Running",
         "table_booked": "Booked",
         "kot_slip": "Kitchen Slip (KOT)",
+        "kitchen_slip": "(Kitchen Slip) Kitchen Slip#",
+        "payment_invoice": "Payment Invoice#",
         "customer_invoice": "Customer Invoice",
         "print_kot": "Print KOT",
         "print_customer_bill": "Print Bill",

@@ -78,5 +78,19 @@ class RolePermissionTableSeeder extends Seeder
             $chefPerms = Permission::whereIn('name', $chefPermissions)->get();
             $chef->givePermissionTo($chefPerms);
         }
+
+        $waiter = Role::find(EnumRole::WAITER);
+        if ($waiter) {
+            $waiterPermissions = [
+                'dashboard',
+                'dining-tables',
+                'table-orders',
+                'pos',
+                'pos-orders',
+                'order-status-screen',
+            ];
+            $waiterPerms = Permission::whereIn('name', $waiterPermissions)->get();
+            $waiter->givePermissionTo($waiterPerms);
+        }
     }
 }

@@ -31,9 +31,9 @@ class ItemVariationRequest extends FormRequest
                 'required',
                 'string',
                 'max:190',
-                Rule::unique("item_variations", "name")->whereNull('deleted_at')->ignore($this->route('itemVariation.id'))->where(
+                Rule::unique("item_variations", "name")->whereNull('deleted_at')->ignore($this->route('itemVariation')?->id ?? $this->route('itemVariation') ?? $this->route('itemVariation.id'))->where(
                     'item_id',
-                    $this->route('item.id')
+                    $this->route('item')?->id ?? $this->route('item') ?? $this->route('item.id')
                 )
             ],
             'item_attribute_id' => ['required', 'numeric'],

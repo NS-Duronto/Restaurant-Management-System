@@ -29,7 +29,7 @@ class ItemCategoryRequest extends FormRequest
                 'required',
                 'string',
                 'max:190',
-                Rule::unique("item_categories", "name")->ignore($this->route('itemCategory.id'))
+                Rule::unique("item_categories", "name")->ignore($this->route('itemCategory')?->id ?? $this->route('itemCategory') ?? $this->route('itemCategory.id'))
             ],
             'description' => ['nullable', 'string', 'max:900'],
             'status'      => ['required', 'numeric', 'max:24'],

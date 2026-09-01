@@ -108,14 +108,18 @@ class ItemCategoryService
     public function destroy(ItemCategory $itemCategory)
     {
         try {
-            $checkItem = $itemCategory->items->whereNull('deleted_at');
-            if (!blank($checkItem)) {
-                $itemCategory->delete();
-            } else {
-                DB::statement('SET FOREIGN_KEY_CHECKS=0');
-                $itemCategory->delete();
-                DB::statement('SET FOREIGN_KEY_CHECKS=1');
+            $hasActiveItems = \App\Models\Item::where('item_category_id', $itemCategory->id)->whereNull('deleted_at')->exists();
+            if ($hasActiveItems) {
+                throw new Exception("Cannot delete category because active items are assigned to it.", 422);
             }
+            $items = \App\Models\Item::where('item_category_id', $itemCategory->id)->withTrashed()->get();
+            foreach ($items as $item) {
+                $item->variations()->forceDelete();
+                $item->extras()->forceDelete();
+                $item->addons()->forceDelete();
+                $item->forceDelete();
+            }
+            $itemCategory->delete();
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
             throw new Exception(QueryExceptionLibrary::message($exception), 422);

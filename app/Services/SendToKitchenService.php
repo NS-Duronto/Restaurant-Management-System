@@ -83,6 +83,11 @@ class SendToKitchenService
                         $qty = (float) $itemObj->quantity;
                         $unitId = $itemObj->unit_id ?? null;
 
+                        $goods = KitchenGoods::find($goodsId);
+                        if ($goods && (float) $goods->current_stock < $qty) {
+                            throw new Exception("Insufficient stock for {$goods->name}. Available: {$goods->current_stock}, Requested: {$qty}", 422);
+                        }
+
                         SendToKitchenItem::create([
                             'send_to_kitchen_id' => $sendToKitchen->id,
                             'kitchen_goods_id' => $goodsId,
@@ -91,7 +96,6 @@ class SendToKitchenService
                         ]);
 
                         // Stock OUT: Decrement current stock in store
-                        $goods = KitchenGoods::find($goodsId);
                         if ($goods) {
                             $goods->decrement('current_stock', $qty);
                         }

@@ -367,7 +367,7 @@ class AppLibrary
     public static function defaultMenu($menus, $defaulPermission): array
     {
         foreach ($menus as $menu) {
-            if (isset($menu['url']) && $menu['url'] === $defaulPermission->url) {
+            if (isset($menu['url']) && isset($defaulPermission->url) && $menu['url'] === $defaulPermission->url) {
                 return $menu;
             }
             if (isset($menu['children']) && is_array($menu['children']) && count($menu['children']) > 0) {

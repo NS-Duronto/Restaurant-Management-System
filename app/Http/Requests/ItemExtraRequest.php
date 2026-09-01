@@ -26,11 +26,11 @@ class ItemExtraRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => [
+            'name'   => [
                 'required',
                 'string',
                 'max:190',
-                Rule::unique("item_extras", "name")->whereNull('deleted_at')->ignore($this->route('itemExtra.id'))->where('item_id', $this->route('item.id')),
+                Rule::unique("item_extras", "name")->whereNull('deleted_at')->ignore($this->route('itemExtra')?->id ?? $this->route('itemExtra') ?? $this->route('itemExtra.id'))->where('item_id', $this->route('item')?->id ?? $this->route('item') ?? $this->route('item.id')),
             ],
             'price'   => ['required', new IniAmount()],
             'status'  => ['required', 'numeric', 'max:24'],

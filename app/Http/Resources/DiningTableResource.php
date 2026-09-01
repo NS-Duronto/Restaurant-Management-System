@@ -24,7 +24,7 @@ class DiningTableResource extends JsonResource
             "branch_id"      => $this->branch_id,
             "branch_name"    => optional($this->branch)->name,
             "status"              => $this->status,
-            "dining_table_status" => (int) ($this->dining_table_status ?? 1),
+            "dining_table_status" => (int) ($this->table_status ?? $this->dining_table_status ?? 1),
             "capacity"            => (int) ($this->capacity ?? $this->size ?? 4),
             "qr"                  => $this->qr,
             "branch_address" => $this->branch->address,
