@@ -13,17 +13,17 @@
                     <div class="form-row">
                         <!-- Category -->
                         <div class="form-col-12 sm:form-col-6">
-                            <label for="expense_category" class="db-field-title required">{{ $t("label.expense_category") || 'খরচের খাত' }}</label>
+                            <label for="expense_category" class="db-field-title required">{{ $t("label.expense_category") }}</label>
                             <vue-select class="db-field-control" id="expense_category"
                                 v-model="props.form.expense_category_id" :options="categories" label-by="name"
                                 value-by="id" :closeOnSelect="true" :searchable="true" :clearOnClose="true"
-                                placeholder="ক্যাটাগরি নির্বাচন করুন" />
+                                :placeholder="$t('label.select_category')" />
                             <small class="db-field-alert" v-if="errors.expense_category_id">{{ errors.expense_category_id[0] }}</small>
                         </div>
 
                         <!-- Date -->
                         <div class="form-col-12 sm:form-col-6">
-                            <label for="expense_date" class="db-field-title required">{{ $t("label.expense_date") || 'খরচের তারিখ' }}</label>
+                            <label for="expense_date" class="db-field-title required">{{ $t("label.expense_date") }}</label>
                             <input v-model="props.form.date" type="date" id="expense_date" class="db-field-control">
                             <small class="db-field-alert" v-if="errors.date">{{ errors.date[0] }}</small>
                         </div>
@@ -32,7 +32,7 @@
                         <div class="form-col-12 sm:form-col-6">
                             <label for="amount" class="db-field-title required">{{ $t("label.amount") }}</label>
                             <input v-model="props.form.amount" v-bind:class="errors.amount ? 'invalid' : ''" type="number" step="0.01" min="1"
-                                id="amount" class="db-field-control" placeholder="টাকার পরিমাণ (৳)">
+                                id="amount" class="db-field-control" :placeholder="$t('label.amount')">
                             <small class="db-field-alert" v-if="errors.amount">{{ errors.amount[0] }}</small>
                         </div>
 
@@ -40,16 +40,16 @@
                         <div class="form-col-12 sm:form-col-6">
                             <label for="payment_method" class="db-field-title">{{ $t("label.payment_method") }}</label>
                             <select v-model="props.form.payment_method" id="payment_method" class="db-field-control">
-                                <option :value="1">Cash (ক্যাশ)</option>
-                                <option :value="2">Bank (ব্যাংক)</option>
-                                <option :value="3">bKash / Nagad (মোবাইল ব্যাংকিং)</option>
-                                <option :value="4">Other (অন্যান্য)</option>
+                                <option :value="1">{{ $t('label.cash') }}</option>
+                                <option :value="2">{{ $t('label.bank') }}</option>
+                                <option :value="3">{{ $t('label.mobile_banking') }}</option>
+                                <option :value="4">{{ $t('label.other') }}</option>
                             </select>
                         </div>
 
                         <!-- Receipt Voucher Image Upload -->
                         <div class="form-col-12">
-                            <label for="file" class="db-field-title">{{ $t("label.receipt_voucher") || 'রসিদ / ভাউচার ফাইল' }}</label>
+                            <label for="file" class="db-field-title">{{ $t("label.receipt_voucher") }}</label>
                             <input type="file" id="file" @change="changeFile" class="db-field-control">
                             <small class="db-field-alert" v-if="errors.file">{{ errors.file[0] }}</small>
                         </div>
@@ -57,7 +57,7 @@
                         <!-- Description -->
                         <div class="form-col-12">
                             <label for="description" class="db-field-title">{{ $t("label.description") }}</label>
-                            <textarea v-model="props.form.description" id="description" class="db-field-control" placeholder="খরচের বিবরণ (যেমন: আগস্ট মাসের বিদ্যুৎ বিল)..."></textarea>
+                            <textarea v-model="props.form.description" id="description" class="db-field-control" :placeholder="$t('label.expense_title')"></textarea>
                         </div>
 
                         <div class="form-col-12">
@@ -100,7 +100,7 @@ export default {
     },
     computed: {
         addButton: function () {
-            return { title: this.$t('button.add_expense') || 'খরচ এন্ট্রি করুন' };
+            return { title: this.$t('button.add_expense') };
         },
         categories: function () {
             return this.$store.getters['expenseCategory/lists'] || [];

@@ -25,8 +25,8 @@
                                     <i class="fa-solid fa-arrow-trend-up"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xs font-semibold uppercase tracking-wider text-emerald-100">{{ $t('label.total_income') || 'মোট আয়' }}</h3>
-                                    <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ summary.currency_total_income || '৳0.00' }}</h4>
+                                    <h3 class="text-xs font-semibold uppercase tracking-wider text-emerald-100">{{ $t('label.total_income') }}</h3>
+                                    <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ summary.currency_total_income || currencyFormat(0) }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -38,8 +38,8 @@
                                     <i class="fa-solid fa-arrow-trend-down"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xs font-semibold uppercase tracking-wider text-red-100">{{ $t('label.total_expense') || 'মোট ব্যয়' }}</h3>
-                                    <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ summary.currency_total_expense || '৳0.00' }}</h4>
+                                    <h3 class="text-xs font-semibold uppercase tracking-wider text-red-100">{{ $t('label.total_expense') }}</h3>
+                                    <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ summary.currency_total_expense || currencyFormat(0) }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -52,10 +52,10 @@
                                     <i :class="summary.net_profit >= 0 ? 'fa-solid fa-scale-balanced' : 'fa-solid fa-triangle-exclamation'"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xs font-semibold uppercase tracking-wider opacity-80">{{ $t('label.net_profit') || 'নিট লাভ' }}</h3>
-                                    <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ summary.currency_net_profit || '৳0.00' }}</h4>
-                                    <span v-if="summary.net_profit !== undefined" class="text-xs font-medium mt-1 inline-block px-2 py-0.5 rounded-full" :class="summary.net_profit >= 0 ? 'bg-white/20 text-white' : 'bg-white/20 text-white'">
-                                        {{ summary.net_profit >= 0 ? '▲ লাভ' : '▼ ক্ষতি' }}
+                                    <h3 class="text-xs font-semibold uppercase tracking-wider opacity-80">{{ $t('label.net_profit') }}</h3>
+                                    <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ summary.currency_net_profit || currencyFormat(0) }}</h4>
+                                    <span v-if="summary.net_profit !== undefined" class="text-xs font-medium mt-1 inline-block px-2 py-0.5 rounded-full bg-white/20 text-white">
+                                        {{ summary.net_profit >= 0 ? '▲ ' + $t('label.profit') : '▼ ' + $t('label.loss') }}
                                     </span>
                                 </div>
                             </div>
@@ -67,16 +67,16 @@
                 <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5" v-if="chartReady">
                     <h4 class="font-semibold text-base text-heading dark:text-gray-100 mb-4">
                         <i class="fa-solid fa-chart-area text-orange-500 mr-2"></i>
-                        {{ $t('label.daily_breakdown') || 'দৈনিক আয়-ব্যয় বিশ্লেষণ' }}
+                        {{ $t('label.daily_breakdown') }}
                     </h4>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b border-gray-200 dark:border-gray-700">
-                                    <th class="text-left py-3 px-3 font-semibold text-gray-600 dark:text-gray-400">{{ $t('label.date') || 'তারিখ' }}</th>
-                                    <th class="text-right py-3 px-3 font-semibold text-emerald-600 dark:text-emerald-400">{{ $t('label.income') || 'আয়' }}</th>
-                                    <th class="text-right py-3 px-3 font-semibold text-red-600 dark:text-red-400">{{ $t('label.expense') || 'ব্যয়' }}</th>
-                                    <th class="text-right py-3 px-3 font-semibold text-blue-600 dark:text-blue-400">{{ $t('label.profit') || 'লাভ/ক্ষতি' }}</th>
+                                    <th class="text-left py-3 px-3 font-semibold text-gray-600 dark:text-gray-400">{{ $t('label.date') }}</th>
+                                    <th class="text-right py-3 px-3 font-semibold text-emerald-600 dark:text-emerald-400">{{ $t('label.income') }}</th>
+                                    <th class="text-right py-3 px-3 font-semibold text-red-600 dark:text-red-400">{{ $t('label.expense') }}</th>
+                                    <th class="text-right py-3 px-3 font-semibold text-blue-600 dark:text-blue-400">{{ $t('label.profit') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -98,7 +98,7 @@
                             </tbody>
                             <tfoot>
                                 <tr class="border-t-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50">
-                                    <td class="py-3 px-3 font-bold text-gray-800 dark:text-gray-200">{{ $t('label.total') || 'মোট' }}</td>
+                                    <td class="py-3 px-3 font-bold text-gray-800 dark:text-gray-200">{{ $t('label.total') }}</td>
                                     <td class="py-3 px-3 text-right font-bold text-emerald-600 dark:text-emerald-400">{{ summary.currency_total_income }}</td>
                                     <td class="py-3 px-3 text-right font-bold text-red-500 dark:text-red-400">{{ summary.currency_total_expense }}</td>
                                     <td class="py-3 px-3 text-right font-bold" :class="summary.net_profit >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-orange-500 dark:text-orange-400'">
@@ -113,7 +113,7 @@
                 <!-- Empty State -->
                 <div v-if="!chartReady && !loading.isActive" class="text-center py-16">
                     <i class="fa-solid fa-chart-pie text-5xl text-gray-300 dark:text-gray-600 mb-4"></i>
-                    <p class="text-gray-500 dark:text-gray-400 text-sm">{{ $t('message.no_data_available') || 'কোনো ডাটা পাওয়া যায়নি' }}</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">{{ $t('message.no_data_available') }}</p>
                 </div>
             </div>
         </div>
@@ -124,6 +124,7 @@
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { startOfMonth, endOfMonth, startOfYear, endOfYear, subMonths, subYears } from "date-fns";
+import appService from "../../../services/appService";
 
 export default {
     name: "ProfitLossReportListComponent",
@@ -144,6 +145,11 @@ export default {
                 { label: "Last year", range: [startOfYear(subYears(new Date(), 1)), endOfYear(subYears(new Date(), 1))] },
             ],
         };
+    },
+    computed: {
+        setting: function () {
+            return this.$store.getters['frontendSetting/lists'];
+        },
     },
     mounted() {
         const date = new Date();
@@ -180,11 +186,10 @@ export default {
         formatDate(dateStr) {
             if (!dateStr) return '';
             const d = new Date(dateStr);
-            return d.toLocaleDateString('bn-BD', { day: '2-digit', month: 'short', year: 'numeric' });
+            return d.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' });
         },
         currencyFormat(value) {
-            if (value === undefined || value === null) return '৳0.00';
-            return '৳' + parseFloat(value).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return appService.currencyFormat(value || 0, this.setting?.site_digit_after_decimal_point, this.setting?.site_default_currency_symbol, this.setting?.site_currency_position);
         },
     },
 };

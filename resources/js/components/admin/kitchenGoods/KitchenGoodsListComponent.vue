@@ -11,7 +11,7 @@
             <div class="db-card-body">
                 <div class="table-filter-div">
                     <div class="form-group">
-                        <input v-model="props.search.name" @input="list" type="text" class="db-field-control" placeholder="কাঁচামাল খুঁজুন...">
+                        <input v-model="props.search.name" @input="list" type="text" class="db-field-control" :placeholder="$t('label.search_raw_material')">
                     </div>
                 </div>
 
@@ -22,8 +22,8 @@
                                 <th class="db-table-head-th">{{ $t('label.name') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.category') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.unit') }}</th>
-                                <th class="db-table-head-th">{{ $t('label.current_stock') || 'বর্তমান স্টক' }}</th>
-                                <th class="db-table-head-th">{{ $t('label.unit_cost') || 'একক ক্রয়মূল্য' }}</th>
+                                <th class="db-table-head-th">{{ $t('label.current_stock') }}</th>
+                                <th class="db-table-head-th">{{ $t('label.unit_cost') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.status') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.action') }}</th>
                             </tr>

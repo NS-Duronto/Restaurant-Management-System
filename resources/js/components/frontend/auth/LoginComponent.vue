@@ -16,7 +16,7 @@
             <!-- Dark / Light Mode Toggle -->
             <button @click="toggleTheme" type="button"
                 class="w-9 h-9 rounded-xl flex items-center justify-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 shadow-sm transition"
-                :title="isDarkMode ? 'লাইট মোডে পরিবর্তন' : 'ডার্ক মোডে পরিবর্তন'">
+                :title="isDarkMode ? $t('label.light_mode') : $t('label.dark_mode')">
                 <i :class="isDarkMode ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-indigo-500'"></i>
             </button>
         </div>

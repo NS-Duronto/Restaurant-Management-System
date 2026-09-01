@@ -11,7 +11,7 @@
             <div class="db-card-body">
                 <div class="table-filter-div">
                     <div class="form-group">
-                        <input v-model="props.search.issue_no" @input="list" type="text" class="db-field-control" placeholder="ইস্যু ভাউচার নং দিয়ে খুঁজুন...">
+                        <input v-model="props.search.issue_no" @input="list" type="text" class="db-field-control" :placeholder="$t('label.search_issue_voucher')">
                     </div>
                 </div>
 
@@ -19,10 +19,10 @@
                     <table class="db-table stripe">
                         <thead class="db-table-head">
                             <tr class="db-table-head-tr">
-                                <th class="db-table-head-th">{{ $t('label.reference_no') || 'ইস্যু নং' }}</th>
+                                <th class="db-table-head-th">{{ $t('label.reference_no') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.date') }}</th>
-                                <th class="db-table-head-th">{{ $t('label.total_items') || 'আইটেম সংখ্যা' }}</th>
-                                <th class="db-table-head-th">{{ $t('label.issued_by') || 'প্রেরক' }}</th>
+                                <th class="db-table-head-th">{{ $t('label.total_items') }}</th>
+                                <th class="db-table-head-th">{{ $t('label.issued_by') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.note') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.action') }}</th>
                             </tr>
@@ -31,8 +31,8 @@
                             <tr class="db-table-body-tr" v-for="item in issues" :key="item.id">
                                 <td class="db-table-body-td font-bold text-orange-600 dark:text-orange-400">#{{ item.send_no }}</td>
                                 <td class="db-table-body-td">{{ item.date }}</td>
-                                <td class="db-table-body-td font-semibold">{{ item.total_items }} টি আইটেম</td>
-                                <td class="db-table-body-td font-medium">{{ item.user_name || 'স্টোরকিপার' }}</td>
+                                <td class="db-table-body-td font-semibold">{{ item.total_items }} {{ $t('label.items') }}</td>
+                                <td class="db-table-body-td font-medium">{{ item.user_name || $t('label.storekeeper') }}</td>
                                 <td class="db-table-body-td">{{ item.note || '-' }}</td>
                                 <td class="db-table-body-td">
                                     <div class="flex items-center gap-2">

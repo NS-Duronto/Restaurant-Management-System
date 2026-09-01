@@ -14,35 +14,35 @@
                         <div class="form-col-12 sm:form-col-6">
                             <label for="name" class="db-field-title required">{{ $t("label.name") }}</label>
                             <input v-model="props.form.name" v-bind:class="errors.name ? 'invalid' : ''" type="text"
-                                id="name" class="db-field-control" placeholder="সাপ্লায়ারের নাম">
+                                id="name" class="db-field-control" :placeholder="$t('label.supplier_name')">
                             <small class="db-field-alert" v-if="errors.name">{{ errors.name[0] }}</small>
                         </div>
 
                         <div class="form-col-12 sm:form-col-6">
-                            <label for="company" class="db-field-title">{{ $t("label.company_name") || 'কোম্পানি' }}</label>
+                            <label for="company" class="db-field-title">{{ $t("label.company_name") }}</label>
                             <input v-model="props.form.company_name" v-bind:class="errors.company_name ? 'invalid' : ''" type="text"
-                                id="company" class="db-field-control" placeholder="প্রতিষ্ঠানের নাম">
+                                id="company" class="db-field-control" :placeholder="$t('label.company_name_placeholder')">
                             <small class="db-field-alert" v-if="errors.company_name">{{ errors.company_name[0] }}</small>
                         </div>
 
                         <div class="form-col-12 sm:form-col-6">
                             <label for="phone" class="db-field-title">{{ $t("label.phone") }}</label>
                             <input v-model="props.form.phone" v-bind:class="errors.phone ? 'invalid' : ''" type="text"
-                                id="phone" class="db-field-control" placeholder="মোবাইল নম্বর">
+                                id="phone" class="db-field-control" :placeholder="$t('label.phone_placeholder')">
                             <small class="db-field-alert" v-if="errors.phone">{{ errors.phone[0] }}</small>
                         </div>
 
                         <div class="form-col-12 sm:form-col-6">
                             <label for="email" class="db-field-title">{{ $t("label.email") }}</label>
                             <input v-model="props.form.email" v-bind:class="errors.email ? 'invalid' : ''" type="email"
-                                id="email" class="db-field-control" placeholder="ইমেইল এড্রেস">
+                                id="email" class="db-field-control" :placeholder="$t('label.email_placeholder')">
                             <small class="db-field-alert" v-if="errors.email">{{ errors.email[0] }}</small>
                         </div>
 
                         <div class="form-col-12">
                             <label for="address" class="db-field-title">{{ $t("label.address") }}</label>
                             <textarea v-model="props.form.address" v-bind:class="errors.address ? 'invalid' : ''"
-                                id="address" class="db-field-control" placeholder="ঠিকানা"></textarea>
+                                id="address" class="db-field-control" :placeholder="$t('label.address_placeholder')"></textarea>
                             <small class="db-field-alert" v-if="errors.address">{{ errors.address[0] }}</small>
                         </div>
 
@@ -111,7 +111,7 @@ export default {
     },
     computed: {
         addButton: function () {
-            return { title: this.$t('button.add_supplier') || 'সাপ্লায়ার যোগ করুন' };
+            return { title: this.$t('button.add_supplier') };
         },
     },
     methods: {

@@ -12,7 +12,7 @@
                 <div>
                     <span class="text-sm font-bold text-orange-500 dark:text-orange-400 block leading-tight">{{
                         setting.company_name || 'Sohoj RMS' }}</span>
-                    <span class="text-[10px] text-gray-500">রেস্টুরেন্ট আরএমএস</span>
+                    <span class="text-[10px] text-gray-500">{{ $t('label.restaurant_rms') }}</span>
                 </div>
             </router-link>
             <button @click.prevent="handleSidebar"
@@ -90,7 +90,7 @@
                     <div class="truncate max-w-[130px]">
                         <h4 class="text-xs font-semibold text-gray-800 dark:text-gray-200 truncate">{{ authInfo.name }}</h4>
                         <p class="text-[10px] text-green-500 dark:text-green-400 flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> {{ $t('label.online') || 'অনলাইন' }}
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> {{ $t('label.online') }}
                         </p>
                     </div>
                 </div>

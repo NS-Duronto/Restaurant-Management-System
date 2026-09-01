@@ -11,7 +11,7 @@
             <div class="db-card-body">
                 <div class="table-filter-div">
                     <div class="form-group">
-                        <input v-model="props.search.description" @input="list" type="text" class="db-field-control" placeholder="খরচের বিবরণ দিয়ে খুঁজুন...">
+                        <input v-model="props.search.description" @input="list" type="text" class="db-field-control" :placeholder="$t('label.search_expense')">
                     </div>
                 </div>
 
@@ -34,7 +34,7 @@
                                 <td class="db-table-body-td font-bold text-red-600 dark:text-red-400">
                                     {{ currencyFormat(item.amount, setting.site_digit_after_decimal_point, setting.site_default_currency_symbol, setting.site_currency_position) }}
                                 </td>
-                                <td class="db-table-body-td">{{ paymentMethodMap[item.payment_method] || 'Cash' }}</td>
+                                <td class="db-table-body-td">{{ paymentMethodMap[item.payment_method] || $t('label.cash') }}</td>
                                 <td class="db-table-body-td">{{ item.note || item.description || '-' }}</td>
                                 <td class="db-table-body-td">
                                     <div class="flex items-center gap-2">
@@ -78,12 +78,6 @@ export default {
             loading: {
                 isActive: false
             },
-            paymentMethodMap: {
-                1: 'Cash',
-                2: 'Bank',
-                3: 'bKash / Nagad',
-                4: 'Other'
-            },
             props: {
                 form: {
                     expense_category_id: null,
@@ -104,6 +98,14 @@ export default {
         }
     },
     computed: {
+        paymentMethodMap: function () {
+            return {
+                1: this.$t('label.cash'),
+                2: this.$t('label.bank'),
+                3: this.$t('label.mobile_banking'),
+                4: this.$t('label.other'),
+            };
+        },
         setting: function () {
             return this.$store.getters['frontendSetting/lists'];
         },

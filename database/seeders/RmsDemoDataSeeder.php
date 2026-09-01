@@ -13,6 +13,7 @@ use App\Models\SendToKitchenItem;
 use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\User;
+use App\Enums\Status;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 

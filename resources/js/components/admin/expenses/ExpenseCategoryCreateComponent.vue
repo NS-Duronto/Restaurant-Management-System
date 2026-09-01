@@ -14,13 +14,13 @@
                         <div class="form-col-12">
                             <label for="name" class="db-field-title required">{{ $t("label.name") }}</label>
                             <input v-model="props.form.name" v-bind:class="errors.name ? 'invalid' : ''" type="text"
-                                id="name" class="db-field-control" placeholder="ক্যাটাগরির নাম (যেমন: বিদ্যুৎ বিল, স্যালারি)">
+                                id="name" class="db-field-control" :placeholder="$t('label.expense_category_name')">
                             <small class="db-field-alert" v-if="errors.name">{{ errors.name[0] }}</small>
                         </div>
 
                         <div class="form-col-12">
                             <label for="description" class="db-field-title">{{ $t("label.description") }}</label>
-                            <textarea v-model="props.form.description" id="description" class="db-field-control" placeholder="বিবরণ..."></textarea>
+                            <textarea v-model="props.form.description" id="description" class="db-field-control" :placeholder="$t('label.description')"></textarea>
                         </div>
 
                         <div class="form-col-12 sm:form-col-6">
@@ -88,7 +88,7 @@ export default {
     },
     computed: {
         addButton: function () {
-            return { title: this.$t('button.add_expense_category') || 'ক্যাটাগরি যোগ করুন' };
+            return { title: this.$t('button.add_expense_category') };
         },
     },
     methods: {

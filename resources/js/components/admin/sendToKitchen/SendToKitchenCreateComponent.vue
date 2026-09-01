@@ -13,7 +13,7 @@
                     <div class="form-row">
                         <!-- Issue Date -->
                         <div class="form-col-12 sm:form-col-6">
-                            <label for="issue_date" class="db-field-title required">{{ $t("label.issue_date") || 'ইস্যুর তারিখ' }}</label>
+                            <label for="issue_date" class="db-field-title required">{{ $t("label.issue_date") }}</label>
                             <input v-model="props.form.date" type="date" id="issue_date" class="db-field-control">
                             <small class="db-field-alert" v-if="errors.date">{{ errors.date[0] }}</small>
                         </div>
@@ -21,10 +21,10 @@
                         <!-- Dynamic Items to Issue -->
                         <div class="form-col-12 mt-3">
                             <div class="flex items-center justify-between mb-2">
-                                <label class="db-field-title !mb-0 required font-bold">কিচেনে পাঠানোর আইটেম (Items to Kitchen)</label>
+                                <label class="db-field-title !mb-0 required font-bold">{{ $t('label.items_to_kitchen') }}</label>
                                 <button type="button" @click="addItemRow" class="text-xs font-bold text-orange-500 hover:text-orange-600 flex items-center gap-1 bg-orange-50 dark:bg-gray-800 px-2.5 py-1 rounded-lg border border-orange-200 dark:border-gray-700">
                                     <i class="fa-solid fa-plus text-[10px]"></i>
-                                    <span>{{ $t('button.add_item_row') || 'আইটেম যোগ করুন' }}</span>
+                                    <span>{{ $t('button.add_item_row') }}</span>
                                 </button>
                             </div>
 
@@ -35,14 +35,14 @@
                                         <vue-select class="db-field-control text-xs"
                                             v-model="row.kitchen_goods_id" :options="kitchenGoodsOptions" label-by="name"
                                             value-by="id" :closeOnSelect="true" :searchable="true" :clearOnClose="true"
-                                            placeholder="কাঁচামাল নির্বাচন করুন" />
+                                            :placeholder="$t('label.select_raw_material')" />
                                     </div>
                                     <div class="w-28">
                                         <input v-model="row.quantity" type="number" step="0.01" min="0.01"
-                                            placeholder="ইস্যুর পরিমাণ" class="db-field-control text-xs" required>
+                                            :placeholder="$t('label.issue_quantity')" class="db-field-control text-xs" required>
                                     </div>
                                     <div class="w-28 text-xs text-gray-500 dark:text-gray-400 font-semibold text-right" v-if="getStock(row.kitchen_goods_id) !== null">
-                                        স্টক: <span class="text-orange-500 font-bold">{{ getStock(row.kitchen_goods_id) }}</span>
+                                        {{ $t('label.stock') }}: <span class="text-orange-500 font-bold">{{ getStock(row.kitchen_goods_id) }}</span>
                                     </div>
                                     <button type="button" @click="removeItemRow(index)" v-if="props.form.items.length > 1"
                                         class="text-gray-400 hover:text-red-500 p-1 text-sm">
@@ -55,14 +55,14 @@
                         <!-- Notes -->
                         <div class="form-col-12 mt-3">
                             <label for="note" class="db-field-title">{{ $t("label.note") }}</label>
-                            <textarea v-model="props.form.note" id="note" class="db-field-control" placeholder="যেমন: দুপুরের বিরিয়ানি ব্যাচ..."></textarea>
+                            <textarea v-model="props.form.note" id="note" class="db-field-control" :placeholder="$t('label.note')"></textarea>
                         </div>
 
                         <div class="form-col-12">
                             <div class="flex flex-wrap gap-3 mt-4">
                                 <button type="submit" class="db-btn py-2 text-white bg-primary">
                                     <i class="fa-solid fa-paper-plane mr-1"></i>
-                                    <span>{{ $t("button.send_to_kitchen") || 'কিচেনে পাঠান' }}</span>
+                                    <span>{{ $t("button.send_to_kitchen") }}</span>
                                 </button>
                                 <button type="button" class="modal-btn-outline modal-close" @click="reset">
                                     <i class="lab lab-close"></i>
@@ -97,7 +97,7 @@ export default {
     },
     computed: {
         addButton: function () {
-            return { title: this.$t('button.send_to_kitchen') || 'কিচেনে মাল পাঠান' };
+            return { title: this.$t('button.send_to_kitchen') };
         },
         kitchenGoods: function () {
             return this.$store.getters['kitchenGoods/lists'] || [];
@@ -106,7 +106,7 @@ export default {
             const list = this.$store.getters['kitchenGoods/lists'] || [];
             return list.map(item => ({
                 id: item.id,
-                name: `${item.name} (স্টক: ${Number(item.current_stock || item.stock_quantity || 0).toFixed(2)} ${item.unit_name || item.unit_code || ''})`
+                name: `${item.name} (${this.$t('label.stock')}: ${Number(item.current_stock || item.stock_quantity || 0).toFixed(2)} ${item.unit_name || item.unit_code || ''})`
             }));
         },
     },
@@ -152,13 +152,13 @@ export default {
         save: function () {
             try {
                 if (!this.props.form.items || !this.props.form.items.length) {
-                    return alertService.error("কমপক্ষে একটি আইটেম যোগ করুন");
+                    return alertService.error(this.$t('message.add_at_least_one_item'));
                 }
                 this.loading.isActive = true;
                 this.$store.dispatch('sendToKitchen/save', this.props).then((res) => {
                     this.loading.isActive = false;
                     appService.sideDrawerHide();
-                    alertService.success("কিচেনে মালামাল পাঠানো হয়েছে ও স্টক থেকে কাটা হয়েছে!");
+                    alertService.success(this.$t('message.send_to_kitchen_success'));
                     this.$store.dispatch('kitchenGoods/lists', { paginate: 0 }).then().catch();
                     this.addReset();
                 }).catch((err) => {

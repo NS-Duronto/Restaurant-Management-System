@@ -78,7 +78,7 @@
                         <h3 class="text-xs font-semibold uppercase tracking-wider opacity-80">{{ $t('label.net_profit') }}</h3>
                         <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ net_profit }}</h4>
                         <span class="text-xs mt-0.5 inline-block px-2 py-0.5 rounded-full bg-white/20" v-if="net_profit">
-                            {{ net_profit_raw >= 0 ? '▲ লাভ' : '▼ ক্ষতি' }}
+                            {{ net_profit_raw >= 0 ? '▲ ' + $t('label.profit') : '▼ ' + $t('label.loss') }}
                         </span>
                     </div>
                 </div>

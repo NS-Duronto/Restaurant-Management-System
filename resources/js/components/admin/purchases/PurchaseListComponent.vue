@@ -11,7 +11,7 @@
             <div class="db-card-body">
                 <div class="table-filter-div">
                     <div class="form-group">
-                        <input v-model="props.search.reference_no" @input="list" type="text" class="db-field-control" placeholder="ভাউচার নং দিয়ে খুঁজুন...">
+                        <input v-model="props.search.reference_no" @input="list" type="text" class="db-field-control" :placeholder="$t('label.search_voucher_no')">
                     </div>
                 </div>
 
@@ -19,11 +19,11 @@
                     <table class="db-table stripe">
                         <thead class="db-table-head">
                             <tr class="db-table-head-tr">
-                                <th class="db-table-head-th">{{ $t('label.reference_no') || 'ভাউচার নং' }}</th>
+                                <th class="db-table-head-th">{{ $t('label.reference_no') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.date') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.supplier') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.total') }}</th>
-                                <th class="db-table-head-th">{{ $t('label.payment_status') || 'পেমেন্ট' }}</th>
+                                <th class="db-table-head-th">{{ $t('label.payment_status') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.action') }}</th>
                             </tr>
                         </thead>
@@ -38,7 +38,7 @@
                                 <td class="db-table-body-td">
                                     <span class="px-2 py-0.5 rounded text-xs font-bold"
                                         :class="item.payment_status === 1 ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400' : 'bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400'">
-                                        {{ item.payment_status === 1 ? 'PAID' : 'UNPAID' }}
+                                        {{ item.payment_status === 1 ? $t('label.paid') : $t('label.unpaid') }}
                                     </span>
                                 </td>
                                 <td class="db-table-body-td">

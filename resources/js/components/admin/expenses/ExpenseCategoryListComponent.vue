@@ -11,7 +11,7 @@
             <div class="db-card-body">
                 <div class="table-filter-div">
                     <div class="form-group">
-                        <input v-model="props.search.name" @input="list" type="text" class="db-field-control" placeholder="ক্যাটাগরি খুঁজুন...">
+                        <input v-model="props.search.name" @input="list" type="text" class="db-field-control" :placeholder="$t('label.search_category')">
                     </div>
                 </div>
 
@@ -31,7 +31,7 @@
                                 <td class="db-table-body-td">{{ item.description || '-' }}</td>
                                 <td class="db-table-body-td">
                                     <span :class="statusClass(item.status)">
-                                        {{ (item.status == 5 || item.status == 1) ? ($t('label.active') || 'Active') : ($t('label.inactive') || 'Inactive') }}
+                                        {{ (item.status == 5 || item.status == 1) ? $t('label.active') : $t('label.inactive') }}
                                     </span>
                                 </td>
                                 <td class="db-table-body-td">

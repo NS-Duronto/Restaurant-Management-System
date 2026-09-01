@@ -11,7 +11,7 @@
             <div class="db-card-body">
                 <div class="table-filter-div">
                     <div class="form-group">
-                        <input v-model="props.search.name" @input="list" type="text" class="db-field-control" placeholder="সাপ্লায়ার খুঁজুন...">
+                        <input v-model="props.search.name" @input="list" type="text" class="db-field-control" :placeholder="$t('label.search_supplier')">
                     </div>
                 </div>
 
@@ -20,7 +20,7 @@
                         <thead class="db-table-head">
                             <tr class="db-table-head-tr">
                                 <th class="db-table-head-th">{{ $t('label.name') }}</th>
-                                <th class="db-table-head-th">{{ $t('label.company_name') || 'কোম্পানি' }}</th>
+                                <th class="db-table-head-th">{{ $t('label.company_name') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.phone') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.email') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.status') }}</th>
@@ -35,7 +35,7 @@
                                 <td class="db-table-body-td">{{ supplier.email || '-' }}</td>
                                 <td class="db-table-body-td">
                                     <span :class="statusClass(supplier.status)">
-                                        {{ (supplier.status == 5 || supplier.status == 1) ? ($t('label.active') || 'Active') : ($t('label.inactive') || 'Inactive') }}
+                                        {{ (supplier.status == 5 || supplier.status == 1) ? $t('label.active') : $t('label.inactive') }}
                                     </span>
                                 </td>
                                 <td class="db-table-body-td">

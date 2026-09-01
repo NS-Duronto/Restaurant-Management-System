@@ -14,7 +14,7 @@
                         <div class="form-col-12 sm:form-col-6">
                             <label for="name" class="db-field-title required">{{ $t("label.name") }}</label>
                             <input v-model="props.form.name" v-bind:class="errors.name ? 'invalid' : ''" type="text"
-                                id="name" class="db-field-control" placeholder="কাঁচামালের নাম (চাল, তেল ইত্যাদি)">
+                                id="name" class="db-field-control" :placeholder="$t('label.raw_material_name')">
                             <small class="db-field-alert" v-if="errors.name">{{ errors.name[0] }}</small>
                         </div>
 
@@ -23,7 +23,7 @@
                             <vue-select class="db-field-control" id="category"
                                 v-model="props.form.kitchen_goods_category_id" :options="categories" label-by="name"
                                 value-by="id" :closeOnSelect="true" :searchable="true" :clearOnClose="true"
-                                placeholder="ক্যাটাগরি নির্বাচন করুন" />
+                                :placeholder="$t('label.select_category')" />
                             <small class="db-field-alert" v-if="errors.kitchen_goods_category_id">{{ errors.kitchen_goods_category_id[0] }}</small>
                         </div>
 
@@ -32,14 +32,14 @@
                             <vue-select class="db-field-control" id="unit"
                                 v-model="props.form.unit_id" :options="units" label-by="name"
                                 value-by="id" :closeOnSelect="true" :searchable="true" :clearOnClose="true"
-                                placeholder="একক (Kg / Ltr)" />
+                                :placeholder="$t('label.unit_example')" />
                             <small class="db-field-alert" v-if="errors.unit_id">{{ errors.unit_id[0] }}</small>
                         </div>
 
                         <div class="form-col-12 sm:form-col-6">
                             <label for="cost_per_unit" class="db-field-title">{{ $t("label.unit_cost") }}</label>
                             <input v-model="props.form.cost_per_unit" v-bind:class="errors.cost_per_unit ? 'invalid' : ''" type="number" step="0.01"
-                                id="cost_per_unit" class="db-field-control" placeholder="একক ক্রয়মূল্য">
+                                id="cost_per_unit" class="db-field-control" :placeholder="$t('label.unit_cost')">
                             <small class="db-field-alert" v-if="errors.cost_per_unit">{{ errors.cost_per_unit[0] }}</small>
                         </div>
 
@@ -108,7 +108,7 @@ export default {
     },
     computed: {
         addButton: function () {
-            return { title: this.$t('button.add_kitchen_good') || 'কাঁচামাল যোগ করুন' };
+            return { title: this.$t('button.add_kitchen_good') };
         },
         categories: function () {
             return this.$store.getters['kitchenGoodsCategory/lists'] || [];

@@ -68,7 +68,7 @@
                         <i class="fa-solid fa-circle-dot text-[10px] animate-pulse"></i> {{ $t('label.pos_terminal_active') }}
                     </span>
 
-                    <button @click="toggleTheme" type="button" class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-orange-400 border border-gray-300 dark:border-gray-700 flex items-center justify-center transition shadow-sm" title="থিম পরিবর্তন করুন">
+                    <button @click="toggleTheme" type="button" class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-orange-400 border border-gray-300 dark:border-gray-700 flex items-center justify-center transition shadow-sm" :title="$t('button.toggle_theme')">
                         <i :class="isDarkMode ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-gray-700'" class="text-sm"></i>
                     </button>
 

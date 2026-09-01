@@ -17,7 +17,7 @@
                             <vue-select class="db-field-control" id="supplier"
                                 v-model="props.form.supplier_id" :options="suppliers" label-by="name"
                                 value-by="id" :closeOnSelect="true" :searchable="true" :clearOnClose="true"
-                                placeholder="সাপ্লায়ার নির্বাচন করুন" />
+                                :placeholder="$t('label.select_supplier')" />
                             <small class="db-field-alert" v-if="errors.supplier_id">{{ errors.supplier_id[0] }}</small>
                         </div>
 
@@ -31,10 +31,10 @@
                         <!-- Dynamic Items Section -->
                         <div class="form-col-12 mt-3">
                             <div class="flex items-center justify-between mb-2">
-                                <label class="db-field-title !mb-0 required font-bold">কাঁচামাল সামগ্রী (Items to Purchase)</label>
+                                <label class="db-field-title !mb-0 required font-bold">{{ $t('label.items_to_purchase') }}</label>
                                 <button type="button" @click="addItemRow" class="text-xs font-bold text-orange-500 hover:text-orange-600 flex items-center gap-1 bg-orange-50 dark:bg-gray-800 px-2.5 py-1 rounded-lg border border-orange-200 dark:border-gray-700">
                                     <i class="fa-solid fa-plus text-[10px]"></i>
-                                    <span>{{ $t('button.add_item_row') || 'আইটেম যোগ করুন' }}</span>
+                                    <span>{{ $t('button.add_item_row') }}</span>
                                 </button>
                             </div>
 
@@ -46,18 +46,18 @@
                                             v-model="row.kitchen_goods_id" :options="kitchenGoodsOptions" label-by="name"
                                             value-by="id" :closeOnSelect="true" :searchable="true" :clearOnClose="true"
                                             @update:modelValue="onItemSelect(row)"
-                                            placeholder="কাঁচামাল নির্বাচন করুন" />
+                                            :placeholder="$t('label.select_raw_material')" />
                                     </div>
                                     <div class="w-24">
                                         <input v-model="row.quantity" type="number" step="0.01" min="0.01"
-                                            placeholder="পরিমাণ" class="db-field-control text-xs" required>
+                                            :placeholder="$t('label.quantity')" class="db-field-control text-xs" required>
                                     </div>
                                     <div class="w-24">
                                         <input v-model="row.unit_cost" type="number" step="0.01" min="0"
-                                            placeholder="দর (৳)" class="db-field-control text-xs" required>
+                                            :placeholder="$t('label.unit_cost')" class="db-field-control text-xs" required>
                                     </div>
                                     <div class="w-24 text-right font-bold text-xs text-orange-600 dark:text-orange-400">
-                                        ৳{{ ((Number(row.quantity) || 0) * (Number(row.unit_cost) || 0)).toFixed(2) }}
+                                        {{ currencyFormat(((Number(row.quantity) || 0) * (Number(row.unit_cost) || 0))) }}
                                     </div>
                                     <button type="button" @click="removeItemRow(index)" v-if="props.form.items.length > 1"
                                         class="text-gray-400 hover:text-red-500 p-1 text-sm">
@@ -69,23 +69,23 @@
 
                         <!-- Summary & Notes -->
                         <div class="form-col-12 sm:form-col-6 mt-3">
-                            <label for="payment_status" class="db-field-title">{{ $t('label.payment_status') || 'পেমেন্ট স্ট্যাটাস' }}</label>
+                            <label for="payment_status" class="db-field-title">{{ $t('label.payment_status') }}</label>
                             <select v-model="props.form.payment_status" id="payment_status" class="db-field-control">
-                                <option :value="1">PAID (পরিশোধিত)</option>
-                                <option :value="2">UNPAID (বাকি)</option>
+                                <option :value="1">{{ $t('label.paid') }}</option>
+                                <option :value="2">{{ $t('label.unpaid') }}</option>
                             </select>
                         </div>
 
                         <div class="form-col-12 sm:form-col-6 mt-3">
-                            <label class="db-field-title font-bold text-gray-700 dark:text-gray-300">সর্বমোট পারচেজ বিল (Total Bill)</label>
+                            <label class="db-field-title font-bold text-gray-700 dark:text-gray-300">{{ $t('label.total_purchase_bill') }}</label>
                             <div class="h-10 rounded-xl bg-orange-50 dark:bg-gray-800 border border-orange-500/30 flex items-center px-4 font-black text-orange-600 dark:text-orange-400 text-lg">
-                                ৳ {{ totalPurchaseAmount.toFixed(2) }}
+                                {{ currencyFormat(totalPurchaseAmount) }}
                             </div>
                         </div>
 
                         <div class="form-col-12 mt-2">
                             <label for="note" class="db-field-title">{{ $t("label.note") }}</label>
-                            <textarea v-model="props.form.note" id="note" class="db-field-control" placeholder="পারচেজ ভাউচার নোট..."></textarea>
+                            <textarea v-model="props.form.note" id="note" class="db-field-control" :placeholder="$t('label.purchase_voucher_note')"></textarea>
                         </div>
 
                         <div class="form-col-12">
@@ -126,8 +126,11 @@ export default {
         }
     },
     computed: {
+        setting: function () {
+            return this.$store.getters['frontendSetting/lists'];
+        },
         addButton: function () {
-            return { title: this.$t('button.add_purchase') || 'মাল ক্রয় এন্ট্রি' };
+            return { title: this.$t('button.add_purchase') };
         },
         suppliers: function () {
             return this.$store.getters['supplier/lists'] || [];
@@ -155,6 +158,9 @@ export default {
         this.$store.dispatch('kitchenGoods/lists', { paginate: 0 }).then().catch();
     },
     methods: {
+        currencyFormat: function (amount) {
+            return appService.currencyFormat(amount, this.setting?.site_digit_after_decimal_point, this.setting?.site_default_currency_symbol, this.setting?.site_currency_position);
+        },
         addItemRow: function () {
             this.props.form.items.push({
                 kitchen_goods_id: null,
@@ -200,13 +206,13 @@ export default {
         save: function () {
             try {
                 if (!this.props.form.items || !this.props.form.items.length) {
-                    return alertService.error("কমপক্ষে একটি আইটেম যোগ করুন");
+                    return alertService.error(this.$t('message.add_at_least_one_item'));
                 }
                 this.loading.isActive = true;
                 this.$store.dispatch('purchase/save', this.props).then((res) => {
                     this.loading.isActive = false;
                     appService.sideDrawerHide();
-                    alertService.success(this.$t('menu.purchases') + " সফলভাবে তৈরি ও স্টকে যোগ হয়েছে!");
+                    alertService.success(this.$t('message.purchase_saved_success'));
                     this.$store.dispatch('kitchenGoods/lists', { paginate: 0 }).then().catch();
                     this.addReset();
                 }).catch((err) => {
