@@ -84,7 +84,7 @@ class MenuTableSeeder extends Seeder
                         'url'        => 'order-status-screen',
                         'icon'       => 'lab lab-cds',
                         'priority'   => 4,
-                        'status'     => 1,
+                        'status'     => 0,
                         'created_at' => now(),
                         'updated_at' => now()
                     ]
@@ -326,7 +326,7 @@ class MenuTableSeeder extends Seeder
                 'url'        => '#',
                 'icon'       => 'lab lab-offers',
                 'priority'   => 110,
-                'status'     => 1,
+                'status'     => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
                 'children'   => [

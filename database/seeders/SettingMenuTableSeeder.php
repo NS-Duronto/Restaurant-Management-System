@@ -42,7 +42,7 @@ class SettingMenuTableSeeder extends Seeder
                 'url'        => 'branches',
                 'icon'       => 'lab lab-branches',
                 'priority'   => 990,
-                'status'     => Status::ACTIVE,
+                'status'     => Status::INACTIVE,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -52,7 +52,7 @@ class SettingMenuTableSeeder extends Seeder
                 'url'        => 'mail',
                 'icon'       => 'lab lab-mail',
                 'priority'   => 985,
-                'status'     => Status::ACTIVE,
+                'status'     => Status::INACTIVE,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -62,7 +62,7 @@ class SettingMenuTableSeeder extends Seeder
                 'url'        => 'otp',
                 'icon'       => 'lab lab-otp',
                 'priority'   => 980,
-                'status'     => Status::ACTIVE,
+                'status'     => Status::INACTIVE,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -92,7 +92,7 @@ class SettingMenuTableSeeder extends Seeder
                 'url'        => 'analytics',
                 'icon'       => 'lab lab-analytics',
                 'priority'   => 965,
-                'status'     => Status::ACTIVE,
+                'status'     => Status::INACTIVE,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -152,7 +152,7 @@ class SettingMenuTableSeeder extends Seeder
                 'url'        => 'pages',
                 'icon'       => 'lab lab-pages',
                 'priority'   => 935,
-                'status'     => Status::ACTIVE,
+                'status'     => Status::INACTIVE,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -182,7 +182,7 @@ class SettingMenuTableSeeder extends Seeder
                 'url'        => 'sms-gateway',
                 'icon'       => 'lab lab-sms',
                 'priority'   => 920,
-                'status'     => Status::ACTIVE,
+                'status'     => Status::INACTIVE,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -192,7 +192,7 @@ class SettingMenuTableSeeder extends Seeder
                 'url'        => 'payment-gateway',
                 'icon'       => 'lab lab-payment-gateway',
                 'priority'   => 915,
-                'status'     => Status::ACTIVE,
+                'status'     => Status::INACTIVE,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -202,7 +202,7 @@ class SettingMenuTableSeeder extends Seeder
                 'url'        => 'license',
                 'icon'       => 'lab lab-license',
                 'priority'   => 910,
-                'status'     => Status::ACTIVE,
+                'status'     => Status::INACTIVE,
                 'created_at' => now(),
                 'updated_at' => now()
             ],

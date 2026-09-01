@@ -1,21 +1,27 @@
 <template>
   <LoadingComponent :props="loading" />
   <div class="col-12 xl:col-6">
-    <div class="db-card">
-      <div class="db-card-header">
-        <h3 class="db-card-title">{{ $t('label.order_stats') }}</h3>
-        <div id="customer-range" class="cursor-pointer flex items-center gap-3 custom-datepicker">
+    <div class="db-card h-full">
+      <div class="db-card-header flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center text-base">
+            <i class="fa-solid fa-chart-column"></i>
+          </div>
+          <div>
+            <h3 class="db-card-title text-base font-bold text-gray-900 dark:text-gray-100">{{ $t('label.order_stats') }}</h3>
+          </div>
+        </div>
+        <div id="customer-range" class="cursor-pointer flex items-center gap-2 custom-datepicker">
           <Datepicker hideInputIcon autoApply :enableTimePicker="false" utc="false" @update:modelValue="customerStates"
             v-model="date" range :preset-ranges="presetRanges">
             <template #yearly="{ label, range, presetDateRange }">
               <span @click="presetDateRange(range)">{{ label }}</span>
             </template>
           </Datepicker>
-          <i class="lab lab-calendar lab-font-size-24 lab-color-pink"></i>
         </div>
       </div>
       <div class="db-card-body">
-        <div id="column-chart"></div>
+        <div id="customer-column-chart" class="min-h-[290px]"></div>
       </div>
     </div>
   </div>
@@ -25,7 +31,6 @@
 import LoadingComponent from "../components/LoadingComponent";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
-import { ref, onMounted } from 'vue';
 import { endOfMonth, endOfYear, startOfMonth, startOfYear, subMonths, subYears } from 'date-fns';
 
 export default {
@@ -36,7 +41,7 @@ export default {
       loading: {
         isActive: false,
       },
-
+      chartInstance: null,
       date: null,
       first_date: null,
       last_date: null,
@@ -61,7 +66,12 @@ export default {
     const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     this.date = [startDate, endDate];
     this.customerStates();
-
+  },
+  beforeUnmount() {
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+      this.chartInstance = null;
+    }
   },
   methods: {
     customerStates: function (e) {
@@ -81,50 +91,94 @@ export default {
       this.$store.dispatch("dashboard/customerStates", date).then((res) => {
         let options = {
           series: [{
-            name: this.$t('menu.customers'),
-            data: res.data.data.total_customers,
+            name: this.$t('menu.customers') || 'Customers',
+            data: res.data.data.total_customers || [],
           }],
           chart: {
             type: 'bar',
-            height: 300,
+            height: 290,
+            fontFamily: 'inherit',
             parentHeightOffset: 0,
             zoom: { enabled: false },
             toolbar: { show: false },
+            background: 'transparent'
+          },
+          theme: {
+            mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
           },
           plotOptions: {
             bar: {
               horizontal: false,
-              columnWidth: '40%',
-              endingShape: 'rounded'
+              columnWidth: '45%',
+              borderRadius: 6,
+              borderRadiusApplication: 'end'
             },
           },
           stroke: {
             show: true,
-            width: 2,
-            colors: ['#567DFF']
+            width: 0,
+            colors: ['transparent']
           },
           xaxis: {
-            categories: res.data.data.times,
+            categories: res.data.data.times || [],
+            axisBorder: { show: false },
+            axisTicks: { show: false },
+            labels: {
+              style: {
+                colors: '#9CA3AF',
+                fontSize: '11px',
+                fontFamily: 'inherit'
+              }
+            }
+          },
+          yaxis: {
+            labels: {
+              style: {
+                colors: '#9CA3AF',
+                fontSize: '11px',
+                fontFamily: 'inherit'
+              },
+              formatter: (val) => `${Math.round(val)}`
+            }
           },
           fill: {
-            opacity: 1
+            type: 'gradient',
+            gradient: {
+              type: 'vertical',
+              shadeIntensity: 1,
+              gradientToColors: ['#6366F1'],
+              inverseColors: false,
+              opacityFrom: 0.95,
+              opacityTo: 0.75,
+              stops: [0, 100]
+            }
           },
+          colors: ['#3B82F6'],
           tooltip: {
+            theme: 'dark',
             style: {
-              fontSize: '14px',
+              fontSize: '12px',
               fontFamily: 'inherit',
             }
           },
-          colors: ['#567DFF'],
-          grid: { show: false, },
-          yaxis: { show: false },
+          grid: {
+            borderColor: '#374151',
+            strokeDashArray: 4,
+            opacity: 0.2,
+            xaxis: { lines: { show: false } },
+            yaxis: { lines: { show: true } }
+          },
           dataLabels: { enabled: false },
         };
 
-        let chart = new ApexCharts(document.querySelector("#column-chart"), options);
-        chart.render();
-        if (date.first_date !== '' && date.last_date !== '') {
-          chart.updateSeries([{ data: res.data.data.total_customers }]);
+        const chartEl = document.querySelector("#customer-column-chart");
+        if (chartEl) {
+          if (this.chartInstance) {
+            this.chartInstance.updateOptions(options);
+          } else {
+            this.chartInstance = new ApexCharts(chartEl, options);
+            this.chartInstance.render();
+          }
         }
         this.loading.isActive = false;
       }).catch((err) => {

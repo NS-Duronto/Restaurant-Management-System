@@ -2,14 +2,12 @@
 
 namespace Database\Seeders;
 
-
 use App\Enums\Activity;
-use App\Models\Currency;
 use App\Enums\CurrencyPosition;
-use Illuminate\Database\Seeder;
 use Dipokhalder\EnvEditor\EnvEditor;
-use Illuminate\Support\Facades\Artisan;
 use Dipokhalder\Settings\Facades\Settings;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class SiteTableSeeder extends Seeder
 {
@@ -27,7 +25,7 @@ class SiteTableSeeder extends Seeder
             'site_default_timezone'          => 'Asia/Dhaka',
             'site_default_branch'            => 1,
             'site_default_currency'          => 1,
-            'site_default_currency_symbol'   => '$',
+            'site_default_currency_symbol'   => '৳',
             'site_currency_position'         => CurrencyPosition::LEFT,
             'site_digit_after_decimal_point' => '2',
             'site_email_verification'        => Activity::ENABLE,
@@ -51,8 +49,8 @@ class SiteTableSeeder extends Seeder
         $envService->addData([
             'APP_DEBUG'              => 'false',
             'TIMEZONE'               => 'Asia/Dhaka',
-            'CURRENCY'               => 'USD',
-            'CURRENCY_SYMBOL'        => '$',
+            'CURRENCY'               => 'BDT',
+            'CURRENCY_SYMBOL'        => '৳',
             'CURRENCY_POSITION'      => '5',
             'CURRENCY_DECIMAL_POINT' => '2',
             'DATE_FORMAT'            => 'd-m-Y',

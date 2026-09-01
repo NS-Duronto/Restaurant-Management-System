@@ -1,8 +1,8 @@
 <template>
     <LoadingComponent :props="loading" />
-    <div class="mb-9">
-        <div class="flex items-center justify-between mb-6">
-            <h4 class="font-bold text-[24px] leading-[34px] capitalize text-heading dark:text-gray-100">{{ $t("menu.overview") }}</h4>
+    <div class="mb-8">
+        <div class="flex items-center justify-between gap-4 mb-6">
+            <h4 class="font-bold text-xl leading-tight capitalize text-gray-900 dark:text-gray-100">{{ $t("menu.overview") }}</h4>
             <div class="relative cursor-pointer custom-datepicker">
                 <Datepicker hideInputIcon autoApply :enableTimePicker="false" utc="false"
                     @update:modelValue="handleDate" v-model="date" range :preset-ranges="presetRanges">
@@ -12,74 +12,92 @@
                 </Datepicker>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12 sm:col-6 xl:col-3 mb-4">
-                <div class="p-5 rounded-2xl flex items-center gap-4 bg-orange-500 text-white shadow-md shadow-orange-500/20 transition-transform hover:-translate-y-1 duration-300">
-                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
+        <div class="row g-4">
+            <!-- 1. Total Sales -->
+            <div class="col-12 sm:col-6 xl:col-4 mb-4">
+                <div class="p-5 rounded-2xl bg-white dark:bg-gray-900/90 border border-gray-200/80 dark:border-gray-800/80 shadow-sm hover:shadow-xl hover:border-orange-500/40 transition-all duration-300 group flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">{{ $t('label.total_sales') }}</span>
+                        <h4 class="font-extrabold text-2xl lg:text-[26px] leading-tight text-gray-900 dark:text-white mt-1.5 group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">{{ total_sales || defaultZeroAmount }}</h4>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-orange-500 to-amber-500 text-white text-2xl shadow-lg shadow-orange-500/20 group-hover:scale-110 transition-transform duration-300">
                         <i class="fa-solid fa-chart-line"></i>
                     </div>
-                    <div>
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-orange-100">{{ $t('label.total_sales') }}</h3>
-                        <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ total_sales }}</h4>
-                    </div>
                 </div>
             </div>
-            <div class="col-12 sm:col-6 xl:col-3 mb-4">
-                <div class="p-5 rounded-2xl flex items-center gap-4 bg-blue-600 text-white shadow-md shadow-blue-500/20 transition-transform hover:-translate-y-1 duration-300">
-                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
+
+            <!-- 2. Total Orders -->
+            <div class="col-12 sm:col-6 xl:col-4 mb-4">
+                <div class="p-5 rounded-2xl bg-white dark:bg-gray-900/90 border border-gray-200/80 dark:border-gray-800/80 shadow-sm hover:shadow-xl hover:border-blue-500/40 transition-all duration-300 group flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">{{ $t('label.total_orders') }}</span>
+                        <h4 class="font-extrabold text-2xl lg:text-[26px] leading-tight text-gray-900 dark:text-white mt-1.5 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">{{ total_orders !== null ? total_orders : 0 }}</h4>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-2xl shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300">
                         <i class="fa-solid fa-receipt"></i>
                     </div>
-                    <div>
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-blue-100">{{ $t('label.total_orders') }}</h3>
-                        <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ total_orders }}</h4>
-                    </div>
                 </div>
             </div>
-            <div class="col-12 sm:col-6 xl:col-3 mb-4">
-                <div class="p-5 rounded-2xl flex items-center gap-4 bg-emerald-600 text-white shadow-md shadow-emerald-500/20 transition-transform hover:-translate-y-1 duration-300">
-                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
+
+            <!-- 3. Total Customers -->
+            <div class="col-12 sm:col-6 xl:col-4 mb-4">
+                <div class="p-5 rounded-2xl bg-white dark:bg-gray-900/90 border border-gray-200/80 dark:border-gray-800/80 shadow-sm hover:shadow-xl hover:border-emerald-500/40 transition-all duration-300 group flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">{{ $t('label.total_customers') }}</span>
+                        <h4 class="font-extrabold text-2xl lg:text-[26px] leading-tight text-gray-900 dark:text-white mt-1.5 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">{{ total_customers !== null ? total_customers : 0 }}</h4>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-2xl shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform duration-300">
                         <i class="fa-solid fa-users"></i>
                     </div>
-                    <div>
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-emerald-100">{{ $t('label.total_customers') }}</h3>
-                        <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ total_customers }}</h4>
-                    </div>
                 </div>
             </div>
-            <div class="col-12 sm:col-6 xl:col-3 mb-4">
-                <div class="p-5 rounded-2xl flex items-center gap-4 bg-purple-600 text-white shadow-md shadow-purple-500/20 transition-transform hover:-translate-y-1 duration-300">
-                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
+
+            <!-- 4. Total Menu Items -->
+            <div class="col-12 sm:col-6 xl:col-4 mb-4">
+                <div class="p-5 rounded-2xl bg-white dark:bg-gray-900/90 border border-gray-200/80 dark:border-gray-800/80 shadow-sm hover:shadow-xl hover:border-purple-500/40 transition-all duration-300 group flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">{{ $t('label.total_menu_items') }}</span>
+                        <h4 class="font-extrabold text-2xl lg:text-[26px] leading-tight text-gray-900 dark:text-white mt-1.5 group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-colors">{{ total_menu_items !== null ? total_menu_items : 0 }}</h4>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-purple-500 to-violet-600 text-white text-2xl shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300">
                         <i class="fa-solid fa-burger"></i>
                     </div>
+                </div>
+            </div>
+
+            <!-- 5. Total Expenses -->
+            <div class="col-12 sm:col-6 xl:col-4 mb-4" v-if="permissionChecker('profit-loss-report')">
+                <div class="p-5 rounded-2xl bg-white dark:bg-gray-900/90 border border-gray-200/80 dark:border-gray-800/80 shadow-sm hover:shadow-xl hover:border-rose-500/40 transition-all duration-300 group flex items-center justify-between">
                     <div>
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-purple-100">{{ $t('label.total_menu_items') }}</h3>
-                        <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ total_menu_items }}</h4>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">{{ $t('label.total_expense') }}</span>
+                        <h4 class="font-extrabold text-2xl lg:text-[26px] leading-tight text-gray-900 dark:text-white mt-1.5 group-hover:text-rose-500 dark:group-hover:text-rose-400 transition-colors">{{ total_expenses || defaultZeroAmount }}</h4>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-rose-500 to-red-600 text-white text-2xl shadow-lg shadow-rose-500/20 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-wallet"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-12 sm:col-6 xl:col-3 mb-4" v-if="permissionChecker('profit-loss-report')">
-                <div class="p-5 rounded-2xl flex items-center gap-4 bg-red-500 text-white shadow-md shadow-red-500/20 transition-transform hover:-translate-y-1 duration-300">
-                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
-                        <i class="fa-solid fa-arrow-trend-down"></i>
-                    </div>
+
+            <!-- 6. Net Profit / Loss -->
+            <div class="col-12 sm:col-6 xl:col-4 mb-4" v-if="permissionChecker('profit-loss-report')">
+                <div class="p-5 rounded-2xl bg-white dark:bg-gray-900/90 border border-gray-200/80 dark:border-gray-800/80 shadow-sm hover:shadow-xl transition-all duration-300 group flex items-center justify-between"
+                    :class="net_profit_raw >= 0 ? 'hover:border-emerald-500/40' : 'hover:border-amber-500/40'">
                     <div>
-                        <h3 class="text-xs font-semibold uppercase tracking-wider text-red-100">{{ $t('label.total_expense') }}</h3>
-                        <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ total_expenses }}</h4>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">{{ $t('label.net_profit') }}</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide"
+                                :class="net_profit_raw >= 0 ? 'bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-500 dark:text-rose-400 border border-rose-500/20'">
+                                {{ net_profit_raw >= 0 ? '▲ ' + $t('label.profit') : '▼ ' + $t('label.loss') }}
+                            </span>
+                        </div>
+                        <h4 class="font-extrabold text-2xl lg:text-[26px] leading-tight mt-1.5 transition-colors"
+                            :class="net_profit_raw >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-500 dark:text-amber-400'">
+                            {{ net_profit || defaultZeroAmount }}
+                        </h4>
                     </div>
-                </div>
-            </div>
-            <div class="col-12 sm:col-6 xl:col-3 mb-4" v-if="permissionChecker('profit-loss-report')">
-                <div class="p-5 rounded-2xl flex items-center gap-4 text-white shadow-md transition-transform hover:-translate-y-1 duration-300"
-                    :class="net_profit_raw >= 0 ? 'bg-teal-600 shadow-teal-500/20' : 'bg-amber-600 shadow-amber-500/20'">
-                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/20 backdrop-blur-sm text-white text-2xl shadow-inner">
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:scale-110 transition-transform duration-300"
+                        :class="net_profit_raw >= 0 ? 'bg-gradient-to-br from-emerald-500 to-teal-600 shadow-emerald-500/20' : 'bg-gradient-to-br from-amber-500 to-rose-600 shadow-amber-500/20'">
                         <i :class="net_profit_raw >= 0 ? 'fa-solid fa-scale-balanced' : 'fa-solid fa-triangle-exclamation'"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xs font-semibold uppercase tracking-wider opacity-80">{{ $t('label.net_profit') }}</h3>
-                        <h4 class="font-bold text-2xl leading-tight text-white mt-1">{{ net_profit }}</h4>
-                        <span class="text-xs mt-0.5 inline-block px-2 py-0.5 rounded-full bg-white/20" v-if="net_profit">
-                            {{ net_profit_raw >= 0 ? '▲ ' + $t('label.profit') : '▼ ' + $t('label.loss') }}
-                        </span>
                     </div>
                 </div>
             </div>
@@ -94,6 +112,7 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import appService from "../../../services/appService";
 import { ref } from 'vue';
 import { endOfMonth, endOfYear, startOfMonth, startOfYear, subMonths, subYears } from 'date-fns';
+
 export default {
     name: "OverviewComponent",
     components: { LoadingComponent, Datepicker },
@@ -122,7 +141,7 @@ export default {
                 { label: 'This year', range: [startOfYear(new Date()), endOfYear(new Date())] },
                 {
                     label: 'Last year',
-                    range: [startOfYear(subYears(new Date(), 1)), endOfYear(subYears(new Date(), 1))],
+                    range: [startOfYear(subYears(new Date(), 1)), endOfYear(subYears(new Date(), 1))]
                 },
             ]
         };
@@ -133,6 +152,14 @@ export default {
         const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
         this.date = [startDate, endDate];
         this.fetchAll();
+    },
+    computed: {
+        setting: function () {
+            return this.$store.getters["frontendSetting/lists"];
+        },
+        defaultZeroAmount: function () {
+            return (this.setting?.site_default_currency_symbol || '৳') + '0.00';
+        }
     },
     methods: {
         handleDate: function (e) {
@@ -170,7 +197,6 @@ export default {
                 this.loading.isActive = false;
             });
         },
-
         totalOrders: function () {
             this.$store.dispatch("dashboard/totalOrders", {
                 first_date: this.first_date,

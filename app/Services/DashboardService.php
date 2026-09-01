@@ -5,9 +5,11 @@ namespace App\Services;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Enums\Role as EnumRole;
+use App\Enums\Status;
 use App\Libraries\AppLibrary;
 use App\Libraries\QueryExceptionLibrary;
 use App\Models\Expense;
+use App\Models\Item;
 use App\Models\Order;
 use App\Models\Purchase;
 use App\Models\User;
@@ -140,6 +142,16 @@ class DashboardService
             }
 
             return User::role(EnumRole::CUSTOMER)->whereDate('created_at', '>=', $first_date)->whereDate('created_at', '<=', $last_date)->count();
+        } catch (Exception $exception) {
+            Log::info($exception->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
+
+    public function totalMenuItems(Request $request)
+    {
+        try {
+            return Item::where('status', Status::ACTIVE)->count();
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
             throw new Exception(QueryExceptionLibrary::message($exception), 422);
