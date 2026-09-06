@@ -39,6 +39,7 @@ class Order extends Model
         'dining_table_id',
         'source',
         'pos_payment_method',
+        'pos_payment_sub_method',
         'pos_payment_note',
         'pos_received_amount',
         'change_return',

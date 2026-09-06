@@ -5,6 +5,14 @@
             <div class="db-card-header border-none">
                 <h3 class="db-card-title">{{ $t('menu.pos_orders') }}</h3>
                 <div class="db-card-filter">
+                    <div class="relative w-52 sm:w-64">
+                        <input type="text" v-model="props.search.search" @input="quickSearch"
+                            :placeholder="$t('label.search') || 'Search order, token, customer...'"
+                            class="h-9 w-full pl-8 pr-7 text-xs rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 focus:border-orange-500 focus:outline-none">
+                        <i class="lab lab-search-normal absolute left-2.5 top-2.5 text-xs text-gray-400"></i>
+                        <button v-if="props.search.search" @click="resetQuickSearch" type="button"
+                            class="fa-regular fa-circle-xmark absolute right-2 top-2.5 text-xs text-gray-400 hover:text-red-500"></button>
+                    </div>
                     <TableLimitComponent :method="list" :search="props.search" :page="paginationPage" />
                     <FilterComponent @click.prevent="handleSlide('pos-order-filter')" />
                     <div class="dropdown-group">
@@ -90,6 +98,7 @@
                             <th class="db-table-head-th">{{ $t('label.amount') }}</th>
                             <th class="db-table-head-th">{{ $t('label.date') }}</th>
                             <th class="db-table-head-th">{{ $t('label.status') }}</th>
+                            <th class="db-table-head-th">{{ $t('label.payment_status') }}</th>
                             <th class="db-table-head-th hidden-print" v-if="permissionChecker('pos-orders')">{{
                                 $t('label.action') }}</th>
                         </tr>
@@ -97,7 +106,8 @@
                     <tbody class="db-table-body" v-if="orders.length > 0">
                         <tr class="db-table-body-tr" v-for="order in orders" :key="order">
                             <td class="db-table-body-td">
-                                {{ order.order_serial_no }}
+                                <span class="font-bold text-heading dark:text-gray-100">{{ order.order_serial_no }}</span>
+                                <span v-if="order.token" class="text-[10px] text-orange-500 font-semibold block">#{{ order.token }}</span>
                             </td>
                             <td class="db-table-body-td">
                                 <span :class="statusClass(order.order_type)">
@@ -105,17 +115,29 @@
                                 </span>
                             </td>
                             <td class="db-table-body-td">
-                                {{ order.customer_name }}
+                                <span>{{ order.customer_name }}</span>
+                                <span v-if="order.customer_phone" class="text-[11px] text-gray-500 font-normal block">{{ order.customer_phone }}</span>
                             </td>
-                            <td class="db-table-body-td">{{ order.total_amount_price }}</td>
+                            <td class="db-table-body-td font-semibold">{{ order.total_amount_price }}</td>
                             <td class="db-table-body-td">{{ order.order_datetime }}</td>
                             <td class="db-table-body-td">
                                 <span :class="orderStatusClass(order.status)">
                                     {{ enums.orderStatusEnumArray[order.status] }}
                                 </span>
                             </td>
+                            <td class="db-table-body-td">
+                                <span :class="order.payment_status === 5 ? 'db-table-badge text-emerald-600 bg-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-400 font-semibold' : 'db-table-badge text-red-600 bg-red-100 dark:bg-red-950/50 dark:text-red-400 font-semibold'">
+                                    {{ enums.paymentStatusEnumArray[order.payment_status] || (order.payment_status === 5 ? $t('label.paid') : $t('label.unpaid')) }}
+                                </span>
+                            </td>
                             <td class="db-table-body-td hidden-print" v-if="permissionChecker('pos-orders')">
                                 <div class="flex justify-start items-center sm:items-start sm:justify-start gap-1.5">
+                                    <router-link :to="{ path: '/admin/pos', query: { order_id: order.id } }"
+                                        class="db-table-action edit"
+                                        :title="$t('button.edit') || 'Edit'">
+                                        <i class="lab lab-edit-line"></i>
+                                        <span class="db-tooltip">{{ $t('button.edit') }}</span>
+                                    </router-link>
                                     <SmIconViewComponent :link="'admin.pos.orders.show'" :id="order.id"
                                         v-if="permissionChecker('pos-orders')" />
                                     <SmIconDeleteComponent @click="destroy(order.id)"
@@ -126,7 +148,7 @@
                     </tbody>
                     <tbody class="db-table-body" v-else>
                         <tr class="db-table-body-tr">
-                            <td class="db-table-body-td text-center" colspan="7">
+                            <td class="db-table-body-td text-center" colspan="8">
                                 <div class="p-4">
                                     <div class="max-w-[300px] mx-auto mt-2">
                                         <img class="w-full h-full" :src="ENV.API_URL + '/images/default/not-found.png'"
@@ -174,7 +196,9 @@ import { endOfMonth, endOfYear, startOfMonth, startOfYear, subMonths } from 'dat
 import statusEnum from "../../../enums/modules/statusEnum";
 import displayModeEnum from "../../../enums/modules/displayModeEnum";
 import sourceEnum from "../../../enums/modules/sourceEnum";
+import paymentStatusEnum from "../../../enums/modules/paymentStatusEnum";
 import ENV from "../../../config/env";
+import _ from "lodash";
 
 export default {
     name: "PosOrderListComponent",
@@ -223,6 +247,7 @@ export default {
             enums: {
                 orderStatusEnum: orderStatusEnum,
                 orderTypeEnum: orderTypeEnum,
+                paymentStatusEnum: paymentStatusEnum,
                 orderStatusEnumArray: {
                     [orderStatusEnum.ACCEPT]: this.$t("label.accept"),
                     [orderStatusEnum.PREPARING]: this.$t("label.preparing"),
@@ -232,6 +257,10 @@ export default {
                 orderTypeEnumArray: {
                     [orderTypeEnum.TAKEAWAY]: this.$t("label.takeaway"),
                     [orderTypeEnum.DINING_TABLE]: this.$t("label.dining_table")
+                },
+                paymentStatusEnumArray: {
+                    [paymentStatusEnum.PAID]: this.$t("label.paid") || 'Paid',
+                    [paymentStatusEnum.UNPAID]: this.$t("label.unpaid") || 'Unpaid',
                 }
             },
             printLoading: true,
@@ -250,6 +279,7 @@ export default {
                     order_column: 'id',
                     order_by: "desc",
                     order_serial_no: "",
+                    search: "",
                     source: sourceEnum.POS,
                     user_id: null,
                     status: null,
@@ -304,6 +334,15 @@ export default {
         search: function () {
             this.list();
         },
+        quickSearch: _.debounce(function () {
+            this.props.search.page = 1;
+            this.list();
+        }, 300),
+        resetQuickSearch: function () {
+            this.props.search.search = "";
+            this.props.search.page = 1;
+            this.list();
+        },
         handleDate: function (e) {
             if (e) {
                 this.props.search.from_date = e[0];
@@ -319,6 +358,7 @@ export default {
             this.props.search.page = 1;
             this.props.search.order_by = "desc";
             this.props.search.order_serial_no = "";
+            this.props.search.search = "";
             this.props.search.status = null;
             this.props.search.from_date = "";
             this.props.search.to_date = "";

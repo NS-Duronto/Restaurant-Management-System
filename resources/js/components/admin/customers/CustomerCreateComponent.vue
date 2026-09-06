@@ -15,25 +15,14 @@
                             $t("label.name")
                         }}</label>
                         <input v-model="props.form.name" v-bind:class="errors.name ? 'invalid' : ''" type="text"
-                            id="name" class="db-field-control" />
+                            id="name" class="db-field-control" required />
                         <small class="db-field-alert" v-if="errors.name">{{
                             errors.name[0]
                         }}</small>
                     </div>
 
                     <div class="form-col-12 sm:form-col-6">
-                        <label for="email" class="db-field-title required">{{
-                            $t("label.email")
-                        }}</label>
-                        <input v-model="props.form.email" v-bind:class="errors.email ? 'invalid' : ''" type="text"
-                            id="email" class="db-field-control" />
-                        <small class="db-field-alert" v-if="errors.email">{{
-                            errors.email[0]
-                        }}</small>
-                    </div>
-
-                    <div class="form-col-12 sm:form-col-6">
-                        <label for="phone" class="db-field-title">{{ $t('label.phone') }}</label>
+                        <label for="phone" class="db-field-title required">{{ $t('label.phone') }}</label>
                         <div :class="errors.phone ? 'invalid' : ''" class="db-field-control flex items-center">
                             <div class="w-fit flex-shrink-0 dropdown-group">
                                 <button type="button" class="flex items-center gap-1 dropdown-btn">
@@ -45,11 +34,22 @@
                                 </button>
                             </div>
                             <input v-model="props.form.phone" v-on:keypress="phoneNumber($event)" v-bind:class="errors.phone
-                                ? 'invalid' : ''" type="text" id="phone" class="pl-2 text-sm w-full h-full" />
+                                ? 'invalid' : ''" type="text" id="phone" class="pl-2 text-sm w-full h-full" required />
                         </div>
                         <small class="db-field-alert" v-if="errors.phone">
                             {{ errors.phone[0] }}
                         </small>
+                    </div>
+
+                    <div class="form-col-12 sm:form-col-6">
+                        <label for="email" class="db-field-title">{{
+                            $t("label.email")
+                        }} <span class="text-xs text-gray-400 font-normal">({{ $t('label.optional') || 'Optional' }})</span></label>
+                        <input v-model="props.form.email" v-bind:class="errors.email ? 'invalid' : ''" type="text"
+                            id="email" class="db-field-control" />
+                        <small class="db-field-alert" v-if="errors.email">{{
+                            errors.email[0]
+                        }}</small>
                     </div>
 
                     <div class="form-col-12 sm:form-col-6">
@@ -82,20 +82,22 @@
                             errors.status[0]
                         }}</small>
                     </div>
+
                     <div class="form-col-12 sm:form-col-6">
-                        <label for="password" class="db-field-title required">{{
+                        <label for="password" class="db-field-title">{{
                             $t("label.password")
-                        }}</label>
+                        }} <span class="text-xs text-gray-400 font-normal">({{ $t('label.optional') || 'Optional' }})</span></label>
                         <input v-model="props.form.password" v-bind:class="errors.password ? 'invalid' : ''"
                             type="password" id="password" class="db-field-control" autocomplete="off" />
                         <small class="db-field-alert" v-if="errors.password">{{
                             errors.password[0]
                         }}</small>
                     </div>
+
                     <div class="form-col-12 sm:form-col-6">
-                        <label for="password_confirmation" class="db-field-title required">{{
+                        <label for="password_confirmation" class="db-field-title">{{
                             $t("label.confirm_password")
-                            }}</label>
+                            }} <span class="text-xs text-gray-400 font-normal">({{ $t('label.optional') || 'Optional' }})</span></label>
                         <input v-model="props.form.password_confirmation" v-bind:class="errors.password_confirmation ? 'invalid' : ''
                             " type="password" id="password_confirmation" class="db-field-control" autocomplete="off" />
                         <small class="db-field-alert" v-if="errors.password_confirmation">{{

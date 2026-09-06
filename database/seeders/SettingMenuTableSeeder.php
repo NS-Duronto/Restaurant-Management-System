@@ -197,6 +197,16 @@ class SettingMenuTableSeeder extends Seeder
                 'updated_at' => now()
             ],
             [
+                'name'       => 'POS Payment',
+                'language'   => 'pos_payment',
+                'url'        => 'pos-payment',
+                'icon'       => 'fa-solid fa-credit-card',
+                'priority'   => 912,
+                'status'     => Status::ACTIVE,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
                 'name'       => 'License',
                 'language'   => 'license',
                 'url'        => 'license',

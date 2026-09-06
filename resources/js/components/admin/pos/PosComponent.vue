@@ -3,6 +3,23 @@
     <PoscustomerComponent v-on:onCustomverCreate="onCustomverCreate" />
 
     <div class="md:w-[calc(100%-340px)] lg:w-[calc(100%-320px)] xl:w-[calc(100%-377px)]">
+        <!-- Editing Order Alert Banner -->
+        <div v-if="isEditingOrder" class="mb-4 p-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white flex items-center justify-between shadow-lg shadow-orange-500/20">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
+                    <i class="fa-solid fa-pen-to-square text-base animate-pulse"></i>
+                </div>
+                <div>
+                    <h4 class="text-xs font-black uppercase tracking-wider">{{ $t('label.editing_order') || 'Editing Order' }}</h4>
+                    <p class="text-sm font-bold">#{{ editingOrderSerialNo }}</p>
+                </div>
+            </div>
+            <button type="button" @click="cancelEditOrder" class="px-3 py-1.5 bg-white text-orange-600 rounded-xl text-xs font-black hover:bg-orange-50 transition shadow-sm flex items-center gap-1">
+                <i class="fa-solid fa-xmark"></i>
+                <span>{{ $t('button.cancel_edit') || 'Cancel Edit' }}</span>
+            </button>
+        </div>
+
         <!-- Top Sticky Live Dining Table Strip -->
         <div class="mb-4 bg-white dark:bg-gray-900 p-3 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm" v-if="diningtables.length > 0">
             <div class="flex items-center justify-between mb-2">
@@ -91,6 +108,16 @@
             <div class="md:hidden text-right mb-3">
                 <button class="db-pos-cartCls" @click="closePosCart('pos-cart')">
                     <i class="lab-close-circle-line font-fill-danger lab-font-size-24"></i>
+                </button>
+            </div>
+            <!-- Cart Edit Alert -->
+            <div v-if="isEditingOrder" class="mb-3 p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-400 dark:border-amber-700 flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2 font-bold text-amber-700 dark:text-amber-400">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>{{ $t('label.editing_order') || 'Editing' }} #{{ editingOrderSerialNo }}</span>
+                </div>
+                <button type="button" @click="cancelEditOrder" class="text-amber-600 hover:text-red-500 text-xs font-bold underline">
+                    {{ $t('button.cancel') || 'Cancel' }}
                 </button>
             </div>
             <div v-if="selectedTableName" class="mb-3 p-2.5 rounded-xl bg-orange-50 dark:bg-gray-800 border border-orange-500/30 flex items-center justify-between text-xs">
@@ -308,14 +335,15 @@
                     </span>
                 </li>
             </ul>
-            <div class="flex items-center justify-center gap-6" v-if="carts.length > 0">
-                <button @click.prevent="resetCart"
-                    class="capitalize text-sm font-medium leading-6 font-rubik w-full text-center rounded-3xl py-2 text-white bg-[#FB4E4E]">
+            <div class="flex items-center justify-center gap-4" v-if="carts.length > 0">
+                <button @click.prevent="isEditingOrder ? cancelEditOrder() : resetCart()"
+                    class="capitalize text-sm font-medium leading-6 font-rubik w-full text-center rounded-3xl py-2 text-white bg-[#FB4E4E] hover:bg-[#e04545] transition">
                     {{ $t('button.cancel') }}
                 </button>
                 <button @click.prevent="orderSubmit"
-                    class="capitalize text-sm font-medium leading-6 font-rubik w-full text-center rounded-3xl py-2 text-white bg-[#1AB759]">
-                    {{ $t('button.order') }}
+                    class="capitalize text-sm font-medium leading-6 font-rubik w-full text-center rounded-3xl py-2 text-white transition"
+                    :class="isEditingOrder ? 'bg-amber-600 hover:bg-amber-700 shadow-md shadow-amber-600/30' : 'bg-[#1AB759] hover:bg-[#169d4c]'">
+                    {{ isEditingOrder ? ($t('button.update_order') || 'Update Order') : $t('button.order') }}
                 </button>
             </div>
         </div>
@@ -376,6 +404,8 @@ export default {
                 isActive: false,
             },
             order: {},
+            editingOrderId: null,
+            editingOrderSerialNo: "",
             discount: null,
             checkoutProps: {
                 form: {
@@ -566,6 +596,9 @@ export default {
             const table = this.diningtables.find(t => t.id === this.checkoutProps.form.dining_table_id);
             return table ? table.name : null;
         },
+        isEditingOrder: function () {
+            return Boolean(this.$store.getters['posOrder/temp']?.isEditing && this.editingOrderId);
+        },
     },
     mounted() {
         this.closeSidebar();
@@ -599,8 +632,14 @@ export default {
                 status: statusEnum.ACTIVE,
             }).then((res) => {
                 this.loading.isActive = false;
+                if (this.$route.query.order_id) {
+                    this.loadOrderForEdit(this.$route.query.order_id);
+                }
             }).catch((err) => {
                 this.loading.isActive = false;
+                if (this.$route.query.order_id) {
+                    this.loadOrderForEdit(this.$route.query.order_id);
+                }
             });
         } catch (err) {
             this.loading.isActive = false;
@@ -639,7 +678,9 @@ export default {
                 order_type: 'asc',
                 status: statusEnum.ACTIVE,
             }).then((res) => {
-                this.checkoutProps.form.customer_id = id === null ? res.data.data[1].id : id;
+                if (!this.isEditingOrder) {
+                    this.checkoutProps.form.customer_id = id === null ? (res.data.data[1] ? res.data.data[1].id : null) : id;
+                }
                 this.loading.isActive = false;
             }).catch((err) => {
                 this.loading.isActive = false;
@@ -707,6 +748,14 @@ export default {
             }
         },
         resetCart: function () {
+            if (this.isEditingOrder) {
+                this.editingOrderId = null;
+                this.editingOrderSerialNo = "";
+                this.$store.commit('posOrder/reset');
+                if (this.$route.query.order_id) {
+                    this.$router.replace({ path: '/admin/pos' });
+                }
+            }
             this.$store.dispatch('posCart/resetCart').then(res => {
             }).catch();
         },
@@ -831,26 +880,138 @@ export default {
         clearSelectedTable: function () {
             this.checkoutProps.form.dining_table_id = null;
         },
+        loadOrderForEdit: function (orderId) {
+            if (!orderId) return;
+            this.loading.isActive = true;
+            this.$store.dispatch('posOrder/show', orderId).then((res) => {
+                const order = res.data.data;
+                if (!order) {
+                    this.loading.isActive = false;
+                    return;
+                }
+                this.editingOrderId = order.id;
+                this.editingOrderSerialNo = order.order_serial_no;
+                this.$store.commit('posOrder/edit', order.id);
+
+                let cartItems = [];
+                if (order.order_items && order.order_items.length) {
+                    order.order_items.forEach((item) => {
+                        let variationsObj = {};
+                        let variationNamesObj = {};
+                        if (item.item_variations && Array.isArray(item.item_variations)) {
+                            item.item_variations.forEach(v => {
+                                if (v.item_attribute_id && v.id) {
+                                    variationsObj[v.item_attribute_id] = v.id;
+                                }
+                                if (v.variation_name && v.name) {
+                                    variationNamesObj[v.variation_name] = v.name;
+                                }
+                            });
+                        }
+                        let extrasArr = [];
+                        let extraNamesArr = [];
+                        if (item.item_extras && Array.isArray(item.item_extras)) {
+                            item.item_extras.forEach(e => {
+                                if (e.id) extrasArr.push(e.id);
+                                if (e.name) extraNamesArr.push(e.name);
+                            });
+                        }
+                        cartItems.push({
+                            item_id: item.item_id,
+                            name: item.item_name,
+                            image: item.item_image || '',
+                            instruction: item.instruction || '',
+                            quantity: Number(item.quantity) || 1,
+                            discount: Number(item.discount_amount || 0),
+                            convert_price: Number(item.convert_price !== undefined ? item.convert_price : 0),
+                            item_variation_total: Number(item.item_variation_total || 0),
+                            item_extra_total: Number(item.item_extra_total || 0),
+                            total: Number(item.total_price || 0),
+                            item_variations: {
+                                variations: variationsObj,
+                                names: variationNamesObj
+                            },
+                            item_extras: {
+                                extras: extrasArr,
+                                names: extraNamesArr
+                            }
+                        });
+                    });
+                }
+
+                this.$store.dispatch('posCart/setCart', cartItems);
+
+                if (order.customer_id) {
+                    this.checkoutProps.form.customer_id = order.customer_id;
+                }
+                this.checkoutProps.form.token = order.token || "";
+                this.checkoutProps.form.order_type = order.order_type;
+
+                if (order.order_type === this.orderTypeEnums.dineIn) {
+                    this.checkoutProps.form.dining_table_id = order.dining_table_id || null;
+                    this.$nextTick(() => {
+                        if (this.$refs.dineIn) {
+                            this.dineInOrder();
+                        }
+                    });
+                } else {
+                    this.$nextTick(() => {
+                        if (this.$refs.takeAway) {
+                            this.takeAwayOrder();
+                        }
+                    });
+                }
+
+                if (order.discount && order.discount > 0) {
+                    this.discount = order.discount;
+                    this.discountType = this.discountTypeEnum.FIXED;
+                    this.checkoutProps.form.discount = order.discount;
+                    this.$store.dispatch('posCart/discount', order.discount);
+                }
+
+                this.loading.isActive = false;
+            }).catch((err) => {
+                this.loading.isActive = false;
+                alertService.error(err.response?.data?.message || "Failed to load order for edit");
+            });
+        },
+        cancelEditOrder: function () {
+            this.editingOrderId = null;
+            this.editingOrderSerialNo = "";
+            this.$store.commit('posOrder/reset');
+            if (this.$route.query.order_id) {
+                this.$router.replace({ path: '/admin/pos' });
+            }
+            this.resetCart();
+        },
     },
     watch: {
         carts: {
             handler(newCarts) {
                 if (!newCarts || newCarts.length === 0) {
-                    this.discount = null;
-                    this.discountType = discountTypeEnum.PERCENTAGE;
-                    this.$nextTick(() => {
-                        if (this.$refs.dineIn) {
-                            this.$refs.dineIn.click();
-                            if (this.customers.length > 1) {
-                                this.checkoutProps.form.customer_id = this.customers[1].id;
+                    if (!this.isEditingOrder) {
+                        this.discount = null;
+                        this.discountType = discountTypeEnum.PERCENTAGE;
+                        this.$nextTick(() => {
+                            if (this.$refs.dineIn) {
+                                this.$refs.dineIn.click();
+                                if (this.customers.length > 1) {
+                                    this.checkoutProps.form.customer_id = this.customers[1].id;
+                                }
                             }
-
-                        }
-                    });
+                        });
+                    }
                 }
             },
             deep: true,
             immediate: true
+        },
+        '$route.query.order_id': function (newVal) {
+            if (newVal) {
+                this.loadOrderForEdit(newVal);
+            } else if (this.isEditingOrder) {
+                this.cancelEditOrder();
+            }
         }
     },
 }

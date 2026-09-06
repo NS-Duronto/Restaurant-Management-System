@@ -718,3 +718,181 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     color: #f9fafb !important;
 }
 
+/* =========================================================
+   Table / QR Code Ordering Dark Mode Enhancement
+   ========================================================= */
+.dark .ff-header,
+.dark .ff-header.active {
+    background-color: #111827 !important;
+    border-bottom: 1px solid #1f2937 !important;
+}
+.dark .ff-header .dropdown-btn {
+    background-color: #1f2937 !important;
+    border-color: #374151 !important;
+    color: #e5e7eb !important;
+}
+.dark .ff-header .header-search-group {
+    background-color: #1f2937 !important;
+    border-color: #374151 !important;
+}
+.dark .ff-header .header-search-field {
+    color: #f9fafb !important;
+}
+.dark .ff-header .header-search-submit i {
+    color: #9ca3af !important;
+}
+.dark .ff-header .webcart {
+    background-color: rgb(var(--primary)) !important;
+    color: #ffffff !important;
+}
+
+/* Table Category Slider */
+.dark .menu-swiper .menu-slides a {
+    background-color: #111827 !important;
+    border: 1px solid #1f2937 !important;
+    color: #e5e7eb !important;
+}
+.dark .menu-swiper .menu-slides a:hover {
+    background-color: #1f2937 !important;
+    border-color: rgb(var(--primary)) !important;
+    color: #ffffff !important;
+}
+.dark .menu-swiper .pos-group a {
+    background-color: #111827 !important;
+    border: 1px solid rgb(var(--primary)) !important;
+    color: rgb(var(--primary)) !important;
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.25) !important;
+}
+
+/* Veg / Non-Veg Pills */
+.dark .veg-navs button {
+    background-color: #111827 !important;
+    border: 1px solid #1f2937 !important;
+    color: #e5e7eb !important;
+}
+.dark .veg-navs button span {
+    color: #e5e7eb !important;
+}
+.dark .veg-navs button:hover,
+.dark .veg-navs button.veg-active {
+    background-color: #1f2937 !important;
+    border-color: rgb(var(--primary)) !important;
+}
+
+/* Product Cards (Grid & List) in QR / Table Menu */
+.dark .product-card-grid,
+.dark .product-card-list {
+    background-color: #111827 !important;
+    border-color: #1f2937 !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4) !important;
+}
+.dark .product-card-grid:hover,
+.dark .product-card-list:hover {
+    border-color: #374151 !important;
+    box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.6) !important;
+}
+.dark .product-card-grid-title,
+.dark .product-card-list-title {
+    color: #f9fafb !important;
+}
+.dark .product-card-grid-describe,
+.dark .product-card-list-describe {
+    color: #9ca3af !important;
+}
+.dark .product-card-grid-price-current,
+.dark .product-card-list-price-current {
+    color: #f9fafb !important;
+    font-weight: 700 !important;
+}
+.dark .product-card-grid-price-previous,
+.dark .product-card-list-price-previous {
+    color: #6b7280 !important;
+}
+.dark .product-card-grid-cart-btn,
+.dark .product-card-list-cart-btn {
+    background-color: #1f2937 !important;
+    border: 1px solid #374151 !important;
+    color: rgb(var(--primary)) !important;
+}
+.dark .product-card-grid-cart-btn span,
+.dark .product-card-list-cart-btn span {
+    color: rgb(var(--primary)) !important;
+}
+.dark .product-card-grid-cart-btn i,
+.dark .product-card-list-cart-btn i {
+    color: rgb(var(--primary)) !important;
+    fill: rgb(var(--primary)) !important;
+}
+.dark .product-card-grid-cart-btn:hover,
+.dark .product-card-list-cart-btn:hover {
+    background-color: rgb(var(--primary)) !important;
+    border-color: rgb(var(--primary)) !important;
+}
+.dark .product-card-grid-cart-btn:hover span,
+.dark .product-card-list-cart-btn:hover span,
+.dark .product-card-grid-cart-btn:hover i,
+.dark .product-card-list-cart-btn:hover i {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+.dark .product-card-grid-info-btn i,
+.dark .product-card-list .info-btn i {
+    color: #9ca3af !important;
+}
+
+/* Table Cart Drawer */
+.dark #cart > div {
+    background-color: #111827 !important;
+    border-left: 1px solid #1f2937 !important;
+    color: #e5e7eb !important;
+}
+.dark #cart .border-b,
+.dark #cart .border-gray-2,
+.dark #cart .border-gray-1 {
+    border-color: #1f2937 !important;
+}
+.dark #cart a.text-heading {
+    color: #f9fafb !important;
+}
+.dark #cart .indec-group {
+    background-color: #1f2937 !important;
+    border: 1px solid #374151 !important;
+    border-radius: 9999px !important;
+    padding: 2px 4px !important;
+}
+.dark #cart .indec-value {
+    background-color: transparent !important;
+    color: #f9fafb !important;
+}
+
+/* Checkout & Order Details Cards */
+.dark section .bg-white {
+    background-color: #111827 !important;
+    border: 1px solid #1f2937 !important;
+    color: #e5e7eb !important;
+}
+.dark section .border-b,
+.dark section .border-gray-100,
+.dark section .border-gray-2 {
+    border-color: #1f2937 !important;
+}
+.dark section .text-heading {
+    color: #f9fafb !important;
+}
+.dark section .custom-radio-span {
+    border-color: #4b5563 !important;
+}
+.dark #confirm-order .modal-dialog {
+    background-color: #111827 !important;
+    border: 1px solid #1f2937 !important;
+    color: #e5e7eb !important;
+}
+.dark #confirm-order .bg-white {
+    background-color: #1f2937 !important;
+    color: rgb(var(--primary)) !important;
+}
+.dark .text-black {
+    color: #9ca3af !important;
+}
+
+

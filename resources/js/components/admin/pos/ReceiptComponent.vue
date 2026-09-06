@@ -105,7 +105,17 @@
                     <div class="py-2 border-t border-b border-dashed border-gray-400 text-xs space-y-0.5">
                         <div class="flex justify-between">
                             <span class="text-gray-500">{{ $t('label.pos_payment_method') }}:</span>
-                            <span class="font-bold">{{ posPaymentMethodEnumArray[order.pos_payment_method] || $t('label.cash') }}</span>
+                            <span class="font-bold">
+                                {{ posPaymentMethodEnumArray[order.pos_payment_method] || $t('label.cash') }}
+                                <span v-if="order.pos_payment_sub_method">({{ order.pos_payment_sub_method }})</span>
+                            </span>
+                        </div>
+                        <div v-if="order.payment_status === paymentStatusEnum.UNPAID" class="text-center py-1 text-red-600 font-bold tracking-wider">
+                            *** {{ $t('label.unpaid') || 'UNPAID' }} ({{ $t('label.pay_later') || 'PAY LATER' }}) ***
+                        </div>
+                        <div v-if="order.pos_payment_note" class="flex justify-between">
+                            <span class="text-gray-500">{{ $t('label.note') }}:</span>
+                            <span class="font-medium">{{ order.pos_payment_note }}</span>
                         </div>
                         <div v-if="order.pos_received_amount > 0" class="flex justify-between">
                             <span class="text-gray-500">{{ $t('label.received_amount') }}:</span>
@@ -178,6 +188,7 @@ import appService from "../../../services/appService";
 import displayModeEnum from "../../../enums/modules/displayModeEnum";
 import posPaymentMethodEnum from "../../../enums/modules/posPaymentMethodEnum";
 import orderTypeEnum from "../../../enums/modules/orderTypeEnum";
+import paymentStatusEnum from "../../../enums/modules/paymentStatusEnum";
 
 export default {
     name: "ReceiptComponent",
@@ -188,6 +199,7 @@ export default {
         return {
             activeSlip: 'customer',
             orderTypeEnum: orderTypeEnum,
+            paymentStatusEnum: paymentStatusEnum,
         }
     },
     computed: {
@@ -236,6 +248,13 @@ export default {
 @media print {
     .hidden-print {
         display: none !important;
+    }
+    #print {
+        color: #000 !important;
+        background: #fff !important;
+    }
+    #print * {
+        color: #000 !important;
     }
 }
 </style>

@@ -67,7 +67,7 @@
                 <div class="max-w-[250px] mx-auto">
                     <img class="w-full mb-8" :src="setting.image_order_not_found" alt="image_order_not_found">
                 </div>
-                <span class="w-full mb-4 text-center text-black">{{ $t('message.no_data_available') }}</span>
+                <span class="w-full mb-4 text-center text-heading dark:text-gray-400">{{ $t('message.no_data_available') }}</span>
             </div>
         </div>
     </section>

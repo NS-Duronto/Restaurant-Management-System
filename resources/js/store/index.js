@@ -83,6 +83,7 @@ import { purchase } from './modules/purchase';
 import { sendToKitchen } from './modules/sendToKitchen';
 import { expenseCategory } from './modules/expenseCategory';
 import { expense } from './modules/expense';
+import { posPaymentSetting } from './modules/posPaymentSetting';
 
 
 export default new createStore({
@@ -171,7 +172,8 @@ export default new createStore({
         purchase,
         sendToKitchen,
         expenseCategory,
-        expense
+        expense,
+        posPaymentSetting
     },
     plugins: [
         createPersistedState({

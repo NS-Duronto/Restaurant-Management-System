@@ -9,9 +9,11 @@ use App\Enums\Role as EnumRole;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use App\Http\Requests\CustomerRequest;
 use App\Http\Requests\PaginateRequest;
 use App\Libraries\QueryExceptionLibrary;
+use App\Enums\Status;
 use App\Http\Requests\ChangeImageRequest;
 use App\Http\Requests\UserChangePasswordRequest;
 
@@ -63,11 +65,11 @@ class CustomerService
                     'name'              => $request->name,
                     'email'             => $request->email,
                     'phone'             => $request->phone,
-                    'username'          => $this->username($request->email),
-                    'password'          => bcrypt($request->password),
+                    'username'          => $this->username($request->email, $request->phone, $request->name),
+                    'password'          => bcrypt($request->password ?: Str::random(12)),
                     'branch_id'         => 0,
                     'email_verified_at' => now(),
-                    'status'            => $request->status,
+                    'status'            => !blank($request->status) ? (int)$request->status : Status::ACTIVE,
                     'country_code'      => $request->country_code,
                     'is_guest'          => Ask::NO,
                 ]);
@@ -93,7 +95,7 @@ class CustomerService
                     $this->user->name         = $request->name;
                     $this->user->email        = $request->email;
                     $this->user->phone        = $request->phone;
-                    $this->user->status       = $request->status;
+                    $this->user->status       = !blank($request->status) ? (int)$request->status : $customer->status;
                     $this->user->country_code = $request->country_code;
                     if ($request->password) {
                         $this->user->password = Hash::make($request->password);
@@ -153,10 +155,21 @@ class CustomerService
         }
     }
 
-    private function username($email): string
+    private function username($email, $phone = null, $name = null): string
     {
-        $emails = explode('@', $email);
-        return $emails[0] . mt_rand();
+        do {
+            if (!empty($email)) {
+                $emails = explode('@', $email);
+                $uname = $emails[0] . mt_rand(100, 999);
+            } elseif (!empty($phone)) {
+                $cleanPhone = preg_replace('/\D/', '', $phone);
+                $uname = 'c_' . substr($cleanPhone, -6) . mt_rand(100, 999);
+            } else {
+                $uname = Str::slug($name ?? 'cust') . '_' . mt_rand(1000, 9999);
+            }
+        } while (User::where('username', $uname)->exists());
+
+        return $uname;
     }
 
     /**

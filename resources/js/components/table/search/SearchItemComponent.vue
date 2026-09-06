@@ -21,7 +21,7 @@
                 <div class="max-w-[250px] mx-auto">
                     <img class="w-full mb-8" :src="setting.item_not_found" alt="image_order_not_found">
                 </div>
-                <span class="w-full mb-4 text-center text-black">{{ $t('message.no_items_found') }}</span>
+                <span class="w-full mb-4 text-center text-heading dark:text-gray-400">{{ $t('message.no_items_found') }}</span>
                 <router-link :to="{ name: 'table.menu.table', params: { slug: this.$route.params.slug } }"
                     class="block w-full mx-auto max-w-[250px] py-3 rounded-3xl capitalize text-base font-medium leading-6 text-center bg-primary text-white">
                     {{ $t('button.go_home') }}

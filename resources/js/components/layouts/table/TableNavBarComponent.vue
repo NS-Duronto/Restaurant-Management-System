@@ -11,6 +11,12 @@
 
                 <!-- This code for mobile device -->
                 <div class="flex items-center gap-2 lg:hidden">
+                    <button @click="toggleTheme" type="button"
+                        class="w-8 h-8 rounded-3xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-amber-400 border border-gray-300 dark:border-gray-700 flex items-center justify-center transition shadow-xs"
+                        :title="$t('button.toggle_theme')">
+                        <i :class="isDarkMode ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-gray-700'" class="text-xs"></i>
+                    </button>
+
                     <div v-if="setting.site_language_switch === enums.activityEnum.ENABLE"
                         class="block relative dropdown-group w-full sm:w-fit">
                         <button
@@ -52,6 +58,12 @@
                         <i class="lab lab-close-circle-line lab-font-size-16 lab-font-weight-600 text-red-500"></i>
                     </button>
                 </form>
+
+                <button @click="toggleTheme" type="button"
+                    class="hidden lg:flex w-8 h-8 rounded-3xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-amber-400 border border-gray-300 dark:border-gray-700 items-center justify-center transition shadow-xs"
+                    :title="$t('button.toggle_theme')">
+                    <i :class="isDarkMode ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-gray-700'" class="text-xs"></i>
+                </button>
 
                 <div v-if="setting.site_language_switch === enums.activityEnum.ENABLE"
                     class="hidden lg:block relative dropdown-group w-full sm:w-fit">
@@ -98,6 +110,7 @@ export default {
                 isActive: false,
             },
             searchItem: "",
+            isDarkMode: localStorage.getItem('rms_theme') === 'dark' || (!('rms_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
             enums: {
                 activityEnum: activityEnum,
             },
@@ -196,6 +209,16 @@ export default {
         },
         openCanvas: function (id) {
             return appService.openCanvas(id);
+        },
+        toggleTheme: function () {
+            this.isDarkMode = !this.isDarkMode;
+            if (this.isDarkMode) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('rms_theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('rms_theme', 'light');
+            }
         },
     }
 }

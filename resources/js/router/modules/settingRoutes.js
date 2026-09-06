@@ -33,6 +33,7 @@ import PaymentGatewayComponent from "../../components/admin/settings/PaymentGate
 import SmsGatewayComponent from "../../components/admin/settings/SmsGateway/SmsGatewayComponent";
 import NotificationAlertComponent from "../../components/admin/settings/NotificationAlert/NotificationAlertComponent";
 import NotificationComponent from "../../components/admin/settings/Notification/NotificationComponent";
+import PosPaymentComponent from "../../components/admin/settings/PosPayment/PosPaymentComponent";
 
 export default [
     {
@@ -447,6 +448,17 @@ export default [
                     auth: true,
                     permissionUrl: "settings",
                     breadcrumb: "notification",
+                },
+            },
+            {
+                path: "pos-payment",
+                component: PosPaymentComponent,
+                name: "admin.settings.posPayment",
+                meta: {
+                    isFrontend: false,
+                    auth: true,
+                    permissionUrl: "settings",
+                    breadcrumb: "pos_payment",
                 },
             },
         ],

@@ -48,6 +48,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\PosCategoryController;
 use App\Http\Controllers\Admin\PosController;
 use App\Http\Controllers\Admin\PosOrderController;
+use App\Http\Controllers\Admin\PosPaymentSettingController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SalesReportController;
@@ -164,6 +165,11 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::prefix('site')->name('site.')->group(function () {
             Route::get('/', [SiteController::class, 'index']);
             Route::match(['put', 'patch'], '/', [SiteController::class, 'update']);
+        });
+
+        Route::prefix('pos-payment')->name('pos-payment.')->group(function () {
+            Route::get('/', [PosPaymentSettingController::class, 'index']);
+            Route::match(['put', 'patch'], '/', [PosPaymentSettingController::class, 'update']);
         });
 
         Route::prefix('mail')->name('mail.')->group(function () {
@@ -420,6 +426,7 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::get('/export', [PosOrderController::class, 'export']);
         Route::post('/change-status/{order}', [PosOrderController::class, 'changeStatus']);
         Route::post('/change-payment-status/{order}', [PosOrderController::class, 'changePaymentStatus']);
+        Route::match(['put', 'patch'], '/{order}', [PosOrderController::class, 'update']);
     });
 
     Route::prefix('table-order')->name('tableOrder.')->group(function () {

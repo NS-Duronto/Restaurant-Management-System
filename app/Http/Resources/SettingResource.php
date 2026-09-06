@@ -57,6 +57,8 @@ class SettingResource extends JsonResource
             'order_setup_free_delivery_kilometer'  => $this->info['order_setup_free_delivery_kilometer'],
             'order_setup_basic_delivery_charge'    => $this->info['order_setup_basic_delivery_charge'],
             'order_setup_charge_per_kilo'          => $this->info['order_setup_charge_per_kilo'],
+            'order_setup_pos_card_types'           => $this->info['order_setup_pos_card_types'] ?? json_encode(['Visa', 'Mastercard', 'Takapay', 'Nexuspay']),
+            'order_setup_pos_mfs_types'            => $this->info['order_setup_pos_mfs_types'] ?? json_encode(['bKash', 'Rocket', 'Nagad', 'Ucash']),
             'notification_fcm_api_key'             => $this->info['notification_fcm_api_key'],
             'notification_fcm_auth_domain'         => $this->info['notification_fcm_auth_domain'],
             'notification_fcm_project_id'          => $this->info['notification_fcm_project_id'],

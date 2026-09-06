@@ -6,6 +6,7 @@ use App\Enums\DiningTableStatus;
 use App\Enums\OrderStatus;
 use App\Enums\OrderType;
 use App\Enums\PaymentStatus;
+use App\Enums\PosPaymentMethod;
 use App\Enums\TaxType;
 use App\Events\SendOrderGotMail;
 use App\Events\SendOrderGotPush;
@@ -80,6 +81,18 @@ class OrderService
                         '<=',
                         $last_date
                     );
+                }
+
+                if (!empty($requests['search'])) {
+                    $searchTerm = $requests['search'];
+                    $query->where(function ($q) use ($searchTerm) {
+                        $q->where('order_serial_no', 'like', '%' . $searchTerm . '%')
+                          ->orWhere('token', 'like', '%' . $searchTerm . '%')
+                          ->orWhereHas('user', function ($uq) use ($searchTerm) {
+                              $uq->where('name', 'like', '%' . $searchTerm . '%')
+                                 ->orWhere('phone', 'like', '%' . $searchTerm . '%');
+                          });
+                    });
                 }
                 foreach ($requests as $key => $request) {
                     if (in_array($key, $this->orderFilter)) {
@@ -291,12 +304,14 @@ class OrderService
     {
         try {
             DB::transaction(function () use ($request) {
+                $validData = method_exists($request, 'validated') && $request->validator ? $request->validated() : $request->all();
                 $this->order = Order::create(
-                    $request->validated() + [
+                    $validData + [
                         'user_id' => $request->customer_id,
                         'status' => OrderStatus::ACCEPT,
                         'token' => $request->token,
-                        'payment_status' => PaymentStatus::PAID,
+                        'payment_status' => $request->payment_status ? (int) $request->payment_status : PaymentStatus::PAID,
+                        'pos_payment_sub_method' => $request->pos_payment_sub_method,
                         'order_datetime' => date('Y-m-d H:i:s'),
                         'preparation_time' => Settings::group('order_setup')->get('order_setup_food_preparation_time'),
                     ]
@@ -354,6 +369,9 @@ class OrderService
                 if ($request->pos_received_amount && (float) $request->pos_received_amount > 0) {
                     $this->order->pos_received_amount = (float) $request->pos_received_amount;
                     $this->order->change_return = max(0, (float) $request->pos_received_amount - (float) $this->order->total);
+                } elseif ($this->order->pos_payment_method == PosPaymentMethod::CASH && $this->order->payment_status == PaymentStatus::PAID) {
+                    $this->order->pos_received_amount = (float) $this->order->total;
+                    $this->order->change_return = 0;
                 }
                 if ($request->slip_type) {
                     $this->order->slip_type = (int) $request->slip_type;
@@ -367,6 +385,103 @@ class OrderService
                         'current_order_id' => $this->order->id,
                     ]);
                 }
+            });
+
+            return $this->order;
+        } catch (Exception $exception) {
+            DB::rollBack();
+            Log::info($exception->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function posOrderUpdate(PosOrderRequest $request, Order $order): object
+    {
+        try {
+            DB::transaction(function () use ($request, $order) {
+                // If dining table changed, release previous table
+                if ($order->dining_table_id && $order->dining_table_id != $request->dining_table_id) {
+                    DiningTable::where('id', $order->dining_table_id)->update([
+                        'table_status' => DiningTableStatus::AVAILABLE,
+                        'current_order_id' => null,
+                    ]);
+                }
+
+                $validData = method_exists($request, 'validated') && $request->validator ? $request->validated() : $request->all();
+                $order->fill($validData);
+                $order->user_id = $request->customer_id;
+                $order->token = $request->token;
+                if ($request->filled('payment_status')) {
+                    $order->payment_status = (int) $request->payment_status;
+                }
+                if ($request->pos_payment_sub_method) {
+                    $order->pos_payment_sub_method = $request->pos_payment_sub_method;
+                }
+
+                $requestItems = json_decode($request->items);
+                $items = Item::get()->pluck('tax_id', 'id');
+                $taxes = AppLibrary::pluck(Tax::get(), 'obj', 'id');
+                $totalTax = 0;
+                $itemsArray = [];
+                $i = 0;
+
+                if (! blank($requestItems)) {
+                    foreach ($requestItems as $item) {
+                        $taxId = isset($items[$item->item_id]) ? $items[$item->item_id] : 0;
+                        $taxName = isset($taxes[$taxId]) ? $taxes[$taxId]->name : null;
+                        $taxRate = isset($taxes[$taxId]) ? $taxes[$taxId]->tax_rate : 0;
+                        $taxType = isset($taxes[$taxId]) ? $taxes[$taxId]->type : TaxType::FIXED;
+                        $taxPrice = $taxType === TaxType::FIXED ? $taxRate : ($item->total_price * $taxRate) / 100;
+                        $itemsArray[$i] = [
+                            'order_id' => $order->id,
+                            'branch_id' => $item->branch_id,
+                            'item_id' => $item->item_id,
+                            'quantity' => $item->quantity,
+                            'discount' => (float) $item->discount,
+                            'tax_name' => $taxName,
+                            'tax_rate' => $taxRate,
+                            'tax_type' => $taxType,
+                            'tax_amount' => $taxPrice,
+                            'price' => $item->item_price,
+                            'item_variations' => json_encode($item->item_variations),
+                            'item_extras' => json_encode($item->item_extras),
+                            'instruction' => $item->instruction ?? '',
+                            'item_variation_total' => $item->item_variation_total,
+                            'item_extra_total' => $item->item_extra_total,
+                            'total_price' => $item->total_price,
+                        ];
+                        $totalTax = $totalTax + $taxPrice;
+                        $i++;
+                    }
+                }
+
+                OrderItem::where('order_id', $order->id)->delete();
+                if (! blank($itemsArray)) {
+                    OrderItem::insert($itemsArray);
+                }
+
+                $order->total_tax = $totalTax;
+                if ($request->pos_received_amount && (float) $request->pos_received_amount > 0) {
+                    $order->pos_received_amount = (float) $request->pos_received_amount;
+                    $order->change_return = max(0, (float) $request->pos_received_amount - (float) $order->total);
+                } elseif ($order->pos_payment_method == PosPaymentMethod::CASH && $order->payment_status == PaymentStatus::PAID) {
+                    $order->pos_received_amount = (float) $order->total;
+                    $order->change_return = 0;
+                }
+
+                $order->save();
+
+                if ($order->dining_table_id) {
+                    DiningTable::where('id', $order->dining_table_id)->update([
+                        'table_status' => DiningTableStatus::RUNNING,
+                        'current_order_id' => $order->id,
+                    ]);
+                }
+
+                $this->order = $order;
             });
 
             return $this->order;

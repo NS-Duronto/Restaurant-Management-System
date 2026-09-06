@@ -46,6 +46,10 @@ export const posCart = {
         destroyDiscount: function (context) {
             context.commit('discount', 0);
         },
+        setCart: function (context, payload) {
+            context.commit('setCart', payload);
+            context.commit('subtotal');
+        },
         resetCart: function (context) {
             context.commit('resetCart');
         },
@@ -165,6 +169,9 @@ export const posCart = {
         },
         discount: function (state, payload) {
             state.discount = payload;
+        },
+        setCart: function (state, payload) {
+            state.lists = payload;
         },
         resetCart: function (state) {
             state.lists = [];

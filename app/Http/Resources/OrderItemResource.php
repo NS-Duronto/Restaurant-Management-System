@@ -41,6 +41,11 @@ class OrderItemResource extends JsonResource
             'tax_name'                         => $this->tax_name,
             'tax_currency_amount'              => AppLibrary::currencyAmountFormat($this->tax_amount),
             'total_without_tax_currency_price' => AppLibrary::currencyAmountFormat($this->total_price - $this->tax_amount),
+            'convert_price'                    => (float) $this->price,
+            'item_variation_total'             => (float) $this->item_variation_total,
+            'item_extra_total'                 => (float) $this->item_extra_total,
+            'total_price'                      => (float) $this->total_price,
+            'discount_amount'                  => (float) $this->discount,
         ];
     }
 }

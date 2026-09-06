@@ -31,10 +31,10 @@
 
                             <span class="text-heading dark:text-gray-100 font-medium">
                                 {{ posPaymentMethodEnumArray[order.pos_payment_method] }}
-
+                                <span v-if="order.pos_payment_sub_method">({{ order.pos_payment_sub_method }})</span>
                                 <span
                                     v-if="order.pos_payment_method !== enums.posPaymentMethodEnum.CASH && order.pos_payment_note">
-                                    ({{ order.pos_payment_note }})</span>
+                                    - {{ order.pos_payment_note }}</span>
                             </span>
 
 

@@ -131,8 +131,16 @@
                                     enums.orderTypeEnumArray[order.order_type] }}</td>
                             </tr>
                             <tr>
-                                <td class="pt-1 pb-1 pr-1 align-top text-start">{{ $t('label.payment_type') }}: {{
-                                    posPaymentMethodEnumArray[order.pos_payment_method] }}</td>
+                                <td class="pt-1 pb-1 pr-1 align-top text-start">
+                                    {{ $t('label.payment_type') }}: {{ posPaymentMethodEnumArray[order.pos_payment_method] }}
+                                    <span v-if="order.pos_payment_sub_method">({{ order.pos_payment_sub_method }})</span>
+                                    <div v-if="order.payment_status === paymentStatusEnum.UNPAID" class="text-red-600 font-bold">
+                                        *** {{ $t('label.unpaid') || 'UNPAID' }} ({{ $t('label.pay_later') || 'PAY LATER' }}) ***
+                                    </div>
+                                    <div v-if="order.pos_payment_note" class="text-gray-500 font-normal">
+                                        {{ order.pos_payment_note }}
+                                    </div>
+                                </td>
                                 <td class="pt-1 pb-1 text-end" v-if="order.cash_back_amount > 0">
                                     <div>{{ $t('label.cash') }}: {{ order.pos_received_currency_amount }}</div>
                                     <span>{{ $t('label.change') }} : {{ order.cash_back_currency_amount }}</span>
@@ -168,6 +176,7 @@
 import displayModeEnum from "../../../enums/modules/displayModeEnum";
 import posPaymentMethodEnum from "../../../enums/modules/posPaymentMethodEnum";
 import OrderTypeEnum from "../../../enums/modules/orderTypeEnum";
+import paymentStatusEnum from "../../../enums/modules/paymentStatusEnum";
 
 export default {
     name: "PosOrderReceiptComponent",
@@ -176,6 +185,7 @@ export default {
     },
     data() {
         return {
+            paymentStatusEnum: paymentStatusEnum,
             posPaymentMethodEnumArray: {
                 [posPaymentMethodEnum.CASH]: this.$t("label.cash"),
                 [posPaymentMethodEnum.CARD]: this.$t("label.card"),

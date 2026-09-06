@@ -92,7 +92,8 @@
         "send_to_kitchen": "Send to Kitchen",
         "sales_and_profit_reports": "Sales & Profit Reports",
         "profit_loss_report": "Profit & Loss Report",
-        "kitchen_goods_categories": "Kitchen Goods Categories"
+        "kitchen_goods_categories": "Kitchen Goods Categories",
+        "pos_payment": "POS Payment"
     },
     "label": {
         "previous": "Previous",
@@ -729,7 +730,23 @@
         "offline": "Offline",
         "light_mode": "Light Mode",
         "dark_mode": "Dark Mode",
-        "loss": "Loss"
+        "loss": "Loss",
+        "pay_later": "Pay Later",
+        "editing_order": "Editing Order",
+        "payment_sub_method": "Payment Sub-Method",
+        "card_types": "Card Types",
+        "card_types_hint": "Manage accepted bank cards (e.g. Visa, Mastercard, etc.)",
+        "enter_card_type_name": "Enter card brand/type name...",
+        "reset_default": "Reset to Default",
+        "mfs_types": "MFS (Mobile Banking) Types",
+        "mfs_types_hint": "Manage accepted MFS services (e.g. bKash, Nagad, etc.)",
+        "enter_mfs_type_name": "Enter MFS name...",
+        "select_card_type": "Select Card Brand",
+        "select_mfs_service": "Select MFS Service",
+        "select_mfs_type": "Select MFS Type",
+        "optional": "Optional",
+        "pos_payment_method": "Payment Method",
+        "received_amount": "Received Amount"
     },
     "button": {
         "add": "Add",
@@ -739,6 +756,9 @@
         "view": "View",
         "close": "Close",
         "cancel": "Cancel",
+        "cancel_edit": "Cancel Edit",
+        "update_order": "Update Order",
+        "pay_later": "Pay Later",
         "clear": "Clear",
         "search": "Search",
         "filter": "Filter",
@@ -903,6 +923,16 @@
         "add_at_least_one_item": "Please add at least one item",
         "purchase_saved_success": "Purchase saved successfully and added to stock!",
         "send_to_kitchen_success": "Items sent to kitchen successfully and deducted from stock!",
-        "thank_you_for_dining": "Thank you for dining with us!"
+        "thank_you_for_dining": "Thank you for dining with us!",
+        "no_card_types_added": "No card types added. Please add at least one.",
+        "no_mfs_types_added": "No MFS types added. Please add at least one.",
+        "at_least_one_card_required": "Please add at least one card type.",
+        "at_least_one_mfs_required": "Please add at least one MFS type.",
+        "item_already_exists": "This item already exists.",
+        "pos_payment_updated_successfully": "POS payment settings updated successfully.",
+        "order_updated_successfully": "Order updated successfully.",
+        "card_digits_required": "Please enter the last 4 digits of the card.",
+        "trx_id_required": "Please enter the Transaction ID.",
+        "payment_note_required": "Please enter payment note."
     }
 }

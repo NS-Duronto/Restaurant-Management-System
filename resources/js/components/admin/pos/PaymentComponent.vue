@@ -118,20 +118,48 @@
                     </div>
                 </div>
 
-                <!-- 2. Card Payment Panel: Enter last 4 digits of card -->
+                <!-- 2. Card Payment Panel: Sub-options & Card last 4 digits -->
                 <div v-if="props.form.pos_payment_method === posPaymentMethodEnum.CARD" class="mb-4">
                     <label class="capitalize font-semibold text-xs text-gray-700 dark:text-gray-300 mb-1.5 block">
-                        {{ $t('label.enter_card_last_4_digits') }}
+                        {{ $t('label.select_card_type') || 'Select Card Brand' }}
+                    </label>
+                    <div class="grid grid-cols-4 gap-1.5 mb-3">
+                        <button v-for="card in cardList" :key="card" type="button"
+                            @click="selectedCard = card"
+                            class="py-2 px-1.5 rounded-xl border text-xs font-bold transition text-center truncate shadow-sm"
+                            :class="selectedCard === card 
+                                ? 'bg-orange-500 text-white border-orange-500 shadow-md shadow-orange-500/20' 
+                                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-orange-400'">
+                            {{ card }}
+                        </button>
+                    </div>
+
+                    <label class="capitalize font-semibold text-xs text-gray-700 dark:text-gray-300 mb-1.5 block">
+                        {{ $t('label.enter_card_last_4_digits') }} <span class="text-orange-500 font-bold">({{ selectedCard }})</span>
                     </label>
                     <input id="cardInput" type="text" maxlength="4" ref="cardInput" v-model="cardDigits" v-on:keypress="onlyNumber($event)"
                         :placeholder="$t('label.enter_card_last_4_digits')"
                         class="h-11 w-full rounded-xl border py-1.5 px-4 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-bold text-base tracking-widest focus:border-orange-500 focus:outline-none" required>
                 </div>
 
-                <!-- 3. MFS Payment Panel: Enter Transaction ID -->
+                <!-- 3. MFS Payment Panel: Sub-options & Transaction ID -->
                 <div v-if="props.form.pos_payment_method === posPaymentMethodEnum.MOBILE_BANKING" class="mb-4">
                     <label class="capitalize font-semibold text-xs text-gray-700 dark:text-gray-300 mb-1.5 block">
-                        {{ $t('label.enter_transaction_id') }}
+                        {{ $t('label.select_mfs_service') || 'Select MFS Service' }}
+                    </label>
+                    <div class="grid grid-cols-4 gap-1.5 mb-3">
+                        <button v-for="mfs in mfsList" :key="mfs" type="button"
+                            @click="selectedMfs = mfs"
+                            class="py-2 px-1.5 rounded-xl border text-xs font-bold transition text-center truncate shadow-sm"
+                            :class="selectedMfs === mfs 
+                                ? 'bg-orange-500 text-white border-orange-500 shadow-md shadow-orange-500/20' 
+                                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-orange-400'">
+                            {{ mfs }}
+                        </button>
+                    </div>
+
+                    <label class="capitalize font-semibold text-xs text-gray-700 dark:text-gray-300 mb-1.5 block">
+                        {{ $t('label.enter_transaction_id') }} <span class="text-orange-500 font-bold">({{ selectedMfs }})</span>
                     </label>
                     <input id="mfs-trans" type="text" ref="mfsInput" v-model="mfsTransId"
                         :placeholder="$t('label.enter_transaction_id')"
@@ -170,12 +198,19 @@
                     <button type="button" @click="pressKey('.')" class="num bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl p-2.5 flex items-center justify-center text-sm font-bold text-gray-800 dark:text-gray-200 transition shadow-sm">.</button>
                 </div>
 
-                <!-- Confirm Order & Settle Button -->
-                <button @click="confirmOrder" type="button"
-                    class="rounded-xl text-sm py-3 px-4 font-bold w-full text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-lg shadow-orange-500/20 transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-check-circle"></i>
-                    {{ $t("label.confirm_and_print") }}
-                </button>
+                <!-- Action Buttons: Pay Later & Confirm/Print -->
+                <div class="flex items-center gap-2.5">
+                    <button @click="payLater" type="button"
+                        class="rounded-xl text-xs sm:text-sm py-3 px-3 font-bold flex-1 text-amber-700 dark:text-amber-300 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/50 border border-amber-300 dark:border-amber-700 shadow-sm transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>{{ $t('button.pay_later') || 'Pay Later' }}</span>
+                    </button>
+                    <button @click="confirmOrder" type="button"
+                        class="rounded-xl text-xs sm:text-sm py-3 px-4 font-bold flex-[2] text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-lg shadow-orange-500/20 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <span>{{ $t("label.confirm_and_print") }}</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -189,6 +224,7 @@ import appService from "../../../services/appService";
 import alertService from "../../../services/alertService";
 import ReceiptComponent from "./ReceiptComponent";
 import posPaymentMethodEnum from "../../../enums/modules/posPaymentMethodEnum";
+import paymentStatusEnum from "../../../enums/modules/paymentStatusEnum";
 import sourceEnum from "../../../enums/modules/sourceEnum";
 import isAdvanceOrderEnum from "../../../enums/modules/isAdvanceOrderEnum";
 import orderTypeEnum from "../../../enums/modules/orderTypeEnum";
@@ -207,6 +243,11 @@ export default {
             },
             order: {},
             posPaymentMethodEnum: posPaymentMethodEnum,
+            paymentStatusEnum: paymentStatusEnum,
+            selectedMfs: "bKash",
+            selectedCard: "Visa",
+            defaultMfsList: ["bKash", "Rocket", "Nagad", "Ucash"],
+            defaultCardList: ["Visa", "Mastercard", "Takapay", "Nexuspay"],
             receivedAmount: "",
             cardDigits: "",
             mfsTransId: "",
@@ -216,6 +257,28 @@ export default {
     computed: {
         setting: function () {
             return this.$store.getters['frontendSetting/lists'];
+        },
+        cardList: function () {
+            if (this.setting?.order_setup_pos_card_types) {
+                try {
+                    const parsed = typeof this.setting.order_setup_pos_card_types === 'string'
+                        ? JSON.parse(this.setting.order_setup_pos_card_types)
+                        : this.setting.order_setup_pos_card_types;
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                } catch (e) {}
+            }
+            return this.defaultCardList;
+        },
+        mfsList: function () {
+            if (this.setting?.order_setup_pos_mfs_types) {
+                try {
+                    const parsed = typeof this.setting.order_setup_pos_mfs_types === 'string'
+                        ? JSON.parse(this.setting.order_setup_pos_mfs_types)
+                        : this.setting.order_setup_pos_mfs_types;
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                } catch (e) {}
+            }
+            return this.defaultMfsList;
         },
         changeReturnAmount: function () {
             const received = Number(this.receivedAmount) || 0;
@@ -280,6 +343,7 @@ export default {
             this.mfsTransId = "";
             this.otherNote = "";
             this.$props.props.form.pos_payment_note = "";
+            this.$props.props.form.pos_payment_sub_method = null;
             this.$props.props.form.pos_received_amount = null;
             appService.modalHide('#orderpayment');
         },
@@ -287,39 +351,61 @@ export default {
             this.$props.props.form.pos_payment_method = method;
             this.$props.props.form.pos_payment_note = "";
         },
+        payLater: function () {
+            this.$props.props.form.payment_status = this.paymentStatusEnum.UNPAID;
+            this.$props.props.form.pos_received_amount = null;
+            this.$props.props.form.pos_payment_sub_method = null;
+            this.$props.props.form.pos_payment_note = "Pay Later";
+            this.processOrderSave();
+        },
         confirmOrder: function () {
-            try {
-                // Validate payment methods
-                if (this.$props.props.form.pos_payment_method === this.posPaymentMethodEnum.CASH) {
-                    this.$props.props.form.pos_received_amount = this.receivedAmount ? Number(this.receivedAmount) : this.$props.props.form.total;
-                    this.$props.props.form.pos_payment_note = "";
-                } else if (this.$props.props.form.pos_payment_method === this.posPaymentMethodEnum.CARD) {
-                    if (!this.cardDigits || this.cardDigits.trim().length !== 4) {
-                        alertService.error("Please enter last 4 digits of card");
-                        return;
-                    }
-                    this.$props.props.form.pos_received_amount = null;
-                    this.$props.props.form.pos_payment_note = this.cardDigits.trim();
-                } else if (this.$props.props.form.pos_payment_method === this.posPaymentMethodEnum.MOBILE_BANKING) {
-                    if (!this.mfsTransId || !this.mfsTransId.trim()) {
-                        alertService.error("Please enter Transaction ID");
-                        return;
-                    }
-                    this.$props.props.form.pos_received_amount = null;
-                    this.$props.props.form.pos_payment_note = this.mfsTransId.trim();
-                } else if (this.$props.props.form.pos_payment_method === this.posPaymentMethodEnum.OTHER) {
-                    if (!this.otherNote || !this.otherNote.trim()) {
-                        alertService.error("Please enter payment note");
-                        return;
-                    }
-                    this.$props.props.form.pos_received_amount = null;
-                    this.$props.props.form.pos_payment_note = this.otherNote.trim();
+            this.$props.props.form.payment_status = this.paymentStatusEnum.PAID;
+            if (this.$props.props.form.pos_payment_method === this.posPaymentMethodEnum.CASH) {
+                this.$props.props.form.pos_received_amount = this.receivedAmount ? Number(this.receivedAmount) : this.$props.props.form.total;
+                this.$props.props.form.pos_payment_sub_method = null;
+                this.$props.props.form.pos_payment_note = "";
+            } else if (this.$props.props.form.pos_payment_method === this.posPaymentMethodEnum.CARD) {
+                if (!this.cardDigits || this.cardDigits.trim().length !== 4) {
+                    alertService.error(this.$t("message.card_digits_required"));
+                    return;
                 }
-
+                this.$props.props.form.pos_received_amount = null;
+                this.$props.props.form.pos_payment_sub_method = this.selectedCard;
+                this.$props.props.form.pos_payment_note = `${this.selectedCard} - ${this.cardDigits.trim()}`;
+            } else if (this.$props.props.form.pos_payment_method === this.posPaymentMethodEnum.MOBILE_BANKING) {
+                if (!this.mfsTransId || !this.mfsTransId.trim()) {
+                    alertService.error(this.$t("message.trx_id_required"));
+                    return;
+                }
+                this.$props.props.form.pos_received_amount = null;
+                this.$props.props.form.pos_payment_sub_method = this.selectedMfs;
+                this.$props.props.form.pos_payment_note = `${this.selectedMfs} - ${this.mfsTransId.trim()}`;
+            } else if (this.$props.props.form.pos_payment_method === this.posPaymentMethodEnum.OTHER) {
+                if (!this.otherNote || !this.otherNote.trim()) {
+                    alertService.error(this.$t("message.payment_note_required"));
+                    return;
+                }
+                this.$props.props.form.pos_received_amount = null;
+                this.$props.props.form.pos_payment_sub_method = null;
+                this.$props.props.form.pos_payment_note = this.otherNote.trim();
+            }
+            this.processOrderSave();
+        },
+        processOrderSave: function () {
+            try {
                 this.loading.isActive = true;
                 this.$store.dispatch("defaultAccess/show").then((res) => {
                     this.$props.props.form.branch_id = res.data.data.branch_id;
                     this.$store.dispatch('posOrder/save', this.$props.props.form).then(orderResponse => {
+                        const isEdit = this.$store.getters['posOrder/temp']?.isEditing;
+                        if (isEdit) {
+                            this.$store.commit('posOrder/reset');
+                            if (this.$route.query.order_id) {
+                                this.$router.replace({ path: '/admin/pos' });
+                            }
+                            alertService.success(this.$t("message.order_updated_successfully") || "Order updated successfully");
+                        }
+
                         this.$props.props.form.token = "";
                         this.$props.props.form.subtotal = null;
                         this.$props.props.form.discount = 0;
@@ -334,6 +420,7 @@ export default {
                         this.$props.props.form.coupon_id = null;
                         this.$props.props.form.items = [];
                         this.$props.props.form.pos_payment_method = this.posPaymentMethodEnum.CASH;
+                        this.$props.props.form.pos_payment_sub_method = null;
                         this.$props.props.form.pos_payment_note = null;
                         this.$props.props.form.pos_received_amount = null;
 
@@ -342,7 +429,8 @@ export default {
                             this.loading.isActive = false;
                         }).catch();
 
-                        this.$store.dispatch('posOrder/show', orderResponse.data.data.id).then(showRes => {
+                        const savedOrderId = orderResponse.data.data?.id || orderResponse.data?.id;
+                        this.$store.dispatch('posOrder/show', savedOrderId).then(showRes => {
                             this.order = showRes.data.data;
                             this.loading.isActive = false;
                             this.reset();
@@ -364,7 +452,6 @@ export default {
                 }).catch(() => {
                     this.loading.isActive = false;
                 });
-
             } catch (err) {
                 this.loading.isActive = false;
                 alertService.error(err);

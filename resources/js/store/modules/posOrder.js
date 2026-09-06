@@ -66,12 +66,21 @@ export const posOrder = {
         },
         save: function (context, payload) {
             return new Promise((resolve, reject) => {
-                axios.post("admin/pos", payload).then((res) => {
+                let method = axios.post;
+                let url = "admin/pos";
+                if (context.state.temp.isEditing) {
+                    method = axios.put;
+                    url = `admin/pos-order/${context.state.temp.temp_id}`;
+                }
+                method(url, payload).then((res) => {
                     resolve(res);
                 }).catch((err) => {
                     reject(err);
                 });
             });
+        },
+        edit: function (context, payload) {
+            context.commit('edit', payload);
         },
         show: function (context, payload) {
             return new Promise((resolve, reject) => {
@@ -173,6 +182,10 @@ export const posOrder = {
         },
         orderUser: function (state, payload) {
             state.orderUser = payload;
+        },
+        edit: function (state, payload) {
+            state.temp.temp_id = payload;
+            state.temp.isEditing = true;
         },
         reset: function(state) {
             state.temp.temp_id = null;

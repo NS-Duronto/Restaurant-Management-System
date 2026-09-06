@@ -30,9 +30,11 @@ class SimpleOrderResource extends JsonResource
             'order_type'                   => $this->order_type,
             'source'                       => $this->source,
             'pos_payment_method'           => $this->pos_payment_method,
+            'pos_payment_sub_method'       => $this->pos_payment_sub_method,
             'status'                       => $this->status,
             'status_name'                  => trans('orderStatus.' . $this->status),
             'customer_name'                => $this->user?->name,
+            'customer_phone'               => $this->user?->phone,
         ];
     }
 }
