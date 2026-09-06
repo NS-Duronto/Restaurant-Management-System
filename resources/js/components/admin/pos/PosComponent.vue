@@ -144,8 +144,7 @@
                 </button>
             </div>
             <div class="db-field mb-3">
-                <input v-on:keypress="onlyNumber($event)"
-                    class="db-field-control text-sm rounded-lg appearance-none text-heading border-[#D9DBE9] dark:border-gray-700" id="token"
+                <input class="db-field-control text-sm rounded-lg appearance-none text-heading border-[#D9DBE9] dark:border-gray-700" id="token"
                     v-model="checkoutProps.form.token" :placeholder="$t('label.token_no')" />
             </div>
 
@@ -609,6 +608,7 @@ export default {
             this.loading.isActive = true;
             this.$store.dispatch("defaultAccess/show").then((res) => {
                 this.checkoutProps.form.branch_id = res.data.data.branch_id;
+                this.fetchNextToken();
             }).catch((err) => {
                 this.loading.isActive = false;
             });
@@ -757,6 +757,7 @@ export default {
                 }
             }
             this.$store.dispatch('posCart/resetCart').then(res => {
+                this.fetchNextToken();
             }).catch();
         },
         orderSubmit: function () {
@@ -822,8 +823,8 @@ export default {
             this.checkoutProps.form.items = JSON.stringify(this.checkoutProps.form.items);
 
             this.loading.isActive = false;
-            if (!this.checkoutProps.form.token) {
-                return alertService.error(this.$t("message.token_field_required"));
+            if (!this.checkoutProps.form.token && !this.isEditingOrder) {
+                this.fetchNextToken();
             }
             if (this.checkoutProps.form.order_type === orderTypeEnum.DINING_TABLE && !this.checkoutProps.form.dining_table_id) {
                 return alertService.error(this.$t("message.table_field_required"));
@@ -975,6 +976,15 @@ export default {
                 alertService.error(err.response?.data?.message || "Failed to load order for edit");
             });
         },
+        fetchNextToken: function () {
+            if (this.isEditingOrder) return;
+            const branchId = this.checkoutProps.form.branch_id || null;
+            this.$store.dispatch('posOrder/nextToken', branchId ? { branch_id: branchId } : {}).then((res) => {
+                if (res.data?.data?.token) {
+                    this.checkoutProps.form.token = res.data.data.token;
+                }
+            }).catch(() => {});
+        },
         cancelEditOrder: function () {
             this.editingOrderId = null;
             this.editingOrderSerialNo = "";
@@ -1000,6 +1010,9 @@ export default {
                                 }
                             }
                         });
+                        if (this.checkoutProps.form.branch_id) {
+                            this.fetchNextToken();
+                        }
                     }
                 }
             },

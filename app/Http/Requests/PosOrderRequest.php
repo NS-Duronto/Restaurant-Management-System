@@ -32,7 +32,7 @@ class PosOrderRequest extends FormRequest
         $isUnpaid = (int) $this->input('payment_status') === PaymentStatus::UNPAID;
 
         return [
-            'token'                  => ['required', 'numeric'],
+            'token'                  => ['nullable', 'string', 'max:50'],
             'customer_id'            => ['required', 'numeric'],
             'branch_id'              => ['required', 'numeric'],
             'subtotal'               => ['required', 'numeric'],

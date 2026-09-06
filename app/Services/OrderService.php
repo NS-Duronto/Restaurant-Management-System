@@ -297,6 +297,44 @@ class OrderService
         }
     }
 
+    public function generateNextToken(?int $branchId = null): string
+    {
+        if (! $branchId) {
+            $branchId = Auth::check() && Auth::user()->branch_id ? (int) Auth::user()->branch_id : 1;
+        }
+
+        $datePrefix = date('dmY') . '-';
+        $today = Carbon::today();
+
+        $todayTokens = Order::where('branch_id', $branchId)
+            ->where(function ($query) use ($today) {
+                $query->whereDate('order_datetime', $today)
+                    ->orWhereDate('created_at', $today);
+            })
+            ->whereNotNull('token')
+            ->where('token', '!=', '')
+            ->pluck('token');
+
+        $maxSeq = 0;
+
+        foreach ($todayTokens as $t) {
+            $t = trim((string) $t);
+            if (str_starts_with($t, $datePrefix)) {
+                $suffix = substr($t, strlen($datePrefix));
+                if (is_numeric($suffix)) {
+                    $seq = (int) $suffix;
+                    if ($seq > $maxSeq) {
+                        $maxSeq = $seq;
+                    }
+                }
+            }
+        }
+
+        $nextSeq = $maxSeq + 1;
+
+        return $datePrefix . sprintf('%02d', $nextSeq);
+    }
+
     /**
      * @throws Exception
      */
@@ -305,16 +343,34 @@ class OrderService
         try {
             DB::transaction(function () use ($request) {
                 $validData = method_exists($request, 'validated') && $request->validator ? $request->validated() : $request->all();
+                $token = $request->token;
+                if (blank($token)) {
+                    $token = $this->generateNextToken((int) $request->branch_id);
+                } else {
+                    $today = Carbon::today();
+                    $exists = Order::where('branch_id', $request->branch_id)
+                        ->where(function ($query) use ($today) {
+                            $query->whereDate('order_datetime', $today)
+                                ->orWhereDate('created_at', $today);
+                        })
+                        ->where('token', $token)
+                        ->exists();
+
+                    if ($exists) {
+                        $token = $this->generateNextToken((int) $request->branch_id);
+                    }
+                }
+
                 $this->order = Order::create(
-                    $validData + [
+                    array_merge($validData, [
                         'user_id' => $request->customer_id,
                         'status' => OrderStatus::ACCEPT,
-                        'token' => $request->token,
+                        'token' => $token,
                         'payment_status' => $request->payment_status ? (int) $request->payment_status : PaymentStatus::PAID,
                         'pos_payment_sub_method' => $request->pos_payment_sub_method,
                         'order_datetime' => date('Y-m-d H:i:s'),
                         'preparation_time' => Settings::group('order_setup')->get('order_setup_food_preparation_time'),
-                    ]
+                    ])
                 );
 
                 $i = 0;
@@ -413,7 +469,7 @@ class OrderService
                 $validData = method_exists($request, 'validated') && $request->validator ? $request->validated() : $request->all();
                 $order->fill($validData);
                 $order->user_id = $request->customer_id;
-                $order->token = $request->token;
+                $order->token = $request->filled('token') ? $request->token : $order->token;
                 if ($request->filled('payment_status')) {
                     $order->payment_status = (int) $request->payment_status;
                 }

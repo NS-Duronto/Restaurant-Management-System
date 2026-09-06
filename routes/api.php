@@ -415,6 +415,7 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
     });
 
     Route::prefix('pos')->name('pos.')->group(function () {
+        Route::get('/next-token', [PosController::class, 'nextToken']);
         Route::post('/', [PosController::class, 'store']);
         Route::post('/customer', [PosController::class, 'storeCustomer']);
     });

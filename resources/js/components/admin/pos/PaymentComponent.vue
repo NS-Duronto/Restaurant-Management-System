@@ -427,6 +427,12 @@ export default {
                         appService.modalHide('#orderpayment');
                         this.$store.dispatch('posCart/resetCart').then(() => {
                             this.loading.isActive = false;
+                            const branchId = this.$props.props?.form?.branch_id || null;
+                            this.$store.dispatch('posOrder/nextToken', branchId ? { branch_id: branchId } : {}).then((tokenRes) => {
+                                if (tokenRes.data?.data?.token) {
+                                    this.$props.props.form.token = tokenRes.data.data.token;
+                                }
+                            }).catch(() => {});
                         }).catch();
 
                         const savedOrderId = orderResponse.data.data?.id || orderResponse.data?.id;

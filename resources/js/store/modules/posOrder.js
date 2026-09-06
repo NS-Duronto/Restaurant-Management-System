@@ -154,6 +154,19 @@ export const posOrder = {
                     });
             });
         },
+        nextToken: function (context, payload) {
+            return new Promise((resolve, reject) => {
+                let url = 'admin/pos/next-token';
+                if (payload) {
+                    url = url + appService.requestHandler(payload);
+                }
+                axios.get(url).then((res) => {
+                    resolve(res);
+                }).catch((err) => {
+                    reject(err);
+                });
+            });
+        },
     },
     mutations: {
         lists: function (state, payload) {

@@ -9,6 +9,7 @@ use App\Http\Requests\CustomerRequest;
 use App\Http\Requests\PosOrderRequest;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\OrderDetailsResource;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\Middleware;
 
 
@@ -27,8 +28,28 @@ class PosController extends AdminController
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:pos', only: ['store']),
+            new Middleware('permission:pos', only: ['store', 'nextToken']),
         ];
+    }
+
+    public function nextToken(Request $request): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $branchId = $request->branch_id ? (int) $request->branch_id : null;
+            $token = $this->orderService->generateNextToken($branchId);
+
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'token' => $token,
+                ],
+            ]);
+        } catch (Exception $exception) {
+            return response()->json([
+                'status' => false,
+                'message' => $exception->getMessage(),
+            ], 422);
+        }
     }
 
     public function store(PosOrderRequest $request): \Illuminate\Http\Response | OrderDetailsResource | \Illuminate\Contracts\Foundation\Application | \Illuminate\Contracts\Routing\ResponseFactory
