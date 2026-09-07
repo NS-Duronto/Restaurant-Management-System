@@ -10,8 +10,6 @@ class LicenseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -20,8 +18,6 @@ class LicenseRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
@@ -30,24 +26,24 @@ class LicenseRequest extends FormRequest
         ];
     }
 
-
-    public function messages(): array 
+    public function messages(): array
     {
         return [
-            'license_key.required' => 'The license code field is required'
+            'license_key.required' => 'The license code field is required',
         ];
     }
 
     public function withValidator($validator): void
     {
-        $validator->after(function($validator) {
-            $installerService = new InstallerService();
-            $response         = $installerService->licenseCodeChecker($validator->validated());
-            $request          = $validator->validated();
+        $validator->after(function ($validator) {
+            $installerService = new InstallerService;
+            $response = $installerService->licenseCodeChecker($validator->validated());
+            $request = $validator->validated();
             if (isset($response->status) && $response->status) {
-                $envService = new EnvEditor();
+                $envService = new EnvEditor;
                 $envService->addData([
                     'MIX_API_KEY' => $request['license_key'],
+                    'VITE_API_KEY' => $request['license_key'],
                 ]);
             } else {
                 $validator->errors()->add('license_key', $response->message);

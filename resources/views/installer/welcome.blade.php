@@ -13,7 +13,6 @@
         <li class="active"><i class="fa-solid fa-house"></i></li>
         <li><i class="fa-solid fa-server"></i></li>
         <li><i class="fa-sharp fa-solid fa-unlock"></i></li>
-        <li><i class="fa-solid fa-key"></i></li>
         <li><i class="fa-solid fa-gear"></i></li>
         <li><i class="fa-solid fa-database"></i></li>
         <li><i class="fa-solid fa-unlock-keyhole"></i></li>

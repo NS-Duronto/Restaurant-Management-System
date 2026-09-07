@@ -20,21 +20,11 @@ return [
     'permission' => [
         'templateTitle'       => 'Step 2 | Permissions',
         'title'               => 'Permissions',
-        'next'                => 'License Setup',
+        'next'                => 'Site Setup',
         'permission_checking' => 'Permission Checking'
     ],
-    'license' => [
-        'templateTitle'       => 'Step 3 | License',
-        'title'               => 'License Setup',
-        'next'                => 'Site Setup',
-        'active_process'      => 'Active Process',
-        'label'               => [
-            'license_key' => 'License Key',
-            'license_code' => 'License Code'
-        ]
-    ],
     'site'     => [
-        'templateTitle' => 'Step 4 | Site Setup',
+        'templateTitle' => 'Step 3 | Site Setup',
         'title'         => 'Site Setup',
         'next'          => 'Database Setup',
         'label'         => [
@@ -43,7 +33,7 @@ return [
         ]
     ],
     'database' => [
-        'templateTitle' => 'Step 5 | Database Setup',
+        'templateTitle' => 'Step 4 | Database Setup',
         'title'         => 'Database Setup',
         'next'          => 'Final Setup',
         'fail_message'  => 'Could not connect to the database.',
@@ -57,7 +47,7 @@ return [
         ]
     ],
     'final'    => [
-        'templateTitle'   => 'Step 6 | Final Setup',
+        'templateTitle'   => 'Step 5 | Final Setup',
         'title'           => 'Final Setup',
         'success_message' => 'Application has been successfully installed.',
         'login_info'      => 'Login Information',

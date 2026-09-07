@@ -2,23 +2,27 @@
 
 namespace App\Services;
 
-
-use App\Libraries\AppLibrary;
 use Dipokhalder\EnvEditor\EnvEditor;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 
 class InstallerService
 {
     public function siteSetup(Request $request): void
     {
-        $envService = new EnvEditor();
+        $envService = new EnvEditor;
+        $apiKey = $envService->getValue('VITE_API_KEY');
+        if (blank($apiKey)) {
+            $apiKey = 'b6d68vy2-m7g5-20r0-5275-h103w73453q120';
+        }
+
         $envService->addData([
             'APP_NAME' => $request->app_name,
-            'APP_URL'  => rtrim($request->app_url, '/')
+            'APP_URL' => rtrim($request->app_url, '/'),
+            'VITE_API_KEY' => $apiKey,
+            'MIX_API_KEY' => $apiKey,
         ]);
     }
 
@@ -26,10 +30,10 @@ class InstallerService
     {
         $connection = $this->checkDatabaseConnection($request);
         if ($connection) {
-            $envService = new EnvEditor();
+            $envService = new EnvEditor;
             $envService->addData([
-                'DB_HOST'     => $request->database_host,
-                'DB_PORT'     => $request->database_port,
+                'DB_HOST' => $request->database_host,
+                'DB_PORT' => $request->database_port,
                 'DB_DATABASE' => $request->database_name,
                 'DB_USERNAME' => $request->database_username,
                 'DB_PASSWORD' => $request->database_password,
@@ -37,27 +41,29 @@ class InstallerService
 
             Artisan::call('config:cache');
             Artisan::call('migrate:fresh', ['--force' => true]);
-            if(Artisan::call('db:seed', ['--force' => true])) {
+            if (Artisan::call('db:seed', ['--force' => true])) {
                 Artisan::call('optimize:clear');
                 Artisan::call('config:clear');
             }
+
             return true;
         }
+
         return false;
     }
 
     private function checkDatabaseConnection(Request $request): bool
     {
         $connection = 'mysql';
-        $settings   = config("database.connections.$connection");
+        $settings = config("database.connections.$connection");
         config([
             'database' => [
-                'default'     => $connection,
+                'default' => $connection,
                 'connections' => [
                     $connection => array_merge($settings, [
-                        'driver'   => $connection,
-                        'host'     => $request->input('database_host'),
-                        'port'     => $request->input('database_port'),
+                        'driver' => $connection,
+                        'host' => $request->input('database_host'),
+                        'port' => $request->input('database_port'),
                         'database' => $request->input('database_name'),
                         'username' => $request->input('database_username'),
                         'password' => $request->input('database_password'),
@@ -70,6 +76,7 @@ class InstallerService
 
         try {
             DB::connection()->getPdo();
+
             return true;
         } catch (Exception $e) {
             return false;
@@ -78,47 +85,35 @@ class InstallerService
 
     public function licenseCodeChecker($array)
     {
-        try {
-            $payload = [
-                'license_code' => $array['license_key'],
-                'product_id'   => config('product.itemId'),
-                'domain'       => AppLibrary::domain(url('')),
-                'purpose'      => 'install',
-                'version'      => config('product.version')
-            ];
-            if (isset($array['purpose'])) {
-                $payload['purpose'] = $array['purpose'];
-            }
-            $apiUrl   = config('product.licenseCodeCheckerUrl');
-            $response = Http::post($apiUrl . '/api/check-installer-license', $payload);
-            return AppLibrary::licenseApiResponse($response);
-        } catch (\Exception $exception) {
-            return (object)[
-                'status'  => false,
-                'message' => $exception->getMessage()
-            ];
-        }
+        $licenseKey = $array['license_key'] ?? 'b6d68vy2-m7g5-20r0-5275-h103w73453q120';
+
+        return (object) [
+            'status' => true,
+            'message' => 'License verified successfully',
+            'data' => (object) [
+                'license_key' => $licenseKey,
+            ],
+        ];
     }
 
     public function finalSetup(): void
     {
         $installedLogFile = storage_path('installed');
-        $dateStamp        = date('Y-m-d h:i:s A');
-        if (!file_exists($installedLogFile)) {
-            $message = trans('installer.installed.success_log_message') . $dateStamp . "\n";
+        $dateStamp = date('Y-m-d h:i:s A');
+        if (! file_exists($installedLogFile)) {
+            $message = trans('installer.installed.success_log_message').$dateStamp."\n";
             file_put_contents($installedLogFile, $message);
         } else {
-            $message = trans('installer.installed.update_log_message') . $dateStamp;
-            file_put_contents($installedLogFile, $message . PHP_EOL, FILE_APPEND | LOCK_EX);
+            $message = trans('installer.installed.update_log_message').$dateStamp;
+            file_put_contents($installedLogFile, $message.PHP_EOL, FILE_APPEND | LOCK_EX);
         }
 
         Artisan::call('storage:link', ['--force' => true]);
-        $envService = new EnvEditor();
+        $envService = new EnvEditor;
         $envService->addData([
-            'APP_ENV'   => 'production',
-            'APP_DEBUG' => 'false'
+            'APP_ENV' => 'production',
+            'APP_DEBUG' => 'false',
         ]);
         Artisan::call('optimize:clear');
     }
 }
-

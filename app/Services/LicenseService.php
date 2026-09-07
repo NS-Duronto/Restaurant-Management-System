@@ -2,14 +2,13 @@
 
 namespace App\Services;
 
-
-use Exception;
-use Illuminate\Support\Facades\Log;
-use Dipokhalder\EnvEditor\EnvEditor;
 use App\Http\Requests\LicenseRequest;
-use Illuminate\Support\Facades\Artisan;
 use App\Libraries\QueryExceptionLibrary;
+use Dipokhalder\EnvEditor\EnvEditor;
 use Dipokhalder\Settings\Facades\Settings;
+use Exception;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class LicenseService
 {
@@ -34,16 +33,18 @@ class LicenseService
     }
 
     /**
-     * @param LicenseRequest $request
-     * @return
      * @throws Exception
      */
     public function update(LicenseRequest $request)
     {
         try {
             Settings::group('license')->set($request->validated());
-            $this->envService->addData(['MIX_API_KEY' => $request->license_key]);
+            $this->envService->addData([
+                'MIX_API_KEY' => $request->license_key,
+                'VITE_API_KEY' => $request->license_key,
+            ]);
             Artisan::call('optimize:clear');
+
             return $this->list();
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
