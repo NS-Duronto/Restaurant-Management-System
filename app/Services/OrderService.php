@@ -24,6 +24,8 @@ use App\Models\Address;
 use App\Models\DiningTable;
 use App\Models\FrontendOrder;
 use App\Models\Item;
+use App\Models\ItemIngredient;
+use App\Models\KitchenGoods;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
@@ -441,6 +443,8 @@ class OrderService
                         'current_order_id' => $this->order->id,
                     ]);
                 }
+
+                $this->deductOrderStock($this->order);
             });
 
             return $this->order;
@@ -514,6 +518,7 @@ class OrderService
                     }
                 }
 
+                $this->restoreOrderStock($order);
                 OrderItem::where('order_id', $order->id)->delete();
                 if (! blank($itemsArray)) {
                     OrderItem::insert($itemsArray);
@@ -537,6 +542,7 @@ class OrderService
                     ]);
                 }
 
+                $this->deductOrderStock($order);
                 $this->order = $order;
             });
 
@@ -688,6 +694,12 @@ class OrderService
                     }
                     $order->status = $request->status;
                     $order->save();
+
+                    if (in_array((int)$request->status, [OrderStatus::ACCEPT, OrderStatus::PREPARING, OrderStatus::DELIVERED])) {
+                        $this->deductOrderStock($order);
+                    } elseif (in_array((int)$request->status, [OrderStatus::REJECTED, OrderStatus::CANCELED, OrderStatus::RETURNED])) {
+                        $this->restoreOrderStock($order);
+                    }
                 }
             } else {
                 if ($request->status == OrderStatus::REJECTED || $request->status == OrderStatus::CANCELED) {
@@ -709,6 +721,12 @@ class OrderService
                 }
                 $order->status = $request->status;
                 $order->save();
+
+                if (in_array((int)$request->status, [OrderStatus::ACCEPT, OrderStatus::PREPARING, OrderStatus::DELIVERED])) {
+                    $this->deductOrderStock($order);
+                } elseif (in_array((int)$request->status, [OrderStatus::REJECTED, OrderStatus::CANCELED, OrderStatus::RETURNED])) {
+                    $this->restoreOrderStock($order);
+                }
             }
 
             return $order;
@@ -796,6 +814,7 @@ class OrderService
                         'current_order_id' => null,
                     ]);
                 }
+                $this->restoreOrderStock($order);
                 $order->address()?->delete();
                 $order->orderItems()?->delete();
                 $order->delete();
@@ -869,6 +888,62 @@ class OrderService
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
             throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
+
+    /**
+     * Deduct raw material stock based on ordered items' recipes
+     */
+    public function deductOrderStock(Order $order): void
+    {
+        try {
+            if ($order->is_stock_deducted) {
+                return;
+            }
+
+            $order->loadMissing('orderItems');
+            foreach ($order->orderItems as $orderItem) {
+                $ingredients = ItemIngredient::where('item_id', $orderItem->item_id)->get();
+                foreach ($ingredients as $ingredient) {
+                    $totalQtyToDeduct = (float) $ingredient->quantity * (float) $orderItem->quantity;
+                    $goods = KitchenGoods::find($ingredient->kitchen_goods_id);
+                    if ($goods) {
+                        $goods->decrement('current_stock', $totalQtyToDeduct);
+                    }
+                }
+            }
+
+            $order->update(['is_stock_deducted' => true]);
+        } catch (Exception $e) {
+            Log::info("Stock deduction error for order {$order->id}: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Restore raw material stock if an order is cancelled or deleted
+     */
+    public function restoreOrderStock(Order $order): void
+    {
+        try {
+            if (!$order->is_stock_deducted) {
+                return;
+            }
+
+            $order->loadMissing('orderItems');
+            foreach ($order->orderItems as $orderItem) {
+                $ingredients = ItemIngredient::where('item_id', $orderItem->item_id)->get();
+                foreach ($ingredients as $ingredient) {
+                    $totalQtyToRestore = (float) $ingredient->quantity * (float) $orderItem->quantity;
+                    $goods = KitchenGoods::find($ingredient->kitchen_goods_id);
+                    if ($goods) {
+                        $goods->increment('current_stock', $totalQtyToRestore);
+                    }
+                }
+            }
+
+            $order->update(['is_stock_deducted' => false]);
+        } catch (Exception $e) {
+            Log::info("Stock restore error for order {$order->id}: " . $e->getMessage());
         }
     }
 }

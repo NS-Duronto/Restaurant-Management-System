@@ -9,9 +9,22 @@
                 </div>
             </div>
             <div class="db-card-body">
-                <div class="table-filter-div">
-                    <div class="form-group">
-                        <input v-model="props.search.name" @input="list" type="text" class="db-field-control" :placeholder="$t('label.search_raw_material')">
+                <div class="table-filter-div flex flex-wrap items-center justify-between gap-3">
+                    <div class="form-group flex-1 min-w-[200px]">
+                        <input v-model="props.search.name" @input="list(1)" type="text" class="db-field-control" :placeholder="$t('label.search_raw_material')">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" @click="filterStock(false)"
+                            class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition"
+                            :class="!props.search.low_stock ? 'bg-primary text-white border-primary' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700'">
+                            {{ $t('label.all_materials') || 'সকল কাঁচামাল' }}
+                        </button>
+                        <button type="button" @click="filterStock(true)"
+                            class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition flex items-center gap-1.5"
+                            :class="props.search.low_stock ? 'bg-red-600 text-white border-red-600' : 'bg-white dark:bg-gray-800 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800/40'">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            {{ $t('label.low_stock_only') || 'কম স্টক (Low Stock)' }}
+                        </button>
                     </div>
                 </div>
 
@@ -34,13 +47,18 @@
                                 <td class="db-table-body-td">{{ item.category_name || item.kitchen_goods_category_name || '-' }}</td>
                                 <td class="db-table-body-td">{{ item.unit_name || item.unit_code || '-' }}</td>
                                 <td class="db-table-body-td">
-                                    <span class="px-2.5 py-1 rounded-full text-xs font-bold"
-                                        :class="item.current_stock > 0 ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400' : 'bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400'">
-                                        {{ Number(item.current_stock).toFixed(2) }} {{ item.unit_code || '' }}
-                                    </span>
+                                    <div class="flex flex-col gap-1 items-start">
+                                        <span class="px-2.5 py-1 rounded-full text-xs font-bold"
+                                            :class="item.current_stock > 0 ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400' : 'bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400'">
+                                            {{ Number(item.current_stock).toFixed(2) }} {{ item.unit_code || '' }}
+                                        </span>
+                                        <span v-if="item.is_low_stock" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300 flex items-center gap-1">
+                                            <i class="fa-solid fa-triangle-exclamation"></i> {{ $t('label.low_stock') || 'কম স্টক' }} (Min: {{ item.alert_quantity }})
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="db-table-body-td font-semibold">
-                                    {{ currencyFormat(item.cost_per_unit, setting.site_digit_after_decimal_point, setting.site_default_currency_symbol, setting.site_currency_position) }}
+                                    {{ currencyFormat(item.cost_per_unit) }}
                                 </td>
                                 <td class="db-table-body-td">
                                     <span :class="statusClass(item.status)">
@@ -106,6 +124,7 @@ export default {
                     kitchen_goods_category_id: null,
                     unit_id: null,
                     cost_per_unit: "",
+                    alert_quantity: "",
                     status: statusEnum.ACTIVE,
                 },
                 search: {
@@ -115,13 +134,14 @@ export default {
                     order_column: 'id',
                     order_type: 'desc',
                     name: "",
+                    low_stock: null,
                 }
             }
         }
     },
     computed: {
         setting: function () {
-            return this.$store.getters['frontendSetting/lists'];
+            return this.$store.getters['frontendSetting/lists'] || {};
         },
         kitchenGoods: function () {
             return this.$store.getters['kitchenGoods/lists'] || [];
@@ -137,8 +157,13 @@ export default {
         this.list();
     },
     methods: {
-        currencyFormat: function (amount, decimal, currency, position) {
-            return appService.currencyFormat(amount, decimal, currency, position);
+        currencyFormat: function (amount) {
+            return appService.currencyFormat(
+                amount,
+                this.setting?.site_digit_after_decimal_point,
+                this.setting?.site_default_currency_symbol,
+                this.setting?.site_currency_position
+            );
         },
         statusClass: function (status) {
             return appService.statusClass(status);
@@ -160,8 +185,13 @@ export default {
                 kitchen_goods_category_id: item.kitchen_goods_category_id,
                 unit_id: item.unit_id,
                 cost_per_unit: item.cost_per_unit,
+                alert_quantity: item.alert_quantity,
                 status: item.status,
             };
+        },
+        filterStock: function (isLowStock) {
+            this.props.search.low_stock = isLowStock ? 1 : null;
+            this.list(1);
         },
         destroy: function (id) {
             appService.destroyConfirmation().then((res) => {

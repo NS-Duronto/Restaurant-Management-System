@@ -31,6 +31,7 @@ import supplierRoutes from "./modules/supplierRoutes";
 import purchaseRoutes from "./modules/purchaseRoutes";
 import kitchenGoodsRoutes from "./modules/kitchenGoodsRoutes";
 import sendToKitchenRoutes from "./modules/sendToKitchenRoutes";
+import wastageRoutes from "./modules/wastageRoutes";
 import profitLossReportRoutes from "./modules/profitLossReportRoutes";
 
 
@@ -93,6 +94,7 @@ export const routes = baseRoutes.concat(
     purchaseRoutes,
     kitchenGoodsRoutes,
     sendToKitchenRoutes,
+    wastageRoutes,
     profitLossReportRoutes
 );
 

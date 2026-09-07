@@ -44,6 +44,7 @@ class Order extends Model
         'pos_received_amount',
         'change_return',
         'slip_type',
+        'is_stock_deducted',
     ];
 
     protected $casts = [
@@ -72,6 +73,7 @@ class Order extends Model
         'pos_received_amount' => 'decimal:6',
         'change_return' => 'decimal:6',
         'slip_type' => 'integer',
+        'is_stock_deducted' => 'boolean',
     ];
 
     protected static function boot(): void

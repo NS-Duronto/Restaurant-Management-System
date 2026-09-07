@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\ItemAttributeController;
 use App\Http\Controllers\Admin\ItemCategoryController;
 use App\Http\Controllers\Admin\ItemController;
 use App\Http\Controllers\Admin\ItemExtraController;
+use App\Http\Controllers\Admin\ItemIngredientController;
 use App\Http\Controllers\Admin\ItemsReportController;
 use App\Http\Controllers\Admin\ItemVariationController;
 use App\Http\Controllers\Admin\KitchenDisplaySystemController;
@@ -66,6 +67,7 @@ use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\WaiterAddressController;
 use App\Http\Controllers\Admin\WaiterController;
+use App\Http\Controllers\Admin\WastageController;
 use App\Http\Controllers\Auth\DeactivateController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\GuestSignupController;
@@ -412,6 +414,13 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::get('/addon/{item}', [ItemAddonController::class, 'index']);
         Route::post('/addon/{item}', [ItemAddonController::class, 'store']);
         Route::delete('/addon/{item}/{itemAddon}', [ItemAddonController::class, 'destroy']);
+
+        Route::get('/ingredient/{item}', [ItemIngredientController::class, 'index']);
+        Route::post('/ingredient/{item}', [ItemIngredientController::class, 'store']);
+        Route::match(['put', 'patch'], '/ingredient/{item}/{itemIngredient}', [ItemIngredientController::class, 'update']);
+        Route::delete('/ingredient/{item}/{itemIngredient}', [ItemIngredientController::class, 'destroy']);
+        Route::get('/ingredient/{item}/show/{itemIngredient}', [ItemIngredientController::class, 'show']);
+        Route::get('/ingredient/{item}/summary', [ItemIngredientController::class, 'summary']);
     });
 
     Route::prefix('pos')->name('pos.')->group(function () {
@@ -621,6 +630,13 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::get('/show/{sendToKitchen}', [SendToKitchenController::class, 'show']);
         Route::post('/', [SendToKitchenController::class, 'store']);
         Route::delete('/{sendToKitchen}', [SendToKitchenController::class, 'destroy']);
+    });
+
+    Route::prefix('wastage')->name('wastage.')->group(function () {
+        Route::get('/', [WastageController::class, 'index']);
+        Route::get('/show/{wastage}', [WastageController::class, 'show']);
+        Route::post('/', [WastageController::class, 'store']);
+        Route::delete('/{wastage}', [WastageController::class, 'destroy']);
     });
 
     Route::prefix('expense-category')->name('expense-category.')->group(function () {

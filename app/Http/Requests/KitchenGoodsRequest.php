@@ -25,6 +25,7 @@ class KitchenGoodsRequest extends FormRequest
             'unit_id' => ['required', 'numeric', 'exists:units,id'],
             'current_stock' => ['nullable', 'numeric', 'min:0'],
             'cost_per_unit' => ['nullable', 'numeric', 'min:0'],
+            'alert_quantity' => ['nullable', 'numeric', 'min:0'],
             'status' => ['required', 'numeric'],
         ];
     }

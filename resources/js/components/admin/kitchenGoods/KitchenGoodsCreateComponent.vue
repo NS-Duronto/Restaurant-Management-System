@@ -44,6 +44,13 @@
                         </div>
 
                         <div class="form-col-12 sm:form-col-6">
+                            <label for="alert_quantity" class="db-field-title">{{ $t("label.alert_quantity") || 'Low Stock Alert Qty (সতর্কীকরণ স্টক)' }}</label>
+                            <input v-model="props.form.alert_quantity" v-bind:class="errors.alert_quantity ? 'invalid' : ''" type="number" step="0.01"
+                                id="alert_quantity" class="db-field-control" :placeholder="$t('label.alert_quantity_placeholder') || 'e.g. 5 or 10'">
+                            <small class="db-field-alert" v-if="errors.alert_quantity">{{ errors.alert_quantity[0] }}</small>
+                        </div>
+
+                        <div class="form-col-12 sm:form-col-6">
                             <label class="db-field-title required" for="active">{{ $t('label.status') }}</label>
                             <div class="db-field-radio-group">
                                 <div class="db-field-radio">
@@ -130,6 +137,7 @@ export default {
                 kitchen_goods_category_id: null,
                 unit_id: null,
                 cost_per_unit: "",
+                alert_quantity: "",
                 status: statusEnum.ACTIVE,
             };
         },
@@ -142,6 +150,7 @@ export default {
                 kitchen_goods_category_id: null,
                 unit_id: null,
                 cost_per_unit: "",
+                alert_quantity: "",
                 status: statusEnum.ACTIVE,
             };
         },
@@ -157,6 +166,7 @@ export default {
                         kitchen_goods_category_id: null,
                         unit_id: null,
                         cost_per_unit: "",
+                        alert_quantity: "",
                         status: statusEnum.ACTIVE,
                     };
                     this.errors = {};

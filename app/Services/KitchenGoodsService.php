@@ -30,15 +30,20 @@ class KitchenGoodsService
             $orderColumn = $request->get('order_column') ?? 'id';
             $orderType = $request->get('order_type') ?? 'desc';
 
-            return KitchenGoods::with(['category', 'unit'])->where(function ($query) use ($requests) {
-                foreach ($requests as $key => $request) {
+            return KitchenGoods::with(['category', 'unit'])->where(function ($query) use ($requests, $request) {
+                foreach ($requests as $key => $val) {
                     if (in_array($key, $this->goodsFilter)) {
                         if ($key == 'status' || $key == 'kitchen_goods_category_id' || $key == 'unit_id') {
-                            $query->where($key, $request);
+                            $query->where($key, $val);
                         } else {
-                            $query->where($key, 'like', '%'.$request.'%');
+                            $query->where($key, 'like', '%'.$val.'%');
                         }
                     }
+                }
+
+                if ($request->has('low_stock') && $request->get('low_stock') == 1) {
+                    $query->where('alert_quantity', '>', 0)
+                        ->whereColumn('current_stock', '<=', 'alert_quantity');
                 }
             })->orderBy($orderColumn, $orderType)->$method(
                 $methodValue

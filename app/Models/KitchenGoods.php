@@ -19,7 +19,12 @@ class KitchenGoods extends Model
         'unit_id',
         'current_stock',
         'cost_per_unit',
+        'alert_quantity',
         'status',
+    ];
+
+    protected $appends = [
+        'is_low_stock',
     ];
 
     protected $casts = [
@@ -29,8 +34,14 @@ class KitchenGoods extends Model
         'unit_id' => 'integer',
         'current_stock' => 'decimal:2',
         'cost_per_unit' => 'decimal:2',
+        'alert_quantity' => 'decimal:2',
         'status' => 'integer',
     ];
+
+    public function getIsLowStockAttribute(): bool
+    {
+        return (float) $this->alert_quantity > 0 && (float) $this->current_stock <= (float) $this->alert_quantity;
+    }
 
     public function category(): BelongsTo
     {
@@ -50,5 +61,15 @@ class KitchenGoods extends Model
     public function sendToKitchenItems(): HasMany
     {
         return $this->hasMany(SendToKitchenItem::class, 'kitchen_goods_id');
+    }
+
+    public function ingredients(): HasMany
+    {
+        return $this->hasMany(ItemIngredient::class, 'kitchen_goods_id');
+    }
+
+    public function wastageItems(): HasMany
+    {
+        return $this->hasMany(WastageItem::class, 'kitchen_goods_id');
     }
 }

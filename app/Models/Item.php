@@ -129,4 +129,9 @@ class Item extends Model implements HasMedia
     {
         return $this->belongsToMany(Offer::class, 'offer_items');
     }
+
+    public function ingredients(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ItemIngredient::class, 'item_id');
+    }
 }

@@ -2,7 +2,7 @@
     <LoadingComponent :props="loading" />
 
     <div class="col-12">
-        <div class="grid grid-cols-1 sm:grid-cols-6 mb-4 sm:mb-0">
+        <div class="grid grid-cols-2 sm:grid-cols-7 mb-4 sm:mb-0">
             <button type="button" @click="handleTab($event, '#information', '.db-tabBtn', '.db-tabDiv', 'active')"
                 class="db-tabBtn !justify-start active">
                 <i class="lab lab-information lab-font-size-16"></i>
@@ -11,6 +11,11 @@
             <button type="button" @click="handleTab($event, '#image', '.db-tabBtn', '.db-tabDiv', 'active')"
                 class="db-tabBtn !justify-start"><i class="lab lab-image lab-font-size-16"></i>
                 {{ $t('label.images') }}
+            </button>
+            <button type="button" class="db-tabBtn !justify-start"
+                @click="handleTab($event, '#recipe', '.db-tabBtn', '.db-tabDiv', 'active')"><i
+                    class="fa-solid fa-mortar-pestle text-sm"></i>
+                {{ $t('label.recipe') || 'Recipe & BOM' }}
             </button>
             <button type="button" class="db-tabBtn !justify-start"
                 @click="handleTab($event, '#variations', '.db-tabBtn', '.db-tabDiv', 'active')"><i
@@ -142,6 +147,9 @@
             </div>
         </div>
 
+        <div class="db-tabDiv" id="recipe">
+            <ItemIngredientListComponent :item="parseInt($route.params.id)" />
+        </div>
         <div class="db-tabDiv" id="variations">
             <ItemVariationListComponent :item="parseInt($route.params.id)" />
         </div>
@@ -168,6 +176,7 @@ import ItemVariationListComponent from "./variation/ItemVariationListComponent";
 import ItemExtraListComponent from "./extra/ItemExtraListComponent";
 import ItemAddonListComponent from "./addon/ItemAddonListComponent";
 import ItemTranslationComponent from "./ItemTranslationComponent.vue";
+import ItemIngredientListComponent from "./ingredient/ItemIngredientListComponent.vue";
 
 export default {
     name: "ItemCategoryShowComponent",
@@ -176,7 +185,8 @@ export default {
         LoadingComponent,
         ItemExtraListComponent,
         ItemAddonListComponent,
-        ItemTranslationComponent
+        ItemTranslationComponent,
+        ItemIngredientListComponent
     },
     data() {
         return {

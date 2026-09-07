@@ -20,6 +20,8 @@ class KitchenGoodsResource extends JsonResource
             'current_stock' => (float) $this->current_stock,
             'cost_per_unit' => (float) $this->cost_per_unit,
             'currency_cost_per_unit' => AppLibrary::currencyAmountFormat($this->cost_per_unit),
+            'alert_quantity' => (float) $this->alert_quantity,
+            'is_low_stock' => (float) $this->alert_quantity > 0 && (float) $this->current_stock <= (float) $this->alert_quantity,
             'status' => $this->status,
         ];
     }

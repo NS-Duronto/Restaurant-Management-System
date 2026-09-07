@@ -203,6 +203,16 @@ class MenuTableSeeder extends Seeder
                         'status'     => 1,
                         'created_at' => now(),
                         'updated_at' => now()
+                    ],
+                    [
+                        'name'       => 'Wastage & Spoilage',
+                        'language'   => 'wastages',
+                        'url'        => 'wastages',
+                        'icon'       => 'fa-solid fa-trash-can-arrow-up',
+                        'priority'   => 3,
+                        'status'     => 1,
+                        'created_at' => now(),
+                        'updated_at' => now()
                     ]
                 ]
             ],
