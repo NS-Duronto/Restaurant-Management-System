@@ -15,7 +15,8 @@
                     <button class="flex items-center text-left gap-2 dropdown-btn">
                         <i class="lab lab-shop lab-font-size-24 font-fill-primary"></i>
                         <h3 class="capitalize text-xs font-medium text-heading dark:text-gray-100">
-                            <span class="block font-normal mb-0.5 text-gray-500 dark:text-gray-400">{{ $t('label.branch') }}</span>
+                            <span class="block font-normal mb-0.5 text-gray-500 dark:text-gray-400">{{
+                                $t('label.branch') }}</span>
                             <b class="font-semibold whitespace-nowrap">{{ branch.name }}</b>
                         </h3>
                         <i class="lab lab-arrow-down text-xs ml-1.5 lab-font-size-14 dark:text-gray-400"></i>
@@ -39,18 +40,20 @@
                     <div class="relative dropdown-group"
                         v-if="$route.path.includes('kitchen-display-system') || $route.path.includes('order-status-screen')">
                         <router-link :to="{ path: '/admin/' + defaultMenu?.url }" @click="closeFullScreen"
-                            class="flex items-center gap-2 h-9 px-3 rounded-lg bg-primary-light">
+                            class="flex items-center gap-2 h-9 px-3 rounded-lg bg-orange-500/10 dark:bg-gray-800 border border-orange-500/20 dark:border-gray-700 hover:bg-orange-500/20 dark:hover:bg-gray-700 transition">
                             <i class="lab-font-size-17 text-primary" :class="defaultMenu?.icon"></i>
                             <span
-                                class=" md:block hidden whitespace-nowrap text-xs font-medium capitalize text-heading dark:text-gray-200">{{
+                                class="md:block hidden whitespace-nowrap text-xs font-medium capitalize text-heading dark:text-gray-200">{{
                                     $t('menu.' + defaultMenu?.language) }}</span>
                         </router-link>
                     </div>
                     <div v-if="setting.site_language_switch === enums.activityEnum.ENABLE"
                         class="dropdown-group relative">
-                        <button class="dropdown-btn flex items-center gap-2 h-9 px-3 rounded-lg bg-orange-500/10 dark:bg-gray-800">
+                        <button
+                            class="dropdown-btn flex items-center gap-2 h-9 px-3 rounded-lg bg-orange-500/10 dark:bg-gray-800">
                             <img :src="language.image" alt="flag" class="w-4 h-4 rounded-full">
-                            <span class="hidden md:block whitespace-nowrap text-xs font-medium capitalize text-heading dark:text-gray-200">
+                            <span
+                                class="hidden md:block whitespace-nowrap text-xs font-medium capitalize text-heading dark:text-gray-200">
                                 {{ language.name }}
                             </span>
                         </button>
@@ -59,24 +62,29 @@
                             <li @click="changeLanguage(language.id, language.code)" v-for="language in languages"
                                 class="flex items-center gap-2 py-1.5 px-2.5 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
                                 <img :src="language.image" alt="flag" class="w-4 h-4 rounded-full">
-                                <span class="text-heading dark:text-gray-200 capitalize text-sm">{{ language.name }}</span>
+                                <span class="text-heading dark:text-gray-200 capitalize text-sm">{{ language.name
+                                    }}</span>
                             </li>
                         </ul>
                     </div>
 
-                    <span class="hidden xl:flex items-center gap-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-emerald-500/20">
-                        <i class="fa-solid fa-circle-dot text-[10px] animate-pulse"></i> {{ $t('label.pos_terminal_active') }}
+                    <span
+                        class="hidden xl:flex items-center gap-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-emerald-500/20">
+                        <i class="fa-solid fa-circle-dot text-[10px] animate-pulse"></i> {{
+                            $t('label.pos_terminal_active') }}
                     </span>
 
-                    <button @click="toggleTheme" type="button" class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-orange-400 border border-gray-300 dark:border-gray-700 flex items-center justify-center transition shadow-sm" :title="$t('button.toggle_theme')">
-                        <i :class="isDarkMode ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-gray-700'" class="text-sm"></i>
+                    <button @click="toggleTheme" type="button"
+                        class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-orange-400 border border-gray-300 dark:border-gray-700 flex items-center justify-center transition shadow-sm"
+                        :title="$t('button.toggle_theme')">
+                        <i :class="isDarkMode ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-gray-700'"
+                            class="text-sm"></i>
                     </button>
 
                     <router-link
                         v-if="pos.permission && !$route.path.includes('kitchen-display-system') && !$route.path.includes('order-status-screen')"
                         class="w-9 h-9 rounded-lg flex items-center justify-center bg-orange-500/10 dark:bg-orange-500/20 text-orange-500 border border-orange-500/30"
-                        :to="{ path: '/admin/' + pos.url }"
-                        title="POS">
+                        :to="{ path: '/admin/' + pos.url }" title="POS">
                         <i class="lab lab-pos-bold lab-font-size-16 font-fill-pos"></i>
                     </router-link>
                 </div>
@@ -368,7 +376,7 @@ export default {
                     }).catch((err) => {
                         this.loading.isActive = false;
                         this.imageErrors = err.response.data.errors;
-                        if(this.imageErrors?.image && this.imageErrors?.image[0]){
+                        if (this.imageErrors?.image && this.imageErrors?.image[0]) {
                             alertService.error(this.imageErrors.image[0]);
                         }
                     });

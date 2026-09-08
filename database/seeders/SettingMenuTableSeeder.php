@@ -42,7 +42,7 @@ class SettingMenuTableSeeder extends Seeder
                 'url'        => 'branches',
                 'icon'       => 'lab lab-branches',
                 'priority'   => 990,
-                'status'     => Status::INACTIVE,
+                'status'     => Status::ACTIVE,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
