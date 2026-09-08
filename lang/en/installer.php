@@ -2,11 +2,11 @@
 
 
 return [
-    'title' => 'Food Scan Installer',
+    'title' => 'Sohoj RMS Installer',
     'next'  => 'Next Step',
     'welcome' => [
         'templateTitle' => 'Welcome',
-        'title'         => 'Food Scan Installer',
+        'title'         => 'Sohoj RMS Installer',
         'message'       => 'Easy Installation and Setup Wizard.',
         'next'          => 'Check Requirements',
     ],
@@ -58,7 +58,7 @@ return [
         'next'            => 'Finish',
     ],
     'installed' => [
-        'success_log_message' => 'Food Scan installer successfully INSTALLED on ',
-        'update_log_message'  => 'Food Scan Installer successfully UPDATED on ',
+        'success_log_message' => 'Sohoj RMS installer successfully INSTALLED on ',
+        'update_log_message'  => 'Sohoj RMS Installer successfully UPDATED on ',
     ],
 ];

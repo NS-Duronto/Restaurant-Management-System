@@ -32,7 +32,7 @@
             <label class="text-sm font-medium block mb-1.5 text-heading">
                 {{ trans('installer.site.label.app_name') }} <span class="text-[#E93C3C]">*</span>
             </label>
-            <input name="app_name" type="text" value="{{ old('app_name') }}" class="w-full h-12 rounded-lg px-4 border border-[#D9DBE9]">
+            <input name="app_name" type="text" value="{{ old('app_name', config('app.name', 'Sohoj RMS - Restaurant Management System')) }}" class="w-full h-12 rounded-lg px-4 border border-[#D9DBE9]">
             @if ($errors->has('app_name'))
                 <small class="block mt-2 text-sm font-medium text-[#E93C3C]">{{ $errors->first('app_name') }}</small>
             @endif
@@ -42,7 +42,7 @@
             <label class="text-sm font-medium block mb-1.5 text-heading">
                 {{ trans('installer.site.label.app_url') }} <span class="text-[#E93C3C]">*</span>
             </label>
-            <input name="app_url" type="text" value="{{ old('app_url') }}" class="w-full h-12 rounded-lg px-4 border border-[#D9DBE9]">
+            <input name="app_url" type="text" value="{{ old('app_url', url('/')) }}" class="w-full h-12 rounded-lg px-4 border border-[#D9DBE9]">
             @if ($errors->has('app_url'))
                 <small class="block mt-2 text-sm font-medium text-[#E93C3C]">{{ $errors->first('app_url') }}</small>
             @endif

@@ -43,7 +43,7 @@ class DiningTableService
             $orderColumn = $request->get('order_column') ?? 'id';
             $orderType   = $request->get('order_type') ?? 'desc';
 
-            return DiningTable::with('branch')->where(function ($query) use ($requests) {
+            return DiningTable::with(['branch', 'currentOrder.user', 'activeOrders.user'])->where(function ($query) use ($requests) {
                 foreach ($requests as $key => $request) {
                     if (in_array($key, $this->diningTableFilter)) {
                         if ($key == "except") {
@@ -154,4 +154,23 @@ class DiningTableService
             throw new Exception(QueryExceptionLibrary::message($exception), 422);
         }
     }
+
+    /**
+     * @throws Exception
+     */
+    public function releaseTable(DiningTable $diningTable): DiningTable
+    {
+        try {
+            $diningTable->update([
+                'table_status' => \App\Enums\DiningTableStatus::AVAILABLE,
+                'current_order_id' => null,
+            ]);
+
+            return $diningTable->fresh(['branch', 'currentOrder.user']);
+        } catch (Exception $exception) {
+            Log::info($exception->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
 }
+

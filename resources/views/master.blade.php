@@ -83,7 +83,28 @@
     @endif
 
     <div id="app">
-        <default-component />
+        <default-component>
+            <div id="rms-initial-preloader" style="position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #ffffff; z-index: 99999;" class="dark:bg-[#0f172a]">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 32px; border-radius: 24px; background: rgba(255, 255, 255, 0.95); box-shadow: 0 20px 40px -15px rgba(249, 115, 22, 0.25); border: 1px solid rgba(249, 115, 22, 0.15);">
+                    <div style="position: relative; width: 76px; height: 76px; display: flex; align-items: center; justify-content: center;">
+                        <div style="position: absolute; inset: 0; border-radius: 50%; border: 3px solid transparent; border-top-color: #f97316; border-right-color: #fb923c; animation: rmsSpin 1s linear infinite;"></div>
+                        <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); display: flex; align-items: center; justify-content: center; color: #ffffff; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);">
+                            <svg style="width: 22px; height: 22px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 3V11C4 12.6569 5.34315 14 7 14C8.65685 14 10 12.6569 10 11V3M7 3V21M4 7H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M15 3V21M15 3C16.5 3 20 4.5 20 8C20 11.5 16.5 13 15 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div style="margin-top: 14px; text-align: center;">
+                        <span style="font-size: 0.95rem; font-weight: 700; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Sohoj RMS</span>
+                        <div style="font-size: 0.78rem; font-weight: 500; color: #64748b; margin-top: 2px;">লোড হচ্ছে...</div>
+                    </div>
+                </div>
+            </div>
+            <style>
+                @keyframes rmsSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+            </style>
+        </default-component>
     </div>
 
     @if (!blank($analytics))

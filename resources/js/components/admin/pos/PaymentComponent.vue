@@ -395,7 +395,8 @@ export default {
             try {
                 this.loading.isActive = true;
                 this.$store.dispatch("defaultAccess/show").then((res) => {
-                    this.$props.props.form.branch_id = res.data.data.branch_id;
+                    const resolvedBranchId = res.data?.data?.branch_id || this.$props.props?.form?.branch_id || 1;
+                    this.$props.props.form.branch_id = resolvedBranchId;
                     this.$store.dispatch('posOrder/save', this.$props.props.form).then(orderResponse => {
                         const isEdit = this.$store.getters['posOrder/temp']?.isEditing;
                         if (isEdit) {
@@ -419,16 +420,24 @@ export default {
                         this.$props.props.form.dining_table_id = null;
                         this.$props.props.form.coupon_id = null;
                         this.$props.props.form.items = [];
+                        this.$props.props.form.payment_status = this.paymentStatusEnum.PAID;
                         this.$props.props.form.pos_payment_method = this.posPaymentMethodEnum.CASH;
                         this.$props.props.form.pos_payment_sub_method = null;
                         this.$props.props.form.pos_payment_note = null;
                         this.$props.props.form.pos_received_amount = null;
 
                         appService.modalHide('#orderpayment');
+
+                        // Refresh live dining tables status immediately
+                        this.$store.dispatch("diningTable/lists", {
+                            order_column: 'id',
+                            order_type: 'asc',
+                            status: 5,
+                        }).catch(() => {});
+
                         this.$store.dispatch('posCart/resetCart').then(() => {
                             this.loading.isActive = false;
-                            const branchId = this.$props.props?.form?.branch_id || null;
-                            this.$store.dispatch('posOrder/nextToken', branchId ? { branch_id: branchId } : {}).then((tokenRes) => {
+                            this.$store.dispatch('posOrder/nextToken', resolvedBranchId ? { branch_id: resolvedBranchId } : {}).then((tokenRes) => {
                                 if (tokenRes.data?.data?.token) {
                                     this.$props.props.form.token = tokenRes.data.data.token;
                                 }
@@ -449,10 +458,10 @@ export default {
                         this.loading.isActive = false;
                         if (typeof err.response?.data?.errors === 'object') {
                             _.forEach(err.response.data.errors, (error) => {
-                                alertService.error(error[0]);
+                                alertService.error(Array.isArray(error) ? error[0] : error);
                             });
                         } else {
-                            alertService.error(err.response?.data?.message || 'Error saving order');
+                            alertService.error(err.response?.data?.message || err.message || 'Error saving order');
                         }
                     });
                 }).catch(() => {

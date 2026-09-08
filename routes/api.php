@@ -524,6 +524,7 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::post('/', [DiningTableController::class, 'store']);
         Route::match(['post', 'put', 'patch'], '/{diningTable}', [DiningTableController::class, 'update']);
         Route::delete('/{diningTable}', [DiningTableController::class, 'destroy']);
+        Route::post('/{diningTable}/release', [DiningTableController::class, 'releaseTable']);
         Route::get('/export', [DiningTableController::class, 'export']);
     });
 

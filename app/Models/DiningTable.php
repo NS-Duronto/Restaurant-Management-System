@@ -6,6 +6,7 @@ use App\Models\Scopes\BranchScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DiningTable extends Model
 {
@@ -43,6 +44,18 @@ class DiningTable extends Model
     public function currentOrder(): BelongsTo
     {
         return $this->belongsTo(Order::class, 'current_order_id');
+    }
+
+    public function activeOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'dining_table_id')
+            ->where('payment_status', \App\Enums\PaymentStatus::UNPAID)
+            ->whereNotIn('status', [
+                \App\Enums\OrderStatus::CANCELED,
+                \App\Enums\OrderStatus::REJECTED,
+                \App\Enums\OrderStatus::RETURNED
+            ])
+            ->latest('id');
     }
 
     public function getDiningTableStatusAttribute(): int

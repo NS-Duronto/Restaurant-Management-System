@@ -106,6 +106,15 @@ export const diningTable = {
                 });
             });
         },
+        release: function (context, payload) {
+            return new Promise((resolve, reject) => {
+                axios.post(`admin/dining-table/${payload}/release`).then((res) => {
+                    resolve(res);
+                }).catch((err) => {
+                    reject(err);
+                });
+            });
+        },
     },
     mutations: {
         lists: function (state, payload) {

@@ -387,9 +387,10 @@ class OrderService
                         $taxRate = isset($taxes[$taxId]) ? $taxes[$taxId]->tax_rate : 0;
                         $taxType = isset($taxes[$taxId]) ? $taxes[$taxId]->type : TaxType::FIXED;
                         $taxPrice = $taxType === TaxType::FIXED ? $taxRate : ($item->total_price * $taxRate) / 100;
+                        $itemBranchId = !empty($item->branch_id) ? (int)$item->branch_id : ($this->order->branch_id ?? (Auth::check() && Auth::user()->branch_id ? (int)Auth::user()->branch_id : 1));
                         $itemsArray[$i] = [
                             'order_id' => $this->order->id,
-                            'branch_id' => $item->branch_id,
+                            'branch_id' => $itemBranchId,
                             'item_id' => $item->item_id,
                             'quantity' => $item->quantity,
                             'discount' => (float) $item->discount,
@@ -436,10 +437,7 @@ class OrderService
                 $this->order->save();
 
                 if ($this->order->dining_table_id) {
-                    DiningTable::where('id', $this->order->dining_table_id)->update([
-                        'table_status' => DiningTableStatus::RUNNING,
-                        'current_order_id' => $this->order->id,
-                    ]);
+                    $this->syncTableStatus((int) $this->order->dining_table_id);
                 }
             });
 
@@ -458,13 +456,7 @@ class OrderService
     {
         try {
             DB::transaction(function () use ($request, $order) {
-                // If dining table changed, release previous table
-                if ($order->dining_table_id && $order->dining_table_id != $request->dining_table_id) {
-                    DiningTable::where('id', $order->dining_table_id)->update([
-                        'table_status' => DiningTableStatus::AVAILABLE,
-                        'current_order_id' => null,
-                    ]);
-                }
+                $oldTableId = $order->dining_table_id;
 
                 $validData = method_exists($request, 'validated') && $request->validator ? $request->validated() : $request->all();
                 $order->fill($validData);
@@ -491,9 +483,10 @@ class OrderService
                         $taxRate = isset($taxes[$taxId]) ? $taxes[$taxId]->tax_rate : 0;
                         $taxType = isset($taxes[$taxId]) ? $taxes[$taxId]->type : TaxType::FIXED;
                         $taxPrice = $taxType === TaxType::FIXED ? $taxRate : ($item->total_price * $taxRate) / 100;
+                        $itemBranchId = !empty($item->branch_id) ? (int)$item->branch_id : ($order->branch_id ?? (Auth::check() && Auth::user()->branch_id ? (int)Auth::user()->branch_id : 1));
                         $itemsArray[$i] = [
                             'order_id' => $order->id,
-                            'branch_id' => $item->branch_id,
+                            'branch_id' => $itemBranchId,
                             'item_id' => $item->item_id,
                             'quantity' => $item->quantity,
                             'discount' => (float) $item->discount,
@@ -530,11 +523,11 @@ class OrderService
 
                 $order->save();
 
+                if ($oldTableId && $oldTableId != $order->dining_table_id) {
+                    $this->syncTableStatus((int) $oldTableId);
+                }
                 if ($order->dining_table_id) {
-                    DiningTable::where('id', $order->dining_table_id)->update([
-                        'table_status' => DiningTableStatus::RUNNING,
-                        'current_order_id' => $order->id,
-                    ]);
+                    $this->syncTableStatus((int) $order->dining_table_id);
                 }
 
                 $this->order = $order;
@@ -711,6 +704,10 @@ class OrderService
                 $order->save();
             }
 
+            if ($order->dining_table_id) {
+                $this->syncTableStatus((int) $order->dining_table_id);
+            }
+
             return $order;
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
@@ -729,11 +726,8 @@ class OrderService
                     $order->payment_status = $request->payment_status;
                     $order->save();
 
-                    if ($request->payment_status == PaymentStatus::PAID && $order->dining_table_id) {
-                        DiningTable::where('id', $order->dining_table_id)->update([
-                            'table_status' => DiningTableStatus::AVAILABLE,
-                            'current_order_id' => null,
-                        ]);
+                    if ($order->dining_table_id) {
+                        $this->syncTableStatus((int) $order->dining_table_id);
                     }
 
                     return $order;
@@ -744,11 +738,8 @@ class OrderService
                 $order->payment_status = $request->payment_status;
                 $order->save();
 
-                if ($request->payment_status == PaymentStatus::PAID && $order->dining_table_id) {
-                    DiningTable::where('id', $order->dining_table_id)->update([
-                        'table_status' => DiningTableStatus::AVAILABLE,
-                        'current_order_id' => null,
-                    ]);
+                if ($order->dining_table_id) {
+                    $this->syncTableStatus((int) $order->dining_table_id);
                 }
 
                 return $order;
@@ -790,15 +781,13 @@ class OrderService
     {
         try {
             DB::transaction(function () use ($order) {
-                if ($order->dining_table_id) {
-                    DiningTable::where('id', $order->dining_table_id)->where('current_order_id', $order->id)->update([
-                        'table_status' => DiningTableStatus::AVAILABLE,
-                        'current_order_id' => null,
-                    ]);
-                }
+                $tableId = $order->dining_table_id;
                 $order->address()?->delete();
                 $order->orderItems()?->delete();
                 $order->delete();
+                if ($tableId) {
+                    $this->syncTableStatus((int) $tableId);
+                }
             });
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
@@ -869,6 +858,35 @@ class OrderService
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
             throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
+
+    public function syncTableStatus(?int $diningTableId): void
+    {
+        if (! $diningTableId) {
+            return;
+        }
+
+        $latestUnpaid = Order::where('dining_table_id', $diningTableId)
+            ->where('payment_status', PaymentStatus::UNPAID)
+            ->whereNotIn('status', [
+                OrderStatus::CANCELED,
+                OrderStatus::REJECTED,
+                OrderStatus::RETURNED
+            ])
+            ->latest('id')
+            ->first();
+
+        if ($latestUnpaid) {
+            DiningTable::where('id', $diningTableId)->update([
+                'table_status' => DiningTableStatus::RUNNING,
+                'current_order_id' => $latestUnpaid->id,
+            ]);
+        } else {
+            DiningTable::where('id', $diningTableId)->update([
+                'table_status' => DiningTableStatus::AVAILABLE,
+                'current_order_id' => null,
+            ]);
         }
     }
 }

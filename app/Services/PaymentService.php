@@ -23,6 +23,9 @@ class PaymentService
         }
         $order->payment_status = PaymentStatus::PAID;
         $order->save();
+        if ($order->dining_table_id) {
+            app(OrderService::class)->syncTableStatus((int) $order->dining_table_id);
+        }
         return $transaction;
     }
 

@@ -30,7 +30,8 @@ class DiningTableController extends AdminController
             new Middleware('permission:dining_tables_create', only: ['store']),
             new Middleware('permission:dining_tables_edit', only: ['update']),
             new Middleware('permission:dining_tables_delete', only: ['destroy']),
-            new Middleware('permission:dining_tables_show', only: ['show'])
+            new Middleware('permission:dining_tables_show', only: ['show']),
+            new Middleware('permission:pos|dining_tables_edit', only: ['releaseTable'])
         ];
     }
 
@@ -94,4 +95,15 @@ class DiningTableController extends AdminController
             return response(['status' => false, 'message' => $exception->getMessage()], 422);
         }
     }
+
+    public function releaseTable(
+        DiningTable $diningTable
+    ): \Illuminate\Http\Response | DiningTableResource | \Illuminate\Contracts\Foundation\Application | \Illuminate\Contracts\Routing\ResponseFactory {
+        try {
+            return new DiningTableResource($this->diningTableService->releaseTable($diningTable));
+        } catch (Exception $exception) {
+            return response(['status' => false, 'message' => $exception->getMessage()], 422);
+        }
+    }
 }
+

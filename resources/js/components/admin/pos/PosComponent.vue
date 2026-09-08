@@ -26,6 +26,10 @@
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-chair text-orange-500 text-sm"></i>
                     <h3 class="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">{{ $t('label.dining_table_strip') }}</h3>
+                    <button type="button" @click="refreshTables" :title="$t('button.refresh') || 'Refresh Tables'"
+                        class="w-6 h-6 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-center text-gray-400 hover:text-orange-500 transition">
+                        <i class="fa-solid fa-arrows-rotate text-[11px]" :class="loading.isActive ? 'animate-spin' : ''"></i>
+                    </button>
                 </div>
                 <div class="flex items-center gap-3 text-[11px]">
                     <span class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
@@ -52,7 +56,13 @@
                     <span class="w-2 h-2 rounded-full"
                         :class="checkoutProps.form.dining_table_id === table.id ? 'bg-white' : table.dining_table_status === 2 ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'"></span>
                     <span>{{ table.name }}</span>
-                    <span class="text-[10px] opacity-75 font-normal">({{ table.capacity }} {{ $t('label.person') }})</span>
+                    <span v-if="table.dining_table_status === 2 && table.active_orders && table.active_orders.length > 1" class="px-1.5 py-0.5 bg-amber-200/90 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 rounded text-[10px] font-black">
+                        {{ table.active_orders.length }} {{ $t('label.orders_count') || 'orders' }}
+                    </span>
+                    <span v-else-if="table.dining_table_status === 2 && (table.current_order?.total || (table.active_orders && table.active_orders[0]?.total))" class="text-[10px] font-bold text-amber-700 dark:text-amber-300">
+                        ({{ currencyFormat(table.current_order?.total || table.active_orders[0]?.total, setting.site_digit_after_decimal_point, setting.site_default_currency_symbol, setting.site_currency_position) }})
+                    </span>
+                    <span v-else class="text-[10px] opacity-75 font-normal">({{ table.capacity }} {{ $t('label.person') }})</span>
                 </button>
             </div>
         </div>
@@ -360,6 +370,127 @@
         </span>
     </button>
 
+    <!-- Running Table Action Modal -->
+    <div id="runningTableModal" class="modal">
+        <div class="modal-dialog max-w-[460px] w-full">
+            <div class="modal-header pb-3 border-b border-[#D9DBE9] dark:border-gray-800 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-sm font-bold shadow-sm">
+                        <i class="fa-solid fa-chair"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-bold text-sm text-gray-800 dark:text-gray-100">
+                                {{ activeRunningTable?.name }}
+                            </h3>
+                            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium">({{ activeRunningTable?.capacity || 4 }} {{ $t('label.seats') || 'Seats' }})</span>
+                        </div>
+                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-amber-600 dark:text-amber-400">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                            <span v-if="activeRunningTable?.active_orders && activeRunningTable.active_orders.length > 1">
+                                {{ activeRunningTable.active_orders.length }} {{ $t('label.active_orders') || 'Active Orders' }} ({{ $t('label.shared_table') || 'Shared Table' }})
+                            </span>
+                            <span v-else>
+                                {{ $t('label.table_running') || 'Occupied / Running' }}
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <button class="modal-close fa-regular fa-circle-xmark text-gray-400 hover:text-red-500 text-lg" @click="closeRunningTableModal"></button>
+            </div>
+            <div class="modal-body py-4" v-if="activeRunningTable">
+                <!-- Case A: Multiple Active Orders on this Shared Table -->
+                <div v-if="activeRunningTable.active_orders && activeRunningTable.active_orders.length > 1" class="mb-4">
+                    <div class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 flex items-center justify-between">
+                        <span><i class="fa-solid fa-receipt mr-1 text-primary"></i> {{ $t('label.active_orders') || 'Active Orders' }} ({{ activeRunningTable.active_orders.length }})</span>
+                        <span class="text-[10px] font-semibold text-amber-600 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800">{{ $t('label.shared_table') || 'Shared Table' }}</span>
+                    </div>
+                    <div class="space-y-2.5 max-h-[260px] overflow-y-auto thin-scrolling pr-1">
+                        <div v-for="(orderItem, idx) in activeRunningTable.active_orders" :key="orderItem.id"
+                            class="p-3 rounded-2xl bg-amber-50/70 dark:bg-gray-800/80 border border-amber-200/80 dark:border-gray-700 shadow-sm">
+                            <div class="flex items-center justify-between mb-1">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-5 h-5 rounded-full bg-amber-200 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 flex items-center justify-center text-[10px] font-black">#{{ idx + 1 }}</span>
+                                    <span class="text-xs font-black text-amber-700 dark:text-amber-400">
+                                        #{{ orderItem.order_serial_no || orderItem.id }}
+                                    </span>
+                                    <span v-if="orderItem.token" class="text-[10px] text-gray-500 font-medium">({{ $t('label.token') }} #{{ orderItem.token }})</span>
+                                </div>
+                                <span class="text-xs font-black text-orange-600 dark:text-orange-400">
+                                    {{ currencyFormat(orderItem.total || 0, setting.site_digit_after_decimal_point, setting.site_default_currency_symbol, setting.site_currency_position) }}
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-2.5">
+                                <span class="truncate max-w-[170px] text-[11px]"><i class="fa-solid fa-user text-[10px] mr-1 text-gray-400"></i>{{ orderItem.customer_name }}</span>
+                                <span class="text-[10px] text-gray-400">{{ orderItem.order_datetime ? new Date(orderItem.order_datetime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '' }}</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button type="button" @click="payOrder(orderItem.id)"
+                                    class="py-1.5 px-3 rounded-xl text-white text-xs font-bold bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transition flex items-center justify-center gap-1.5 shadow-sm shadow-emerald-500/20">
+                                    <i class="fa-solid fa-cash-register text-[11px]"></i>
+                                    <span>{{ $t('button.pay_bill') || 'Pay Bill' }}</span>
+                                </button>
+                                <button type="button" @click="editOrder(orderItem.id)"
+                                    class="py-1.5 px-3 rounded-xl text-amber-800 dark:text-amber-200 text-xs font-bold bg-amber-100 hover:bg-amber-200 dark:bg-amber-950/50 dark:hover:bg-amber-900/60 transition flex items-center justify-center gap-1.5 border border-amber-300 dark:border-amber-700/60">
+                                    <i class="fa-solid fa-cart-plus text-[11px]"></i>
+                                    <span>{{ $t('button.edit') || 'Edit Items' }}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case B: Single Active Order on Table -->
+                <div v-else class="p-3.5 rounded-2xl bg-amber-50/70 dark:bg-gray-800/80 border border-amber-200/80 dark:border-gray-700 mb-4 shadow-sm">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold">{{ $t('label.order_id') || 'Order No' }}</span>
+                        <span class="text-xs font-black text-amber-700 dark:text-amber-400">
+                            #{{ singleRunningOrder?.order_serial_no || singleRunningOrder?.id || activeRunningTable.current_order_id }}
+                            <span v-if="singleRunningOrder?.token" class="text-[10px] font-normal text-gray-500">({{ $t('label.token') }} #{{ singleRunningOrder.token }})</span>
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center mb-2" v-if="singleRunningOrder?.customer_name">
+                        <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold">{{ $t('label.customer') || 'Customer' }}</span>
+                        <span class="text-xs font-bold text-gray-800 dark:text-gray-200">{{ singleRunningOrder.customer_name }}</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-2.5 border-t border-amber-200/60 dark:border-gray-700">
+                        <span class="text-xs font-bold text-gray-700 dark:text-gray-300">{{ $t('label.total') || 'Total Bill' }}</span>
+                        <span class="text-lg font-black text-orange-600 dark:text-orange-400">
+                            {{ currencyFormat(singleRunningOrder?.total || 0, setting.site_digit_after_decimal_point, setting.site_default_currency_symbol, setting.site_currency_position) }}
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-amber-200/60 dark:border-gray-700">
+                        <button type="button" @click="payOrder(singleRunningOrder?.id || activeRunningTable.current_order_id)"
+                            class="py-2.5 px-3 rounded-xl text-white text-xs font-black bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-500/20">
+                            <i class="fa-solid fa-cash-register"></i>
+                            <span>{{ $t('button.pay_and_release_table') || 'Pay Bill' }}</span>
+                        </button>
+                        <button type="button" @click="editOrder(singleRunningOrder?.id || activeRunningTable.current_order_id)"
+                            class="py-2.5 px-3 rounded-xl text-amber-800 dark:text-amber-200 text-xs font-bold bg-amber-100/90 hover:bg-amber-200 dark:bg-amber-950/50 dark:hover:bg-amber-900/60 transition flex items-center justify-center gap-1.5 border border-amber-200 dark:border-amber-800/40">
+                            <i class="fa-solid fa-cart-plus"></i>
+                            <span>{{ $t('button.add_items_to_order') || 'Add Items / Edit' }}</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table Management Actions -->
+                <div class="flex flex-col gap-2 pt-2 border-t border-gray-200 dark:border-gray-800">
+                    <button type="button" @click="takeSharedTableOrder(activeRunningTable)"
+                        class="w-full py-2.5 px-4 rounded-xl text-orange-600 dark:text-orange-400 text-xs sm:text-sm font-bold bg-orange-50 hover:bg-orange-100 dark:bg-orange-950/30 dark:hover:bg-orange-900/40 border border-orange-200 dark:border-orange-800/60 transition flex items-center justify-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-users-rectangle text-sm"></i>
+                        <span>{{ $t('button.take_shared_order') || 'Take New Shared Order on this Table' }}</span>
+                    </button>
+
+                    <button type="button" @click="releaseTableDirectly(activeRunningTable)"
+                        class="w-full py-2 px-4 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 text-xs font-semibold transition flex items-center justify-center gap-1.5 border border-red-200 dark:border-red-900/40">
+                        <i class="fa-solid fa-door-open"></i>
+                        <span>{{ $t('button.release_table') || 'Direct Release Table' }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--====================================
       PAYMENT MODAL PART START
   =====================================-->
@@ -405,6 +536,7 @@ export default {
             order: {},
             editingOrderId: null,
             editingOrderSerialNo: "",
+            activeRunningTable: null,
             discount: null,
             checkoutProps: {
                 form: {
@@ -598,6 +730,13 @@ export default {
         isEditingOrder: function () {
             return Boolean(this.$store.getters['posOrder/temp']?.isEditing && this.editingOrderId);
         },
+        singleRunningOrder: function () {
+            if (!this.activeRunningTable) return null;
+            if (this.activeRunningTable.active_orders && this.activeRunningTable.active_orders.length > 0) {
+                return this.activeRunningTable.active_orders[0];
+            }
+            return this.activeRunningTable.current_order || null;
+        },
     },
     mounted() {
         this.closeSidebar();
@@ -628,7 +767,7 @@ export default {
             this.loading.isActive = true;
             this.$store.dispatch("diningTable/lists", {
                 order_column: 'id',
-                order_type: 'desc',
+                order_type: 'asc',
                 status: statusEnum.ACTIVE,
             }).then((res) => {
                 this.loading.isActive = false;
@@ -679,7 +818,9 @@ export default {
                 status: statusEnum.ACTIVE,
             }).then((res) => {
                 if (!this.isEditingOrder) {
-                    this.checkoutProps.form.customer_id = id === null ? (res.data.data[1] ? res.data.data[1].id : null) : id;
+                    const walkIn = res.data?.data?.find(c => c.name?.toLowerCase().includes('walk') || c.email?.toLowerCase().includes('walk'))
+                        || (res.data?.data?.length > 1 ? res.data.data[1] : res.data?.data?.[0]);
+                    this.checkoutProps.form.customer_id = id === null ? (walkIn ? walkIn.id : null) : id;
                 }
                 this.loading.isActive = false;
             }).catch((err) => {
@@ -853,19 +994,26 @@ export default {
             document?.querySelector(".db-main")?.classList?.add("expand");
         },
         dineInOrder: function () {
-            this.$refs.dineIn.classList.add('active');
-            this.$refs.dineInDiv.classList.add('block');
-            this.$refs.dineInDiv.classList.remove('hidden');
-            this.$refs.takeAway.classList.remove('active');
+            this.checkoutProps.form.order_type = this.orderTypeEnums.dineIn;
+            this.$refs.dineIn?.classList.add('active');
+            this.$refs.dineInDiv?.classList.add('block');
+            this.$refs.dineInDiv?.classList.remove('hidden');
+            this.$refs.takeAway?.classList.remove('active');
         },
         takeAwayOrder: function () {
             this.checkoutProps.form.dining_table_id = null;
-            this.$refs.takeAway.classList.add('active');
-            this.$refs.dineIn.classList.remove('active');
-            this.$refs.dineInDiv.classList.add('hidden');
-            this.$refs.dineInDiv.classList.remove('block');
+            this.checkoutProps.form.order_type = this.orderTypeEnums.takeAway;
+            this.$refs.takeAway?.classList.add('active');
+            this.$refs.dineIn?.classList.remove('active');
+            this.$refs.dineInDiv?.classList.add('hidden');
+            this.$refs.dineInDiv?.classList.remove('block');
         },
         selectTable: function (table) {
+            if (table.dining_table_status === 2) {
+                this.openRunningTableModal(table);
+                return;
+            }
+
             if (this.checkoutProps.form.dining_table_id === table.id) {
                 this.checkoutProps.form.dining_table_id = null;
             } else {
@@ -880,6 +1028,77 @@ export default {
         },
         clearSelectedTable: function () {
             this.checkoutProps.form.dining_table_id = null;
+        },
+        openRunningTableModal: function (table) {
+            this.activeRunningTable = table;
+            appService.modalShow('#runningTableModal');
+        },
+        closeRunningTableModal: function () {
+            this.activeRunningTable = null;
+            appService.modalHide('#runningTableModal');
+        },
+        payOrder: function (orderId) {
+            if (!orderId) return;
+            this.closeRunningTableModal();
+            this.loadOrderForEdit(orderId);
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    this.orderSubmit();
+                }, 400);
+            });
+        },
+        editOrder: function (orderId) {
+            if (!orderId) return;
+            this.closeRunningTableModal();
+            this.loadOrderForEdit(orderId);
+        },
+        takeSharedTableOrder: function (table) {
+            if (!table) return;
+            this.closeRunningTableModal();
+            this.resetCart();
+            this.checkoutProps.form.order_type = this.orderTypeEnums.dineIn;
+            this.checkoutProps.form.dining_table_id = table.id;
+            this.$nextTick(() => {
+                if (this.$refs.dineIn) {
+                    this.dineInOrder();
+                }
+            });
+            alertService.info(this.$t('message.taking_shared_order') || `Taking new shared order for ${table.name}`);
+        },
+        payRunningTable: function (table) {
+            if (!table) return;
+            const orderId = table.current_order?.id || table.current_order_id;
+            this.payOrder(orderId);
+        },
+        addItemsToRunningTable: function (table) {
+            if (!table) return;
+            const orderId = table.current_order?.id || table.current_order_id;
+            this.editOrder(orderId);
+        },
+        releaseTableDirectly: function (table) {
+            if (!table) return;
+            this.closeRunningTableModal();
+            this.loading.isActive = true;
+            this.$store.dispatch('diningTable/release', table.id).then(() => {
+                this.loading.isActive = false;
+                alertService.success(this.$t('message.table_released_successfully') || "Table released successfully");
+                this.refreshTables();
+            }).catch((err) => {
+                this.loading.isActive = false;
+                alertService.error(err.response?.data?.message || "Failed to release table");
+            });
+        },
+        refreshTables: function () {
+            this.loading.isActive = true;
+            this.$store.dispatch("diningTable/lists", {
+                order_column: 'id',
+                order_type: 'asc',
+                status: statusEnum.ACTIVE,
+            }).then(() => {
+                this.loading.isActive = false;
+            }).catch(() => {
+                this.loading.isActive = false;
+            });
         },
         loadOrderForEdit: function (orderId) {
             if (!orderId) return;
@@ -1005,8 +1224,10 @@ export default {
                         this.$nextTick(() => {
                             if (this.$refs.dineIn) {
                                 this.$refs.dineIn.click();
-                                if (this.customers.length > 1) {
-                                    this.checkoutProps.form.customer_id = this.customers[1].id;
+                                const walkIn = this.customers?.find(c => c.name?.toLowerCase().includes('walk') || c.email?.toLowerCase().includes('walk'))
+                                    || (this.customers?.length > 1 ? this.customers[1] : this.customers?.[0]);
+                                if (walkIn) {
+                                    this.checkoutProps.form.customer_id = walkIn.id;
                                 }
                             }
                         });
