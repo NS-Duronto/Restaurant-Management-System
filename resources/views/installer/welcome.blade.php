@@ -1,30 +1,23 @@
 @extends('installer.layouts.master')
 
-@section('template_title')
-    {{ trans('installer.welcome.templateTitle') }}
-@endsection
-
-@section('title')
-    {{ trans('installer.welcome.title') }}
-@endsection
+@section('title', 'ইনস্টলেশন শুরু')
 
 @section('container')
-    <ul class="installer-track">
-        <li class="active"><i class="fa-solid fa-house"></i></li>
-        <li><i class="fa-solid fa-server"></i></li>
-        <li><i class="fa-sharp fa-solid fa-unlock"></i></li>
-        <li><i class="fa-solid fa-gear"></i></li>
-        <li><i class="fa-solid fa-database"></i></li>
-        <li><i class="fa-solid fa-unlock-keyhole"></i></li>
-    </ul>
+    <h2 class="step-title">Sohoj RMS ইনস্টলেশন</h2>
 
-    <span class="my-6 w-full h-[1px] bg-[#EFF0F6]"></span>
+    <p style="font-size: 13px; color: #475569; line-height: 1.6; margin-bottom: 24px;">
+        রেস্টুরেন্ট ম্যানেজমেন্ট সিস্টেম সফলভাবে সক্রিয় করতে কয়েক মিনিটের একটি সহজ সেটআপ প্রক্রিয়া সম্পন্ন করুন।
+    </p>
 
-    <div class="text-center">
-        <h4 class="text-sm font-medium mb-7">{{ trans('installer.welcome.message') }}</h4>
-        <a href="{{ route('installer.requirement') }}" class="p-3 px-6 rounded-lg inline-flex items-center justify-center gap-3 bg-primary text-white">
-            {{ trans('installer.welcome.next') }}
-            <i class="fa-solid fa-angle-right text-sm"></i>
+    <div class="installer-alert info" style="margin-bottom: 24px;">
+        <i class="fa-solid fa-circle-info" style="color: #64748b; margin-top: 1px;"></i>
+        <span>শুরু করার আগে আপনার MySQL ডাটাবেজের নাম, ইউজারনেম ও পাসওয়ার্ড প্রস্তুত রাখুন।</span>
+    </div>
+
+    <div class="action-footer" style="justify-content: flex-end;">
+        <a href="{{ route('installer.requirement') }}" class="btn-submit">
+            <span>শুরু করুন</span>
+            <i class="fa-solid fa-arrow-right" style="font-size: 11px;"></i>
         </a>
     </div>
 @endsection

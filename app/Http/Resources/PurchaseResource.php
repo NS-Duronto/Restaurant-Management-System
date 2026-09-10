@@ -20,6 +20,7 @@ class PurchaseResource extends JsonResource
             'currency_total_amount' => AppLibrary::currencyAmountFormat($this->total_amount),
             'paid_amount' => (float) $this->paid_amount,
             'currency_paid_amount' => AppLibrary::currencyAmountFormat($this->paid_amount),
+            'payment_status' => (int) ($this->payment_status ?? ($this->paid_amount >= $this->total_amount && $this->total_amount > 0 ? 1 : 2)),
             'payment_method' => $this->payment_method,
             'note' => $this->note ?? '',
             'user_id' => $this->user_id,

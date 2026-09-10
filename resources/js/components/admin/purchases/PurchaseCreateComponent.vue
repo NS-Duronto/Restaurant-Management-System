@@ -184,6 +184,7 @@ export default {
                 supplier_id: null,
                 date: new Date().toISOString().slice(0, 10),
                 payment_status: 1,
+                payment_method: 1,
                 note: "",
                 items: [
                     { kitchen_goods_id: null, quantity: "", unit_cost: "" }
@@ -197,6 +198,7 @@ export default {
                 supplier_id: null,
                 date: new Date().toISOString().slice(0, 10),
                 payment_status: 1,
+                payment_method: 1,
                 note: "",
                 items: [
                     { kitchen_goods_id: null, quantity: "", unit_cost: "" }

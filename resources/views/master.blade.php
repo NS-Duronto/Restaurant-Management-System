@@ -123,7 +123,7 @@
 
     <script>
         const APP_URL = "{{ env('VITE_HOST') }}";
-        const APP_KEY = "{{ env('VITE_API_KEY') }}";
+        const APP_KEY = "{{ env('VITE_API_KEY', '') }}";
         const GOOGLE_TOKEN = "{{ env('VITE_GOOGLE_MAP_KEY') }}";
         const APP_DEMO = "{{ env('VITE_DEMO') }}";
     </script>

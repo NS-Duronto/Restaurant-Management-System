@@ -13,17 +13,16 @@ class InstallerService
     public function siteSetup(Request $request): void
     {
         $envService = new EnvEditor;
-        $apiKey = $envService->getValue('VITE_API_KEY');
-        if (blank($apiKey)) {
-            $apiKey = 'b6d68vy2-m7g5-20r0-5275-h103w73453q120';
-        }
-
-        $envService->addData([
+        $data = [
             'APP_NAME' => $request->app_name,
             'APP_URL' => rtrim($request->app_url, '/'),
-            'VITE_API_KEY' => $apiKey,
-            'MIX_API_KEY' => $apiKey,
-        ]);
+        ];
+
+        if (blank(config('app.key')) && blank(env('APP_KEY'))) {
+            Artisan::call('key:generate', ['--force' => true]);
+        }
+
+        $envService->addData($data);
     }
 
     public function databaseSetup(Request $request): bool
@@ -85,13 +84,11 @@ class InstallerService
 
     public function licenseCodeChecker($array)
     {
-        $licenseKey = $array['license_key'] ?? 'b6d68vy2-m7g5-20r0-5275-h103w73453q120';
-
         return (object) [
             'status' => true,
             'message' => 'License verified successfully',
             'data' => (object) [
-                'license_key' => $licenseKey,
+                'license_key' => $array['license_key'] ?? 'ACTIVE',
             ],
         ];
     }
@@ -108,8 +105,16 @@ class InstallerService
             file_put_contents($installedLogFile, $message.PHP_EOL, FILE_APPEND | LOCK_EX);
         }
 
-        Artisan::call('storage:link', ['--force' => true]);
+        try {
+            Artisan::call('storage:link', ['--force' => true]);
+        } catch (\Throwable $e) {
+        }
         $envService = new EnvEditor;
+
+        if (blank(config('app.key')) && blank(env('APP_KEY'))) {
+            Artisan::call('key:generate', ['--force' => true]);
+        }
+
         $envService->addData([
             'APP_ENV' => 'production',
             'APP_DEBUG' => 'false',

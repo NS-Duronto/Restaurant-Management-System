@@ -1,110 +1,104 @@
 @extends('installer.layouts.master')
 
-@section('template_title')
-    {{ trans('installer.database.templateTitle') }}
-@endsection
-
-@section('title')
-    {{ trans('installer.database.title') }}
-@endsection
+@section('title', 'ডাটাবেজ কনফিগারেশন')
 
 @section('container')
-
-    <ul class="installer-track">
-        <li onclick="handleLinkForInstaller('{{ route('installer.index') }}')" class="done">
-            <i class="fa-solid fa-house"></i>
-        </li>
-        <li onclick="handleLinkForInstaller('{{ route('installer.requirement') }}')" class="done">
-            <i class="fa-solid fa-server"></i>
-        </li>
-        <li onclick="handleLinkForInstaller('{{ route('installer.permission') }}')" class="done">
-            <i class="fa-sharp fa-solid fa-unlock"></i>
-        </li>
-        <li onclick="handleLinkForInstaller('{{ route('installer.site') }}')" class="done">
-            <i class="fa-solid fa-gear"></i>
-        </li>
-        <li class="active"><i class="fa-solid fa-database"></i></li>
-        <li><i class="fa-solid fa-unlock-keyhole"></i></li>
-    </ul>
-
-    <span class="my-6 w-full h-[1px] bg-[#EFF0F6]"></span>
-
+    <h2 class="step-title">ডাটাবেজ কনফিগারেশন</h2>
 
     @if($errors->has('global'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-5 rounded relative" role="alert">
-            <span class="block sm:inline text-[#E93C3C]">{{ $errors->first('global') }}</span>
-            <span class="absolute top-0 bottom-0 right-0 px-4 py-3 cursor-pointer close-alert-button">
-                <i class="fa fa-close margin-top-5-px"></i>
-            </span>
+        <div class="installer-alert danger">
+            {{ $errors->first('global') }}
         </div>
     @endif
-    <form method="post" action="{{ route('installer.databaseStore') }}">
+
+    <form method="post" action="{{ route('installer.databaseStore') }}" id="db-form">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <div class="mb-4">
-            <label class="text-sm font-medium block mb-1.5 text-heading">
-                {{ trans('installer.database.label.database_host') }} <span class="text-[#E93C3C]">*</span>
-            </label>
-            <input name="database_host" value="{{ old('database_host', 'localhost') }}" type="text"
-                   class="w-full h-12 rounded-lg px-4 border border-[#D9DBE9]">
-            @if ($errors->has('database_host'))
-                <small
-                    class="block mt-2 text-sm font-medium text-[#E93C3C]">{{ $errors->first('database_host') }}</small>
-            @endif
+
+        <div class="form-grid-host">
+            <div class="form-row">
+                <label class="form-label">
+                    {{ trans('installer.database.label.database_host') }} <span class="req">*</span>
+                </label>
+                <input name="database_host" type="text"
+                       value="{{ old('database_host', '127.0.0.1') }}"
+                       class="form-input">
+                @if ($errors->has('database_host'))
+                    <div class="form-error">{{ $errors->first('database_host') }}</div>
+                @endif
+            </div>
+
+            <div class="form-row">
+                <label class="form-label">
+                    {{ trans('installer.database.label.database_port') }} <span class="req">*</span>
+                </label>
+                <input name="database_port" type="text"
+                       value="{{ old('database_port', '3306') }}"
+                       class="form-input">
+                @if ($errors->has('database_port'))
+                    <div class="form-error">{{ $errors->first('database_port') }}</div>
+                @endif
+            </div>
         </div>
 
-        <div class="mb-4">
-            <label class="text-sm font-medium block mb-1.5 text-heading">
-                {{ trans('installer.database.label.database_port') }} <span class="text-[#E93C3C]">*</span>
+        <div class="form-row">
+            <label class="form-label">
+                {{ trans('installer.database.label.database_name') }} <span class="req">*</span>
             </label>
-            <input name="database_port" value="{{ old('database_port', '3306') }}" type="text"
-                   class="w-full h-12 rounded-lg px-4 border border-[#D9DBE9]">
-            @if ($errors->has('database_port'))
-                <small
-                    class="block mt-2 text-sm font-medium text-[#E93C3C]">{{ $errors->first('database_port') }}</small>
-            @endif
-        </div>
-
-        <div class="mb-4">
-            <label class="text-sm font-medium block mb-1.5 text-heading">
-                {{ trans('installer.database.label.database_name') }} <span class="text-[#E93C3C]">*</span>
-            </label>
-            <input name="database_name" value="{{ old('database_name') }}" type="text"
-                   class="w-full h-12 rounded-lg px-4 border border-[#D9DBE9]">
+            <input name="database_name" type="text"
+                   value="{{ old('database_name', env('DB_DATABASE', 'foodking')) }}"
+                   class="form-input">
             @if ($errors->has('database_name'))
-                <small
-                    class="block mt-2 text-sm font-medium text-[#E93C3C]">{{ $errors->first('database_name') }}</small>
+                <div class="form-error">{{ $errors->first('database_name') }}</div>
             @endif
         </div>
 
-        <div class="mb-4">
-            <label class="text-sm font-medium block mb-1.5 text-heading">
-                {{ trans('installer.database.label.database_username') }} <span class="text-[#E93C3C]">*</span>
-            </label>
-            <input name="database_username" value="{{ old('database_username') }}" type="text"
-                   class="w-full h-12 rounded-lg px-4 border border-[#D9DBE9]">
-            @if ($errors->has('database_username'))
-                <small
-                    class="block mt-2 text-sm font-medium text-[#E93C3C]">{{ $errors->first('database_username') }}</small>
-            @endif
+        <div class="form-grid-2">
+            <div class="form-row">
+                <label class="form-label">
+                    {{ trans('installer.database.label.database_username') }} <span class="req">*</span>
+                </label>
+                <input name="database_username" type="text"
+                       value="{{ old('database_username', env('DB_USERNAME', 'root')) }}"
+                       class="form-input">
+                @if ($errors->has('database_username'))
+                    <div class="form-error">{{ $errors->first('database_username') }}</div>
+                @endif
+            </div>
+
+            <div class="form-row">
+                <label class="form-label">
+                    {{ trans('installer.database.label.database_password') }}
+                </label>
+                <input name="database_password" type="password"
+                       value="{{ old('database_password', env('DB_PASSWORD')) }}"
+                       class="form-input">
+                @if ($errors->has('database_password'))
+                    <div class="form-error">{{ $errors->first('database_password') }}</div>
+                @endif
+            </div>
         </div>
 
-        <div class="mb-8">
-            <label class="text-sm font-medium block mb-1.5 text-heading">
-                {{ trans('installer.database.label.database_password') }} <span class="text-[#E93C3C]">*</span>
-            </label>
-            <input name="database_password" value="{{ old('database_password') }}" type="text"
-                   class="w-full h-12 rounded-lg px-4 border border-[#D9DBE9]">
-            @if ($errors->has('database_password'))
-                <small
-                    class="block mt-2 text-sm font-medium text-[#E93C3C]">{{ $errors->first('database_password') }}</small>
-            @endif
-        </div>
+        <div class="action-footer">
+            <a href="{{ route('installer.site') }}" class="btn-prev">
+                <i class="fa-solid fa-arrow-left" style="font-size: 10px;"></i>
+                <span>পূর্ববর্তী</span>
+            </a>
 
-        <button type="submit"
-                class="w-fit mx-auto p-3 px-6 rounded-lg flex items-center justify-center gap-3 bg-primary text-white">
-            <span class="text-sm font-medium capitalize">{{ trans('installer.database.next') }}</span>
-            <i class="fa-solid fa-angle-right text-sm"></i>
-        </button>
+            <button type="submit" id="submit-btn" class="btn-submit">
+                <span id="btn-text">ডাটাবেজ সেটআপ করুন</span>
+                <i id="btn-icon" class="fa-solid fa-arrow-right" style="font-size: 11px;"></i>
+            </button>
+        </div>
     </form>
 
+    <script>
+        document.getElementById('db-form').addEventListener('submit', function() {
+            const btn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnIcon = document.getElementById('btn-icon');
+            btn.disabled = true;
+            btnText.innerText = 'সেটআপ হচ্ছে...';
+            btnIcon.className = 'fa-solid fa-circle-notch fa-spin';
+        });
+    </script>
 @endsection

@@ -1,56 +1,60 @@
 @extends('installer.layouts.master')
 
-@section('template_title')
-    {{ trans('installer.requirement.templateTitle') }}
-@endsection
-
-@section('title')
-    {{ trans('installer.requirement.title') }}
-@endsection
+@section('title', 'সার্ভার রিকোয়ারমেন্ট')
 
 @section('container')
-    <ul class="installer-track">
-        <li onclick="handleLinkForInstaller('{{ route('installer.index') }}')" class="done">
-            <i class="fa-solid fa-house"></i>
-        </li>
-        <li class="active"><i class="fa-solid fa-server"></i></li>
-        <li><i class="fa-sharp fa-solid fa-unlock"></i></li>
-        <li><i class="fa-solid fa-gear"></i></li>
-        <li><i class="fa-solid fa-database"></i></li>
-        <li><i class="fa-solid fa-unlock-keyhole"></i></li>
-    </ul>
+    @php
+        $isSupported = (!isset($requirements['errors']) && ($phpSupportInfo['supported'] ?? false));
+    @endphp
 
-    <span class="my-6 w-full h-[1px] bg-[#EFF0F6]"></span>
+    <h2 class="step-title">সার্ভার রিকোয়ারমেন্ট</h2>
 
-    @foreach($requirements['requirements'] as $type => $requirement)
-        <ul class="w-full rounded-lg overflow-hidden mb-8 border border-[#D9DBE9]">
-            <li class="flex items-center justify-between gap-2 py-3.5 px-6 border-b border-[#EFF0F6] last:border-none bg-[#F7F7FC]">
-                @if($type == 'php')
-                    <h3 class="text-sm font-semibold capitalize">{{ ucfirst($type) }}
-                        <span
-                            class="text-xs font-medium lowercase">( {{ trans('installer.requirement.version') }} {{ $phpSupportInfo['minimum'] }} {{ trans('installer.requirement.required') }})</span>
-                    </h3>
-                    <span class="flex items-center gap-1 text-[#1AB759]">
-                    <span class="text-sm font-semibold">{{ $phpSupportInfo['current'] }}</span>
-                    <i class="fa-solid fa-{{ $phpSupportInfo['supported'] ? 'check-circle' : 'exclamation-circle' }} text-sm text-[#{{ $phpSupportInfo['supported'] ? '1AB759' : 'E93C3C' }}]"></i>
-                </span>
-                @endif
-            </li>
+    <!-- PHP Version -->
+    <div style="padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-size: 13px; font-weight: 600; color: #334155;">
+            PHP সংস্করণ (প্রয়োজন {{ $phpSupportInfo['minimum'] }}+)
+        </span>
+        <span style="font-size: 12px; font-weight: 700; color: {{ $phpSupportInfo['supported'] ? '#059669' : '#dc2626' }};">
+            {{ $phpSupportInfo['current'] }}
+            <i class="fa-solid fa-{{ $phpSupportInfo['supported'] ? 'check' : 'xmark' }} ml-1"></i>
+        </span>
+    </div>
 
+    <!-- Extensions list -->
+    <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; margin-bottom: 20px;">
+        @foreach($requirements['requirements'] as $type => $requirement)
             @foreach($requirements['requirements'][$type] as $extension => $enabled)
-                <li class="flex items-center justify-between py-3.5 px-6 border-b border-[#EFF0F6] last:border-none">
-                    <span class="text-sm font-medium capitalize text-heading">{{ $extension }}</span>
-                    <i class="fa-solid fa-{{ $enabled ? 'circle-check' : 'exclamation-circle' }} text-sm text-[#{{ $enabled ? '1AB759' : 'E93C3C' }}]"></i>
-                </li>
+                <div style="padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; font-size: 12px;">
+                    <span style="color: #334155; font-weight: 500; text-transform: capitalize;">{{ $extension }}</span>
+                    @if($enabled)
+                        <span style="color: #059669; font-weight: 600;"><i class="fa-solid fa-check"></i></span>
+                    @else
+                        <span style="color: #dc2626; font-weight: 600;"><i class="fa-solid fa-xmark"></i></span>
+                    @endif
+                </div>
             @endforeach
-        </ul>
-    @endforeach
+        @endforeach
+    </div>
 
-    @if ( ! isset($requirements['errors']) && $phpSupportInfo['supported'] )
-        <a href="{{ route('installer.permission') }}"
-           class="w-fit mx-auto p-3 px-6 rounded-lg flex items-center justify-center gap-3 bg-primary text-white">
-            <span class="text-sm font-medium capitalize">{{ trans('installer.requirement.next') }}</span>
-            <i class="fa-solid fa-angle-right text-sm"></i>
-        </a>
+    @if(!$isSupported)
+        <div class="installer-alert danger">
+            <span>কিছু প্রয়োজনীয় এক্সটেনশন বন্ধ রয়েছে। অনুগ্রহ করে সার্ভার কনফিগারেশন আপডেট করুন।</span>
+        </div>
     @endif
+
+    <div class="action-footer">
+        <a href="{{ route('installer.index') }}" class="btn-prev">
+            <i class="fa-solid fa-arrow-left" style="font-size: 10px;"></i>
+            <span>পূর্ববর্তী</span>
+        </a>
+
+        @if($isSupported)
+            <a href="{{ route('installer.permission') }}" class="btn-submit">
+                <span>পরবর্তী</span>
+                <i class="fa-solid fa-arrow-right" style="font-size: 11px;"></i>
+            </a>
+        @else
+            <button disabled class="btn-submit">পরবর্তী</button>
+        @endif
+    </div>
 @endsection

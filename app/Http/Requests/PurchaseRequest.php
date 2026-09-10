@@ -18,7 +18,8 @@ class PurchaseRequest extends FormRequest
             'date' => ['required', 'date'],
             'total_amount' => ['nullable', 'numeric', 'min:0'],
             'paid_amount' => ['nullable', 'numeric', 'min:0'],
-            'payment_method' => ['required', 'numeric'],
+            'payment_status' => ['nullable', 'numeric'],
+            'payment_method' => ['nullable', 'numeric'],
             'note' => ['nullable', 'string', 'max:500'],
             'items' => ['required'],
         ];

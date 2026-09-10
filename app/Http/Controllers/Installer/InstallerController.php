@@ -123,7 +123,7 @@ class InstallerController extends Controller
         try {
             $this->installerService->finalSetup();
 
-            return redirect(env('APP_URL'));
+            return redirect(env('APP_URL') ?: url('/'));
         } catch (Exception $e) {
             return redirect(route('installer.site'))->withErrors(['global' => $e->getMessage()]);
         }

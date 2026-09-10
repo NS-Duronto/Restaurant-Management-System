@@ -17,11 +17,17 @@ class ApiKeyMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->hasHeader('x-api-key')) {
-            if ($request->header('x-api-key') == env('VITE_API_KEY')) {
-                return $next($request);
-            }
+        $apiKey = env('VITE_API_KEY');
+
+        // If no VITE_API_KEY is configured in .env, allow all requests without requiring it
+        if (blank($apiKey)) {
+            return $next($request);
         }
+
+        if ($request->hasHeader('x-api-key') && $request->header('x-api-key') == $apiKey) {
+            return $next($request);
+        }
+
         return response()->json(trans('all.message.invalid_api_key'), 400);
     }
 }

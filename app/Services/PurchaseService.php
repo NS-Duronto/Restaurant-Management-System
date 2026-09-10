@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\PosPaymentMethod;
 use App\Http\Requests\PaginateRequest;
 use App\Http\Requests\PurchaseRequest;
 use App\Libraries\QueryExceptionLibrary;
@@ -19,6 +20,7 @@ class PurchaseService
         'supplier_id',
         'purchase_no',
         'payment_method',
+        'payment_status',
     ];
 
     /**
@@ -36,7 +38,7 @@ class PurchaseService
             return Purchase::with(['supplier', 'user', 'items.kitchenGoods', 'items.unit'])->where(function ($query) use ($requests, $request) {
                 foreach ($requests as $key => $val) {
                     if (in_array($key, $this->purchaseFilter)) {
-                        if ($key == 'supplier_id' || $key == 'payment_method') {
+                        if ($key == 'supplier_id' || $key == 'payment_method' || $key == 'payment_status') {
                             $query->where($key, $val);
                         } else {
                             $query->where($key, 'like', '%'.$val.'%');
@@ -65,14 +67,17 @@ class PurchaseService
         try {
             return DB::transaction(function () use ($request) {
                 $purchaseNo = 'PUR-'.date('ymd').'-'.rand(1000, 9999);
+                $paymentStatus = (int)($request->payment_status ?? 1);
+                $isPaid = $paymentStatus === 1;
 
                 $purchase = Purchase::create([
                     'supplier_id' => $request->supplier_id,
                     'purchase_no' => $purchaseNo,
                     'date' => $request->date,
                     'total_amount' => 0,
-                    'paid_amount' => $request->paid_amount ?? 0,
-                    'payment_method' => $request->payment_method,
+                    'paid_amount' => 0,
+                    'payment_status' => $paymentStatus,
+                    'payment_method' => $request->payment_method ?? PosPaymentMethod::CASH,
                     'note' => $request->note,
                     'user_id' => Auth::id(),
                 ]);
@@ -112,7 +117,8 @@ class PurchaseService
 
                 $purchase->update([
                     'total_amount' => $totalAmount,
-                    'paid_amount' => $request->paid_amount ?? $totalAmount,
+                    'paid_amount' => $isPaid ? ($request->paid_amount ?? $totalAmount) : 0,
+                    'payment_status' => $paymentStatus,
                 ]);
 
                 return $purchase->load(['supplier', 'items.kitchenGoods', 'items.unit', 'user']);
