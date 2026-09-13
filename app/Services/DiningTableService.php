@@ -85,7 +85,7 @@ class DiningTableService
             $url      = URL::to('/') . "/menu/" . $slug;
 
             if (!File::exists(storage_path('app/public/qr_codes/'))) {
-                File::makeDirectory(storage_path('app/public/qr_codes/'));
+                File::makeDirectory(storage_path('app/public/qr_codes/'), 0775, true);
             }
             QrCode::format('png')->size(200)->generate($url, storage_path('app/public/qr_codes/' . $filename));
             return DiningTable::create($request->validated() + ['qr_code' => 'storage/qr_codes/' . $filename, 'slug' => $slug]);
@@ -109,7 +109,7 @@ class DiningTableService
             $url      = URL::to('/') . "/menu/" . $slug;
 
             if (!File::exists(storage_path('app/public/qr_codes/'))) {
-                File::makeDirectory(storage_path('app/public/qr_codes/'));
+                File::makeDirectory(storage_path('app/public/qr_codes/'), 0775, true);
             }
 
             if (File::exists($diningTable->qr_code) && !$this->envService->getValue('DEMO')) {

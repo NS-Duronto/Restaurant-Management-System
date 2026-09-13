@@ -153,12 +153,11 @@ export default {
                     this.errors = {};
                 }).catch((err) => {
                     this.loading.isActive = false;
-                    if (err.response.data.errors) {
+                    if (err.response && err.response.data && err.response.data.errors) {
                         this.errors = err.response.data.errors;
                     } else {
-                        this.errors = {
-                            name: ["The name has already been taken."]
-                        }
+                        this.errors = {};
+                        alertService.error(err.response?.data?.message || err.message || "An error occurred");
                     }
                 })
             } catch (err) {
