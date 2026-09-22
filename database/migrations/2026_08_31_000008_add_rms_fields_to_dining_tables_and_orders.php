@@ -16,9 +16,6 @@ return new class extends Migration
             if (! Schema::hasColumn('dining_tables', 'current_order_id')) {
                 $table->foreignId('current_order_id')->nullable()->after('table_status')->constrained('orders')->nullOnDelete();
             }
-            if (! Schema::hasColumn('dining_tables', 'capacity')) {
-                $table->integer('capacity')->default(4)->after('size');
-            }
             if (! Schema::hasColumn('dining_tables', 'serial_no')) {
                 $table->integer('serial_no')->nullable()->after('id');
             }
@@ -43,9 +40,6 @@ return new class extends Migration
             }
             if (Schema::hasColumn('dining_tables', 'table_status')) {
                 $table->dropColumn('table_status');
-            }
-            if (Schema::hasColumn('dining_tables', 'capacity')) {
-                $table->dropColumn('capacity');
             }
             if (Schema::hasColumn('dining_tables', 'serial_no')) {
                 $table->dropColumn('serial_no');

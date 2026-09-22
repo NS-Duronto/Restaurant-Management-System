@@ -361,7 +361,25 @@ export default {
         confirmOrder: function () {
             this.$props.props.form.payment_status = this.paymentStatusEnum.PAID;
             if (this.$props.props.form.pos_payment_method === this.posPaymentMethodEnum.CASH) {
-                this.$props.props.form.pos_received_amount = this.receivedAmount ? Number(this.receivedAmount) : this.$props.props.form.total;
+                const total = Number(this.$props.props.form.total) || 0;
+                const trimmedReceived = String(this.receivedAmount || "").trim();
+                if (!trimmedReceived || isNaN(trimmedReceived)) {
+                    alertService.error(this.$t("message.received_amount_required"));
+                    this.$refs.cashInput?.focus();
+                    return;
+                }
+                const received = Number(trimmedReceived);
+                if (total > 0 && received <= 0) {
+                    alertService.error(this.$t("message.received_amount_required"));
+                    this.$refs.cashInput?.focus();
+                    return;
+                }
+                if (received < total) {
+                    alertService.error(this.$t("message.received_amount_less_than_total"));
+                    this.$refs.cashInput?.focus();
+                    return;
+                }
+                this.$props.props.form.pos_received_amount = received;
                 this.$props.props.form.pos_payment_sub_method = null;
                 this.$props.props.form.pos_payment_note = "";
             } else if (this.$props.props.form.pos_payment_method === this.posPaymentMethodEnum.CARD) {

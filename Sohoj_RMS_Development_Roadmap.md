@@ -137,7 +137,7 @@ stateDiagram-v2
 * **নতুন কলাম যোগ:**
   - `status`: ENUM (`1` = খালি/Available, `2` = রানিং/Running, `3` = বুকড/Booked)
   - `current_order_id`: আনপেইড রানিং অর্ডারের ফরেন কি
-  - `capacity`: আসন সংখ্যা
+  - `size`: আসন সংখ্যা
   - `serial_no`: টেবিল ক্রমিক নম্বর
 
 ### ২.২ পিওএস টপ টেবিল বার কম্পোনেন্ট

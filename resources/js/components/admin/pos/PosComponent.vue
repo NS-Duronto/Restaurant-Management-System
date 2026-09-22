@@ -62,7 +62,7 @@
                     <span v-else-if="table.dining_table_status === 2 && (table.current_order?.total || (table.active_orders && table.active_orders[0]?.total))" class="text-[10px] font-bold text-amber-700 dark:text-amber-300">
                         ({{ currencyFormat(table.current_order?.total || table.active_orders[0]?.total, setting.site_digit_after_decimal_point, setting.site_default_currency_symbol, setting.site_currency_position) }})
                     </span>
-                    <span v-else class="text-[10px] opacity-75 font-normal">({{ table.capacity }} {{ $t('label.person') }})</span>
+                    <span v-else class="text-[10px] opacity-75 font-normal">({{ table.size }} {{ $t('label.person') }})</span>
                 </button>
             </div>
         </div>
@@ -383,7 +383,7 @@
                             <h3 class="font-bold text-sm text-gray-800 dark:text-gray-100">
                                 {{ activeRunningTable?.name }}
                             </h3>
-                            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium">({{ activeRunningTable?.capacity || 4 }} {{ $t('label.seats') || 'Seats' }})</span>
+                            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-medium">({{ activeRunningTable?.size || 4 }} {{ $t('label.seats') || 'Seats' }})</span>
                         </div>
                         <span class="inline-flex items-center gap-1 text-[10px] font-bold text-amber-600 dark:text-amber-400">
                             <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>

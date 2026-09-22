@@ -682,7 +682,6 @@
         "orders_count": "orders",
         "shared_table": "Shared Table",
         "seats": "Seats",
-        "capacity": "Capacity",
         "persons": "Persons",
         "company_name": "Company Name",
         "current_stock": "Current Stock",
@@ -944,6 +943,8 @@
         "order_updated_successfully": "Order updated successfully.",
         "card_digits_required": "Please enter the last 4 digits of the card.",
         "trx_id_required": "Please enter the Transaction ID.",
-        "payment_note_required": "Please enter payment note."
+        "payment_note_required": "Please enter payment note.",
+        "received_amount_required": "Please enter the received amount.",
+        "received_amount_less_than_total": "Received amount cannot be less than total amount."
     }
 }

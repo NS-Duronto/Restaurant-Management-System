@@ -677,7 +677,6 @@
         "orders_count": "টি অর্ডার",
         "shared_table": "শেয়ার্ড টেবিল",
         "seats": "আসন",
-        "capacity": "আসন সংখ্যা",
         "persons": "জন",
         "company_name": "কোম্পানির নাম",
         "current_stock": "বর্তমান স্টক",
@@ -936,6 +935,8 @@
         "order_updated_successfully": "অর্ডার সফলভাবে আপডেট করা হয়েছে।",
         "card_digits_required": "দয়া করে কার্ডের শেষ ৪টি ডিজিট দিন।",
         "trx_id_required": "দয়া করে ট্রানজেকশন আইডি (Trx ID) দিন।",
-        "payment_note_required": "দয়া করে পেমেন্ট নোট লিখুন।"
+        "payment_note_required": "দয়া করে পেমেন্ট নোট লিখুন।",
+        "received_amount_required": "দয়া করে প্রাপ্ত টাকার পরিমাণ (Received Amount) লিখুন।",
+        "received_amount_less_than_total": "প্রাপ্ত টাকার পরিমাণ মোট বিলের চেয়ে কম হতে পারবে না।"
     }
 }

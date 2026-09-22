@@ -14,7 +14,7 @@ class DiningTable extends Model
 
     protected $table = 'dining_tables';
 
-    protected $fillable = ['serial_no', 'name', 'slug', 'size', 'capacity', 'status', 'table_status', 'current_order_id', 'branch_id', 'qr_code'];
+    protected $fillable = ['serial_no', 'name', 'slug', 'size', 'status', 'table_status', 'current_order_id', 'branch_id', 'qr_code'];
 
     protected $casts = [
         'id' => 'integer',
@@ -23,7 +23,6 @@ class DiningTable extends Model
         'slug' => 'string',
         'qr_code' => 'string',
         'size' => 'integer',
-        'capacity' => 'integer',
         'branch_id' => 'integer',
         'status' => 'integer',
         'table_status' => 'integer',

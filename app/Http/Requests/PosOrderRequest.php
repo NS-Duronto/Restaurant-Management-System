@@ -51,7 +51,7 @@ class PosOrderRequest extends FormRequest
             'pos_payment_method'     => ['required', 'numeric'],
             'pos_payment_sub_method' => ['nullable', 'string', 'max:50'],
             'pos_payment_note'       => $isUnpaid ? ['nullable', 'string'] : (in_array($this->input('pos_payment_method'), [PosPaymentMethod::CARD, PosPaymentMethod::MOBILE_BANKING, PosPaymentMethod::OTHER]) ? ['required', 'string'] : ['nullable', 'string']),
-            'pos_received_amount'    => (!$isUnpaid && $this->input('pos_payment_method') == PosPaymentMethod::CASH) ? ['required', 'numeric'] : ['nullable', 'numeric'],
+            'pos_received_amount'    => (!$isUnpaid && $this->input('pos_payment_method') == PosPaymentMethod::CASH) ? ['required', 'numeric', 'gt:0'] : ['nullable', 'numeric'],
         ];
     }
 
@@ -67,8 +67,12 @@ class PosOrderRequest extends FormRequest
             } else if (blank($orderType)) {
                 $validator->errors()->add('order_type', 'This order type is disabled now you can try another order type right now or call the management.');
             }
-            if (!$isUnpaid && $this->input('pos_payment_method') == PosPaymentMethod::CASH && !blank($this->input('pos_received_amount')) && ((float)$this->input('total') > (float)$this->input('pos_received_amount'))) {
-                $validator->errors()->add('pos_received_amount', 'The received amount can not be less than the total amount.');
+            if (!$isUnpaid && $this->input('pos_payment_method') == PosPaymentMethod::CASH) {
+                if (blank($this->input('pos_received_amount')) || (float)$this->input('pos_received_amount') <= 0) {
+                    $validator->errors()->add('pos_received_amount', 'The received amount field is required.');
+                } elseif ((float)$this->input('total') > (float)$this->input('pos_received_amount')) {
+                    $validator->errors()->add('pos_received_amount', 'The received amount can not be less than the total amount.');
+                }
             }
         });
     }

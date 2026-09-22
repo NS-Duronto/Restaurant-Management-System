@@ -19,13 +19,12 @@ class DiningTableResource extends JsonResource
             "id"             => $this->id,
             "name"           => $this->name,
             "slug"           => $this->slug,
-            "size"           => $this->size,
+            "size"           => (int) $this->size,
             "qr_code"        => asset($this->qr_code),
             "branch_id"      => $this->branch_id,
             "branch_name"    => optional($this->branch)->name,
             "status"              => $this->status,
             "dining_table_status" => (int) ($this->table_status ?? $this->dining_table_status ?? 1),
-            "capacity"            => (int) ($this->capacity ?? $this->size ?? 4),
             "current_order_id"    => $this->current_order_id,
             "current_order"       => $this->currentOrder ? [
                 "id"              => $this->currentOrder->id,
@@ -54,8 +53,8 @@ class DiningTableResource extends JsonResource
                 ];
             }) : [],
             "qr"                  => $this->qr,
-            "branch_address" => $this->branch->address,
-            "branch_phone"   => $this->branch->phone,
+            "branch_address" => optional($this->branch)->address,
+            "branch_phone"   => optional($this->branch)->phone,
         ];
     }
 }

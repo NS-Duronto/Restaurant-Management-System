@@ -426,8 +426,8 @@ class OrderService
                 if ($request->pos_received_amount && (float) $request->pos_received_amount > 0) {
                     $this->order->pos_received_amount = (float) $request->pos_received_amount;
                     $this->order->change_return = max(0, (float) $request->pos_received_amount - (float) $this->order->total);
-                } elseif ($this->order->pos_payment_method == PosPaymentMethod::CASH && $this->order->payment_status == PaymentStatus::PAID) {
-                    $this->order->pos_received_amount = (float) $this->order->total;
+                } else {
+                    $this->order->pos_received_amount = 0;
                     $this->order->change_return = 0;
                 }
                 if ($request->slip_type) {
@@ -516,8 +516,8 @@ class OrderService
                 if ($request->pos_received_amount && (float) $request->pos_received_amount > 0) {
                     $order->pos_received_amount = (float) $request->pos_received_amount;
                     $order->change_return = max(0, (float) $request->pos_received_amount - (float) $order->total);
-                } elseif ($order->pos_payment_method == PosPaymentMethod::CASH && $order->payment_status == PaymentStatus::PAID) {
-                    $order->pos_received_amount = (float) $order->total;
+                } else {
+                    $order->pos_received_amount = 0;
                     $order->change_return = 0;
                 }
 
