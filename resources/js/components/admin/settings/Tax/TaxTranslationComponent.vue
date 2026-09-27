@@ -81,7 +81,11 @@ export default {
     watch: {
         tax: {
             handler() {
-                this.initForm();
+                if (this.languages.length === 0) {
+                    this.fetchLanguages();
+                } else {
+                    this.initForm();
+                }
             },
             deep: true,
         },
@@ -109,13 +113,18 @@ export default {
             });
         },
         initForm() {
-            const existing = this.tax.translations || [];
+            const existing = (this.tax && this.tax.translations) ? this.tax.translations : [];
+            if (!this.selectedLanguage && this.languages.length > 0) {
+                this.selectedLanguage = this.languages[0].code;
+            }
+            const translations = {};
             this.languages.forEach(lang => {
                 const name = existing.find(t => t.locale === lang.code && t.key === 'name');
-                this.form.translations[lang.code] = {
+                translations[lang.code] = {
                     name: name ? name.value : '',
                 };
             });
+            this.form.translations = translations;
         },
         save() {
             this.loading.isActive = true;

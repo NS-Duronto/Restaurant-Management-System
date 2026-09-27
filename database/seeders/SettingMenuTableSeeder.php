@@ -122,7 +122,7 @@ class SettingMenuTableSeeder extends Seeder
                 'url'        => 'item-categories',
                 'icon'       => 'lab lab-item-categories',
                 'priority'   => 950,
-                'status'     => Status::ACTIVE,
+                'status'     => Status::INACTIVE,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -142,7 +142,7 @@ class SettingMenuTableSeeder extends Seeder
                 'url'        => 'taxes',
                 'icon'       => 'lab lab-taxes',
                 'priority'   => 940,
-                'status'     => Status::ACTIVE,
+                'status'     => Status::INACTIVE,
                 'created_at' => now(),
                 'updated_at' => now()
             ],

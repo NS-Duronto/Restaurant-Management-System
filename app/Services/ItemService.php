@@ -46,7 +46,15 @@ class ItemService
             $orderColumn = $request->get('order_column') ?? 'id';
             $orderType   = $request->get('order_type') ?? 'desc';
 
-            return Item::with('media', 'category', 'tax', 'translations')->where(function ($query) use ($requests) {
+            return Item::with([
+                'media',
+                'category',
+                'tax',
+                'offer',
+                'translations',
+                'variations.itemAttribute.translations',
+                'extras',
+            ])->withCount('orders')->where(function ($query) use ($requests) {
                 foreach ($requests as $key => $request) {
                     if (in_array($key, $this->itemFilter)) {
                         if ($key == "except") {
@@ -83,7 +91,21 @@ class ItemService
             $orderColumn = $request->get('order_column') ?? 'id';
             $orderType   = $request->get('order_type') ?? 'desc';
 
-            return Item::with('media', 'category', 'offer', 'translations')->where(function ($query) use ($requests) {
+            return Item::with([
+                'media',
+                'category.media',
+                'category.translations',
+                'tax.translations',
+                'offer',
+                'translations',
+                'variations.itemAttribute.translations',
+                'extras.item',
+                'addons.item.translations',
+                'addons.addonItem.media',
+                'addons.addonItem.offer',
+                'addons.addonItem.translations',
+                'addons.addonItem.variations.itemAttribute.translations',
+            ])->withCount('orders')->where(function ($query) use ($requests) {
                 foreach ($requests as $key => $request) {
                     if (in_array($key, $this->itemFilter)) {
                         if ($key == "except") {

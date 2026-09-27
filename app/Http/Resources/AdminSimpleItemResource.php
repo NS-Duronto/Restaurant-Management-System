@@ -33,7 +33,7 @@ class AdminSimpleItemResource extends JsonResource
             "status"           => $this->status,
             "description"      => $this->resource->getRawOriginal('description') ?? '',
             "caution"          => $this->resource->getRawOriginal('caution') ?? '',
-            "order"            => $this->orders->count(),
+            "order"            => $this->orders_count ?? $this->orders->count(),
             "thumb"            => $this->thumb,
             "cover"            => $this->cover,
             "preview"          => $this->preview,

@@ -219,6 +219,15 @@ html.dark .dp__theme_light {
     background-color: rgb(246 166 9 / 0.2);
 }
 
+.db-table-action.language i {
+    background-color: rgb(59 130 246 / 0.1);
+    color: rgb(59 130 246);
+}
+
+.db-table-action.language i:hover {
+    background-color: rgb(59 130 246 / 0.2);
+}
+
 .font-fill-primary-toggle {
     color: rgb(var(--primary));
 }
@@ -436,6 +445,8 @@ html.dark .dp__theme_light {
 
 .pos-image-height {
     height: 68% !important;
+    object-fit: cover !important;
+    object-position: center !important;
 }
 
 .pos-add-button:hover .font-fill-primary {

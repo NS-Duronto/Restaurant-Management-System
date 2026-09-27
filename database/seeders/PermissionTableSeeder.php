@@ -538,6 +538,22 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'title' => 'Item Categories',
+                'name' => 'item-categories',
+                'guard_name' => 'sanctum',
+                'url' => 'item-categories',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title' => 'Taxes',
+                'name' => 'taxes',
+                'guard_name' => 'sanctum',
+                'url' => 'taxes',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         $permissions = AppLibrary::associativeToNumericArrayBuilder($permissions);

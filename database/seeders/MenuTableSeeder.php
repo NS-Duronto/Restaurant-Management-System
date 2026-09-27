@@ -101,6 +101,26 @@ class MenuTableSeeder extends Seeder
                 'updated_at' => now()
             ],
             [
+                'name'       => 'Item Categories',
+                'language'   => 'item_categories',
+                'url'        => 'item-categories',
+                'icon'       => 'lab lab-item-categories',
+                'priority'   => 41,
+                'status'     => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'name'       => 'Taxes',
+                'language'   => 'taxes',
+                'url'        => 'taxes',
+                'icon'       => 'lab lab-taxes',
+                'priority'   => 42,
+                'status'     => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
                 'name'       => 'Table Management',
                 'language'   => 'dining_tables',
                 'url'        => 'dining-tables',

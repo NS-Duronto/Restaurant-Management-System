@@ -26,7 +26,7 @@ class TaxController extends AdminController implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:settings', only: ['show', 'store', 'update', 'destroy', 'saveTranslations']),
+            new Middleware('permission:settings|taxes', only: ['show', 'store', 'update', 'destroy', 'saveTranslations']),
         ];
     }
 

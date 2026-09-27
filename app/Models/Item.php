@@ -6,6 +6,7 @@ use App\Enums\Status;
 use App\Traits\Translatable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\Image\Enums\CropPosition;
+use Spatie\Image\Enums\Fit;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -90,8 +91,8 @@ class Item extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('thumb')->crop(168,180,CropPosition::Center)->keepOriginalImageFormat()->sharpen(10);
-        $this->addMediaConversion('cover')->crop(390, 270,CropPosition::Center)->keepOriginalImageFormat()->sharpen(10);
+        $this->addMediaConversion('thumb')->fit(Fit::Crop, 390, 270)->keepOriginalImageFormat()->sharpen(10);
+        $this->addMediaConversion('cover')->fit(Fit::Crop, 640, 440)->keepOriginalImageFormat()->sharpen(10);
         $this->addMediaConversion('preview')->width(600)->keepOriginalImageFormat()->sharpen(10);
     }
 

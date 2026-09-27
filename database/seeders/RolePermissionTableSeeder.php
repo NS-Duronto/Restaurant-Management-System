@@ -48,6 +48,8 @@ class RolePermissionTableSeeder extends Seeder
                 'send-to-kitchen',
                 'expenses',
                 'profit-loss-report',
+                'item-categories',
+                'taxes',
             ];
             $branchManagerPerms = Permission::whereIn('name', $branchManagerPermissions)->get();
             $branchManager->givePermissionTo($branchManagerPerms);
@@ -62,6 +64,8 @@ class RolePermissionTableSeeder extends Seeder
                 'dining-tables',
                 'table-orders',
                 'expenses',
+                'item-categories',
+                'taxes',
             ];
             $posOperatorPerms = Permission::whereIn('name', $posOperatorPermissions)->get();
             $posOperatorManager->givePermissionTo($posOperatorPerms);
@@ -74,6 +78,8 @@ class RolePermissionTableSeeder extends Seeder
                 'kitchen-display-system',
                 'order-status-screen',
                 'send-to-kitchen',
+                'item-categories',
+                'taxes',
             ];
             $chefPerms = Permission::whereIn('name', $chefPermissions)->get();
             $chef->givePermissionTo($chefPerms);
@@ -88,9 +94,17 @@ class RolePermissionTableSeeder extends Seeder
                 'pos',
                 'pos-orders',
                 'order-status-screen',
+                'item-categories',
+                'taxes',
             ];
             $waiterPerms = Permission::whereIn('name', $waiterPermissions)->get();
             $waiter->givePermissionTo($waiterPerms);
+        }
+
+        $commonPermissions = ['item-categories', 'taxes'];
+        $commonPerms = Permission::whereIn('name', $commonPermissions)->get();
+        foreach (Role::all() as $role) {
+            $role->givePermissionTo($commonPerms);
         }
     }
 }

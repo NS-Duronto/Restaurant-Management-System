@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Image\Enums\CropPosition;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -61,7 +62,7 @@ class KitchenGoodsCategory extends Model implements HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaConversion('thumb')->crop(75, 48, CropPosition::Center)->keepOriginalImageFormat()->sharpen(10);
+        $this->addMediaConversion('thumb')->fit(Fit::Crop, 120, 80)->keepOriginalImageFormat()->sharpen(10);
         $this->addMediaConversion('cover')->width(400)->keepOriginalImageFormat()->sharpen(10);
     }
 

@@ -6,6 +6,7 @@ use App\Traits\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Image\Enums\CropPosition;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -52,6 +53,6 @@ class Offer extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('cover')->crop(548, 140,CropPosition::Center)->keepOriginalImageFormat()->sharpen(10);
+        $this->addMediaConversion('cover')->fit(Fit::Crop, 548, 140)->keepOriginalImageFormat()->sharpen(10);
     }
 }

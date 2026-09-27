@@ -29,7 +29,7 @@ class PosCategoryController extends AdminController
             $orderColumn = $request->get('order_column') ?? 'id';
             $orderType   = $request->get('order_type') ?? 'desc';
 
-            $itemCategories =  ItemCategory::with('media')->where(function ($query) use ($requests) {
+            $itemCategories =  ItemCategory::with('media', 'translations')->where(function ($query) use ($requests) {
                 foreach ($requests as $key => $request) {
                     if (in_array($key, $this->itemCateFilter)) {
                         $query->where($key, 'like', '%' . $request . '%');

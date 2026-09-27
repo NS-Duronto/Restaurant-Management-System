@@ -1,7 +1,8 @@
 <template>
     <LoadingComponent :props="loading" />
 
-    <div class="db-card db-tab-div active">
+    <div class="col-12">
+        <div class="db-card">
         <div class="db-card-header border-none">
             <h3 class="db-card-title">{{ $t("menu.taxes") }}</h3>
             <div class="db-card-filter">
@@ -20,7 +21,7 @@
                             {{ $t("label.tax_rate") }}
                         </th>
                         <th class="db-table-head-th">{{ $t('label.status') }}</th>
-                        <th class="db-table-head-th">
+                        <th class="db-table-head-th hidden-print">
                             {{ $t("label.action") }}
                         </th>
                     </tr>
@@ -41,15 +42,11 @@
                                 {{ enums.statusEnumArray[tax.status] }}
                             </span>
                         </td>
-                        <td class="db-table-body-td">
+                        <td class="db-table-body-td hidden-print">
                             <div class="flex justify-start items-center sm:items-start sm:justify-start gap-1.5">
-                                <SmModalEditComponent @click="edit(tax)" />
-                                <button type="button" class="db-btn-outline sm primary m-0.5"
-                                    @click="translate(tax)">
-                                    <i class="lab lab-languages"></i>
-                                    <span>{{ $t('label.translations') }}</span>
-                                </button>
-                                <SmDeleteComponent @click="destroy(tax.id)" />
+                                <SmIconSidebarModalEditComponent @click="edit(tax)" />
+                                <SmIconLanguageComponent @click="translate(tax)" />
+                                <SmIconDeleteComponent @click="destroy(tax.id)" />
                             </div>
                         </td>
                     </tr>
@@ -79,6 +76,7 @@
             </div>
         </div>
     </div>
+    </div>
 
     <!-- placed after the create modal so appService.modalShow()'s default '.modal' selector matches the create modal first -->
     <TaxTranslationComponent :tax="selectedTax" />
@@ -93,8 +91,9 @@ import PaginationBox from "../../components/pagination/PaginationBox";
 import PaginationSMBox from "../../components/pagination/PaginationSMBox";
 import appService from "../../../../services/appService";
 import TableLimitComponent from "../../components/TableLimitComponent";
-import SmDeleteComponent from "../../components/buttons/SmDeleteComponent";
-import SmModalEditComponent from "../../components/buttons/SmModalEditComponent";
+import SmIconDeleteComponent from "../../components/buttons/SmIconDeleteComponent";
+import SmIconSidebarModalEditComponent from "../../components/buttons/SmIconSidebarModalEditComponent";
+import SmIconLanguageComponent from "../../components/buttons/SmIconLanguageComponent";
 import taxTypeEnum from "../../../../enums/modules/taxTypeEnum";
 import statusEnum from "../../../../enums/modules/statusEnum";
 import ENV from "../../../../config/env";
@@ -109,8 +108,9 @@ export default {
         TaxCreateComponent,
         TaxTranslationComponent,
         LoadingComponent,
-        SmDeleteComponent,
-        SmModalEditComponent,
+        SmIconDeleteComponent,
+        SmIconSidebarModalEditComponent,
+        SmIconLanguageComponent,
         taxTypeEnum,
     },
     data() {
@@ -187,13 +187,15 @@ export default {
             this.$store.dispatch("tax/show", tax.id).then(res => {
                 this.selectedTax = res.data.data;
                 this.loading.isActive = false;
-                appService.modalShow('#tax-translation-modal');
+                this.$nextTick(() => {
+                    appService.modalShow('#tax-translation-modal');
+                });
             }).catch(() => {
                 this.loading.isActive = false;
             });
         },
         edit: function (tax) {
-            appService.modalShow('#modal');
+            appService.sideDrawerShow();
             this.loading.isActive = true;
             this.$store.dispatch("tax/edit", tax.id);
             this.props.form = {

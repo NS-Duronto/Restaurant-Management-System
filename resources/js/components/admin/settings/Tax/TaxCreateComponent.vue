@@ -1,15 +1,14 @@
 <template>
     <LoadingComponent :props="loading" />
-    <SmModalCreateComponent :props="addButton" />
+    <SmSidebarModalCreateComponent :props="addButton" @click="addReset" />
 
-    <div id="modal" class="modal">
-        <div class="modal-dialog">
-            <div class="modal-header">
-                <h3 class="modal-title">{{ $t("menu.taxes") }}</h3>
-                <button class="modal-close fa-solid fa-xmark text-xl text-slate-400 hover:text-red-500"
-                    @click="reset"></button>
+    <div id="sidebar" class="drawer">
+        <div class="drawer-dialog">
+            <div class="drawer-header">
+                <h3 class="drawer-title">{{ $t("menu.taxes") }}</h3>
+                <button class="fa-solid fa-xmark close-btn" @click="reset"></button>
             </div>
-            <div class="modal-body">
+            <div class="drawer-body">
                 <form @submit.prevent="save">
                     <div class="form-row">
                         <div class="form-col-12">
@@ -25,13 +24,13 @@
 
                         <div class="form-col-12 sm:form-col-6">
                             <label for="code" class="db-field-title required">{{
-        $t("label.code")
-    }}</label>
+                                $t("label.code")
+                            }}</label>
                             <input v-model="props.form.code" v-bind:class="errors.code ? 'invalid' : ''" type="text"
                                 id="code" class="db-field-control" />
                             <small class="db-field-alert" v-if="errors.code">{{
-        errors.code[0]
-    }}</small>
+                                errors.code[0]
+                            }}</small>
                         </div>
                         <div class="form-col-12 sm:form-col-6">
                             <label for="tax_rate" class="db-field-title required">
@@ -65,15 +64,14 @@
                         </div>
 
                         <div class="form-col-12">
-                            <div class="modal-btns">
+                            <div class="flex flex-wrap gap-3 mt-4">
+                                <button type="submit" class="db-btn py-2 text-white bg-primary">
+                                    <i class="lab lab-save"></i>
+                                    <span>{{ $t("label.save") }}</span>
+                                </button>
                                 <button type="button" class="modal-btn-outline modal-close" @click="reset">
                                     <i class="lab lab-close"></i>
                                     <span>{{ $t("button.close") }}</span>
-                                </button>
-
-                                <button type="submit" class="db-btn py-2 text-white bg-primary">
-                                    <i class="lab lab-save"></i>
-                                    <span>{{ $t("button.save") }}</span>
                                 </button>
                             </div>
                         </div>
@@ -84,7 +82,7 @@
     </div>
 </template>
 <script>
-import SmModalCreateComponent from "../../components/buttons/SmModalCreateComponent";
+import SmSidebarModalCreateComponent from "../../components/buttons/SmSidebarModalCreateComponent";
 import LoadingComponent from "../../components/LoadingComponent";
 import statusEnum from "../../../../enums/modules/statusEnum";
 import alertService from "../../../../services/alertService";
@@ -92,7 +90,7 @@ import appService from "../../../../services/appService";
 
 export default {
     name: "TaxCreateComponent",
-    components: { SmModalCreateComponent, LoadingComponent },
+    components: { SmSidebarModalCreateComponent, LoadingComponent },
     props: ["props"],
     data() {
         return {
@@ -116,7 +114,17 @@ export default {
     },
     methods: {
         reset: function () {
-            appService.modalHide();
+            appService.sideDrawerHide();
+            this.$store.dispatch("tax/reset").then().catch();
+            this.errors = {};
+            this.$props.props.form = {
+                name: "",
+                code: "",
+                tax_rate: "",
+                status: statusEnum.ACTIVE,
+            };
+        },
+        addReset: function () {
             this.$store.dispatch("tax/reset").then().catch();
             this.errors = {};
             this.$props.props.form = {
@@ -131,24 +139,27 @@ export default {
             try {
                 const tempId = this.$store.getters["tax/temp"].temp_id;
                 this.loading.isActive = true;
-                this.$store.dispatch("tax/save", this.props).then((res) => {
-                    appService.modalHide();
-                    this.loading.isActive = false;
-                    alertService.successFlip(
-                        tempId === null ? 0 : 1,
-                        this.$t("menu.taxes")
-                    );
-                    this.props.form = {
-                        name: "",
-                        code: "",
-                        tax_rate: "",
-                        status: statusEnum.ACTIVE,
-                    };
-                    this.errors = {};
-                }).catch((err) => {
-                    this.loading.isActive = false;
-                    this.errors = err.response.data.errors;
-                });
+                this.$store
+                    .dispatch("tax/save", this.props)
+                    .then((res) => {
+                        appService.sideDrawerHide();
+                        this.loading.isActive = false;
+                        alertService.successFlip(
+                            tempId === null ? 0 : 1,
+                            this.$t("menu.taxes")
+                        );
+                        this.props.form = {
+                            name: "",
+                            code: "",
+                            tax_rate: "",
+                            status: statusEnum.ACTIVE,
+                        };
+                        this.errors = {};
+                    })
+                    .catch((err) => {
+                        this.loading.isActive = false;
+                        this.errors = err.response.data.errors;
+                    });
             } catch (err) {
                 this.loading.isActive = false;
                 alertService.error(err);

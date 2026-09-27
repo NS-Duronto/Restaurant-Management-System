@@ -31,7 +31,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('themes/default/fonts/fontawesome/fontawesome.css') }}">
     <link rel="stylesheet" href="{{ asset('themes/default/fonts/lab/lab.css') }}">
     <link rel="stylesheet" href="{{ asset('themes/default/fonts/typography/public/public.css') }}">
@@ -119,7 +118,7 @@
         @endforeach
     @endif
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite('resources/js/app.js')
 
     <script>
         const APP_URL = "{{ env('VITE_HOST') }}";
@@ -128,12 +127,12 @@
         const APP_DEMO = "{{ env('VITE_DEMO') }}";
     </script>
 
-    <script src="{{ asset('themes/default/js/drawer.js') }}"></script>
-    <script src="{{ asset('themes/default/js/modal.js') }}"></script>
-    <script src="{{ asset('themes/default/js/customScript.js') }}"></script>
-    <script src="{{ asset('themes/default/js/tabs.js') }}"></script>
-    <script src="{{ asset('themes/default/js/dropdown.js') }}"></script>
-    <script src="{{ asset('themes/default/js/apexcharts/apexcharts.min.js') }}"></script>
+    <script defer src="{{ asset('themes/default/js/drawer.js') }}"></script>
+    <script defer src="{{ asset('themes/default/js/modal.js') }}"></script>
+    <script defer src="{{ asset('themes/default/js/customScript.js') }}"></script>
+    <script defer src="{{ asset('themes/default/js/tabs.js') }}"></script>
+    <script defer src="{{ asset('themes/default/js/dropdown.js') }}"></script>
+    <script defer src="{{ asset('themes/default/js/apexcharts/apexcharts.min.js') }}"></script>
 </body>
 
 </html>

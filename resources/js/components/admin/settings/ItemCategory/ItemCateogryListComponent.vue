@@ -1,7 +1,8 @@
 <template>
     <LoadingComponent :props="loading" />
 
-    <div class="db-card db-tab-div active">
+    <div class="col-12">
+        <div class="db-card">
         <div class="db-card-header border-none">
             <h3 class="db-card-title">{{ $t('menu.item_categories') }}</h3>
             <div class="db-card-filter">
@@ -31,7 +32,7 @@
                         <th class="db-table-head-th"><i class="lab lab-list"></i></th>
                         <th class="db-table-head-th">{{ $t('label.name') }}</th>
                         <th class="db-table-head-th">{{ $t('label.status') }}</th>
-                        <th class="db-table-head-th">{{ $t('label.action') }}</th>
+                        <th class="db-table-head-th hidden-print">{{ $t('label.action') }}</th>
                     </tr>
                 </thead>
                 <draggable tag="tbody" class="db-table-body" v-if="categories.length > 0" v-model="categories"
@@ -44,11 +45,11 @@
                                 {{ enums.statusEnumArray[itemCategory.status] }}
                             </span>
                         </td>
-                        <td class="db-table-body-td">
+                        <td class="db-table-body-td hidden-print">
                             <div class="flex justify-start items-center sm:items-start sm:justify-start gap-1.5">
-                                <SmViewComponent :link="'admin.settings.itemCategory.show'" :id="itemCategory.id" />
-                                <SmModalEditComponent @click="edit(itemCategory)" />
-                                <SmDeleteComponent @click="destroy(itemCategory.id)" />
+                                <SmIconViewComponent :link="'admin.settings.itemCategory.show'" :id="itemCategory.id" />
+                                <SmIconSidebarModalEditComponent @click="edit(itemCategory)" />
+                                <SmIconDeleteComponent @click="destroy(itemCategory.id)" />
                             </div>
                         </td>
                     </tr>
@@ -78,6 +79,7 @@
             </div>
         </div>
     </div>
+    </div>
 </template>
 
 <script>
@@ -90,9 +92,9 @@ import PaginationSMBox from "../../components/pagination/PaginationSMBox";
 import appService from "../../../../services/appService";
 import statusEnum from "../../../../enums/modules/statusEnum";
 import TableLimitComponent from "../../components/TableLimitComponent";
-import SmDeleteComponent from "../../components/buttons/SmDeleteComponent";
-import SmModalEditComponent from "../../components/buttons/SmModalEditComponent";
-import SmViewComponent from "../../components/buttons/SmViewComponent";
+import SmIconDeleteComponent from "../../components/buttons/SmIconDeleteComponent";
+import SmIconSidebarModalEditComponent from "../../components/buttons/SmIconSidebarModalEditComponent";
+import SmIconViewComponent from "../../components/buttons/SmIconViewComponent";
 import { VueDraggableNext } from 'vue-draggable-next'
 import ExportComponent from "../../components/buttons/export/ExportComponent";
 import SampleFileComponent from "../../components/buttons/import/SampleFileComponent.vue";
@@ -111,9 +113,9 @@ export default {
         PaginationTextComponent,
         ItemCategoryCreateComponent,
         LoadingComponent,
-        SmDeleteComponent,
-        SmModalEditComponent,
-        SmViewComponent,
+        SmIconDeleteComponent,
+        SmIconSidebarModalEditComponent,
+        SmIconViewComponent,
         draggable: VueDraggableNext,
         ExcelComponent,
         UploadFileComponent,
@@ -183,7 +185,7 @@ export default {
             });
         },
         edit: function (itemCategory) {
-            appService.modalShow("#categoryModal");
+            appService.sideDrawerShow();
             this.loading.isActive = true;
             this.$store.dispatch('itemCategory/edit', itemCategory.id);
             this.props.form = {

@@ -203,39 +203,12 @@ export default [
             },
             {
                 path: "item-categories",
-                component: ItemCategoryComponent,
                 name: "admin.settings.itemCategory",
-                redirect: { name: "admin.settings.itemCategory.list" },
-                meta: {
-                    isFrontend: false,
-                    auth: true,
-                    permissionUrl: "settings",
-                    breadcrumb: "item_categories",
-                },
-                children: [
-                    {
-                        path: "list",
-                        component: ItemCategoryListComponent,
-                        name: "admin.settings.itemCategory.list",
-                        meta: {
-                            isFrontend: false,
-                            auth: true,
-                            permissionUrl: "settings",
-                            breadcrumb: "",
-                        },
-                    },
-                    {
-                        path: "show/:id",
-                        component: ItemCategoryShowComponent,
-                        name: "admin.settings.itemCategory.show",
-                        meta: {
-                            isFrontend: false,
-                            auth: true,
-                            permissionUrl: "settings",
-                            breadcrumb: "view",
-                        },
-                    },
-                ],
+                redirect: { name: "admin.itemCategories.list" },
+            },
+            {
+                path: "item-categories/show/:id",
+                redirect: to => `/admin/item-categories/show/${to.params.id}`,
             },
             {
                 path: "item-attributes",
@@ -264,28 +237,8 @@ export default [
             },
             {
                 path: "taxes",
-                component: TaxComponent,
                 name: "admin.settings.tax",
-                redirect: { name: "admin.settings.tax.list" },
-                meta: {
-                    isFrontend: false,
-                    auth: true,
-                    permissionUrl: "settings",
-                    breadcrumb: "taxes",
-                },
-                children: [
-                    {
-                        path: "list",
-                        component: TaxListComponent,
-                        name: "admin.settings.tax.list",
-                        meta: {
-                            isFrontend: false,
-                            auth: true,
-                            permissionUrl: "settings",
-                            breadcrumb: "",
-                        },
-                    },
-                ],
+                redirect: { name: "admin.taxes.list" },
             },
             {
                 path: "pages",

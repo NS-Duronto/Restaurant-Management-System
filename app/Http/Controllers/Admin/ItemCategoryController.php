@@ -32,7 +32,7 @@ class ItemCategoryController extends AdminController implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:settings', only: ['store', 'update', 'destroy', 'show', 'saveTranslations']),
+            new Middleware('permission:settings|item-categories', only: ['store', 'update', 'destroy', 'show', 'saveTranslations']),
         ];
     }
 

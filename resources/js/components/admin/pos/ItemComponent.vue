@@ -3,7 +3,7 @@
         class="grid gap-3 sm:gap-[18px] grid-cols-[repeat(auto-fill,_minmax(140px,_1fr))] sm:grid-cols-[repeat(auto-fill,_minmax(185px,_1fr))] mb-8 md:mb-0">
         <div v-for="item in items" :key="item"
             class="pos-card-height rounded-2xl border transition border-[#EFF0F6] bg-white hover:shadow-xs">
-            <img class="pos-image-height w-full rounded-t-2xl" :src="item.thumb" alt="item">
+            <img class="pos-image-height w-full rounded-t-2xl object-cover" :src="item.thumb" alt="item" loading="lazy">
             <div class="py-3 px-3 rounded-b-2xl">
                 <h3
                     class="text-sm mb-3 font-medium font-rubik capitalize text-ellipsis whitespace-nowrap overflow-hidden">

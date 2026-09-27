@@ -1,15 +1,14 @@
 <template>
     <LoadingComponent :props="loading" />
-    <SmModalCreateComponent :props="addButton" />
+    <SmSidebarModalCreateComponent :props="addButton" @click="addReset" />
 
-    <div id="categoryModal" class="modal">
-        <div class="modal-dialog">
-            <div class="modal-header">
-                <h3 class="modal-title">{{ $t('menu.item_categories') }}</h3>
-                <button class="modal-close fa-solid fa-xmark text-xl text-slate-400 hover:text-red-500"
-                    @click="reset"></button>
+    <div id="sidebar" class="drawer">
+        <div class="drawer-dialog">
+            <div class="drawer-header">
+                <h3 class="drawer-title">{{ $t('menu.item_categories') }}</h3>
+                <button class="fa-solid fa-xmark close-btn" @click="reset"></button>
             </div>
-            <div class="modal-body">
+            <div class="drawer-body">
                 <form @submit.prevent="save">
                     <div class="form-row">
                         <div class="form-col-12">
@@ -18,7 +17,6 @@
                                 id="name" class="db-field-control">
                             <small class="db-field-alert" v-if="errors.name">{{ errors.name[0] }}</small>
                         </div>
-
 
                         <div class="form-col-12 sm:form-col-6">
                             <label for="image" class="db-field-title">{{ $t('label.image') }} (74px,48px)</label>
@@ -52,8 +50,8 @@
 
                         <div class="form-col-12">
                             <label for="description" class="db-field-title">{{
-        $t("label.description")
-    }}</label>
+                                $t("label.description")
+                            }}</label>
                             <textarea v-model="props.form.description"
                                 v-bind:class="errors.description ? 'invalid' : ''" id="description"
                                 class="db-field-control"></textarea>
@@ -61,15 +59,14 @@
                         </div>
 
                         <div class="form-col-12">
-                            <div class="modal-btns">
-                                <button type="button" class="modal-btn-outline modal-close" @click="reset">
-                                    <i class="lab lab-close"></i>
-                                    <span>{{ $t('button.close') }}</span>
-                                </button>
-
+                            <div class="flex flex-wrap gap-3 mt-4">
                                 <button type="submit" class="db-btn py-2 text-white bg-primary">
                                     <i class="lab lab-save"></i>
                                     <span>{{ $t('button.save') }}</span>
+                                </button>
+                                <button type="button" class="modal-btn-outline modal-close" @click="reset">
+                                    <i class="lab lab-close"></i>
+                                    <span>{{ $t('button.close') }}</span>
                                 </button>
                             </div>
                         </div>
@@ -80,7 +77,7 @@
     </div>
 </template>
 <script>
-import SmModalCreateComponent from "../../components/buttons/SmModalCreateComponent";
+import SmSidebarModalCreateComponent from "../../components/buttons/SmSidebarModalCreateComponent";
 import LoadingComponent from "../../components/LoadingComponent";
 import statusEnum from "../../../../enums/modules/statusEnum";
 import alertService from "../../../../services/alertService";
@@ -88,7 +85,7 @@ import appService from "../../../../services/appService";
 
 export default {
     name: "ItemCategoryCreateComponent",
-    components: { SmModalCreateComponent, LoadingComponent },
+    components: { SmSidebarModalCreateComponent, LoadingComponent },
     props: ['props'],
     data() {
         return {
@@ -116,7 +113,7 @@ export default {
             this.image = e.target.files[0];
         },
         reset: function () {
-            appService.modalHide();
+            appService.sideDrawerHide();
             this.$store.dispatch('itemCategory/reset').then().catch();
             this.errors = {};
             this.$props.props.form = {
@@ -126,16 +123,32 @@ export default {
             }
             if (this.image) {
                 this.image = "";
-                this.$refs.imageProperty.value = null;
+                if (this.$refs.imageProperty) {
+                    this.$refs.imageProperty.value = null;
+                }
             }
         },
-
+        addReset: function () {
+            this.$store.dispatch('itemCategory/reset').then().catch();
+            this.errors = {};
+            this.$props.props.form = {
+                name: "",
+                description: "",
+                status: statusEnum.ACTIVE
+            }
+            if (this.image) {
+                this.image = "";
+                if (this.$refs.imageProperty) {
+                    this.$refs.imageProperty.value = null;
+                }
+            }
+        },
         save: function () {
             try {
                 const fd = new FormData();
                 fd.append('name', this.props.form.name);
                 fd.append('status', this.props.form.status);
-                fd.append('description', this.props.form.description);
+                fd.append('description', this.props.form.description ? this.props.form.description : '');
                 if (this.image) {
                     fd.append('image', this.image);
                 }
@@ -146,7 +159,7 @@ export default {
                     form: fd,
                     search: this.props.search
                 }).then((res) => {
-                    appService.modalHide();
+                    appService.sideDrawerHide();
                     this.loading.isActive = false;
                     alertService.successFlip((tempId === null ? 0 : 1), this.$t('menu.item_categories'));
                     this.props.form = {
@@ -156,7 +169,9 @@ export default {
                     }
                     this.image = "";
                     this.errors = {};
-                    this.$refs.imageProperty.value = null;
+                    if (this.$refs.imageProperty) {
+                        this.$refs.imageProperty.value = null;
+                    }
                 }).catch((err) => {
                     this.loading.isActive = false;
                     this.errors = err.response.data.errors;
