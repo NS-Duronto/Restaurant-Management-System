@@ -32,6 +32,9 @@ class KDSOrderDetailsResource extends JsonResource
             'status_name'                         => trans('orderStatus.' . $this->status),
             'order_items'                         => OrderItemResource::collection($this->orderItems->load('orderItem')),
             'table_name'                          => $this->diningTable?->name,
+            'room_number'                         => $this->room_number,
+            'customer_name'                       => $this->customer_name,
+            'customer_phone'                      => $this->customer_phone,
         ];
     }
 }

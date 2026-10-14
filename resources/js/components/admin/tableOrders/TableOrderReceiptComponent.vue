@@ -140,6 +140,22 @@
                                 <td class="pt-1 pb-1 pr-1">{{ $t('label.delivery_time') }}:</td>
                                 <td class="pt-1 pb-1">{{ order.delivery_date }} {{ order.delivery_time }}</td>
                             </tr>
+                            <tr v-if="order.table_name">
+                                <td class="pt-1 pb-1 pr-1">{{ $t('label.table_name') }}:</td>
+                                <td class="pt-1 pb-1 font-medium">{{ order.table_name }}</td>
+                            </tr>
+                            <tr v-if="order.room_number">
+                                <td class="pt-1 pb-1 pr-1 font-bold text-primary">{{ $t('label.room_number') }}:</td>
+                                <td class="pt-1 pb-1 font-bold">{{ order.room_number }}</td>
+                            </tr>
+                            <tr v-if="order.customer_name">
+                                <td class="pt-1 pb-1 pr-1">{{ $t('label.customer_name') }}:</td>
+                                <td class="pt-1 pb-1">{{ order.customer_name }}</td>
+                            </tr>
+                            <tr v-if="order.customer_phone">
+                                <td class="pt-1 pb-1 pr-1">{{ $t('label.phone') }}:</td>
+                                <td class="pt-1 pb-1">{{ order.customer_phone }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

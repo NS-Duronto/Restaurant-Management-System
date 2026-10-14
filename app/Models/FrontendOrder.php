@@ -31,6 +31,9 @@ class FrontendOrder extends Model
         'payment_status',
         'status',
         'dining_table_id',
+        'room_number',
+        'customer_name',
+        'customer_phone',
         'source'
     ];
 

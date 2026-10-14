@@ -22,7 +22,7 @@
 
                 <!-- Brand Name & Status -->
                 <div class="rms-loader-brand">
-                    <span class="rms-brand-title">Sohoj RMS</span>
+                    <span class="rms-brand-title">{{ brandTitle }}</span>
                     <div class="rms-loader-status">
                         <span>{{ statusText }}</span>
                         <span class="rms-dots">
@@ -51,6 +51,10 @@ export default {
         statusText() {
             const locale = this.$i18n?.locale || 'bn';
             return locale === 'bn' ? 'লোড হচ্ছে' : 'Loading';
+        },
+        brandTitle() {
+            const setting = this.$store.getters['frontendSetting/lists'] || {};
+            return setting.company_name || 'Garden Palace Resort';
         }
     }
 }

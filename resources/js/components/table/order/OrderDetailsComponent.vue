@@ -14,10 +14,29 @@
                                 {{ enums.orderTypeEnumArray[order.order_type] }}
                             </span>
                         </div>
-                        <div class="flex flex-wrap items-center gap-2 mb-5">
+                        <div class="flex flex-wrap items-center gap-2 mb-3">
                             <span class="text-sm capitalize">{{ $t("label.table_name") }}:</span>
                             <span class="text-sm capitalize text-heading">
                                 {{ order.table_name }}
+                            </span>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2 mb-2" v-if="order.room_number">
+                            <span class="text-sm font-semibold text-amber-800 capitalize">{{ $t("label.room_number") }}:</span>
+                            <span class="text-xs font-bold text-amber-950 bg-amber-100 px-2 py-0.5 rounded-full">
+                                {{ order.room_number }}
+                            </span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 mb-2" v-if="order.customer_name">
+                            <span class="text-sm capitalize">{{ $t("label.customer_name") }}:</span>
+                            <span class="text-sm font-medium text-heading">
+                                {{ order.customer_name }}
+                            </span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 mb-5" v-if="order.customer_phone">
+                            <span class="text-sm capitalize">{{ $t("label.phone") }}:</span>
+                            <span class="text-sm font-medium text-heading">
+                                {{ order.customer_phone }}
                             </span>
                         </div>
 

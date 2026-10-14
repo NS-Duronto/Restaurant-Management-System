@@ -40,6 +40,9 @@ class TableOrderRequest extends FormRequest
             'is_advance_order' => ['required', 'numeric'],
             'address_id'       => ['nullable'],
             'delivery_time'    => ['nullable'],
+            'room_number'      => ['nullable', 'string', 'max:50'],
+            'customer_name'    => ['nullable', 'string', 'max:191'],
+            'customer_phone'   => ['nullable', 'string', 'max:50'],
             'source'           => ['required', 'numeric'],
             'items'            => ['required', 'json', new ValidJsonOrder]
         ];

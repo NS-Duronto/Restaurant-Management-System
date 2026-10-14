@@ -58,6 +58,7 @@ use App\Http\Controllers\Admin\SimpleUserController;
 use App\Http\Controllers\Admin\SiteController;
 use App\Http\Controllers\Admin\SmsGatewayController;
 use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\ResortController as AdminResortController;
 use App\Http\Controllers\Admin\TableOrderController as AdminTableOrderController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\ThemeController;
@@ -76,6 +77,7 @@ use App\Http\Controllers\Frontend\BranchController as FrontendBranchController;
 use App\Http\Controllers\Frontend\ItemController as FrontendItemController;
 use App\Http\Controllers\Frontend\LanguageController as FrontendLanguageController;
 use App\Http\Controllers\Frontend\PageController as FrontendPageController;
+use App\Http\Controllers\Frontend\ResortController as FrontendResortController;
 use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\SettingController;
 use App\Http\Controllers\Frontend\TokenStoreController;
@@ -639,6 +641,49 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::match(['post', 'put', 'patch'], '/{expense}', [ExpenseController::class, 'update']);
         Route::delete('/{expense}', [ExpenseController::class, 'destroy']);
     });
+
+    Route::prefix('resort')->name('resort.')->group(function () {
+        Route::get('/settings', [AdminResortController::class, 'getSettings']);
+        Route::match(['post', 'put'], '/settings', [AdminResortController::class, 'updateSettings']);
+        Route::get('/sections', [AdminResortController::class, 'sections']);
+        Route::post('/sections/reorder', [AdminResortController::class, 'updateSectionsOrder']);
+
+        Route::get('/sliders', [AdminResortController::class, 'sliders']);
+        Route::post('/sliders', [AdminResortController::class, 'storeSlider']);
+        Route::match(['post', 'put'], '/sliders/{slider}', [AdminResortController::class, 'updateSlider']);
+        Route::delete('/sliders/{slider}', [AdminResortController::class, 'destroySlider']);
+
+        Route::get('/galleries', [AdminResortController::class, 'galleries']);
+        Route::post('/galleries', [AdminResortController::class, 'storeGallery']);
+        Route::match(['post', 'put'], '/galleries/{gallery}', [AdminResortController::class, 'updateGallery']);
+        Route::delete('/galleries/{gallery}', [AdminResortController::class, 'destroyGallery']);
+
+        Route::get('/events', [AdminResortController::class, 'events']);
+        Route::post('/events', [AdminResortController::class, 'storeEvent']);
+        Route::match(['post', 'put'], '/events/{event}', [AdminResortController::class, 'updateEvent']);
+        Route::delete('/events/{event}', [AdminResortController::class, 'destroyEvent']);
+
+        Route::get('/teams', [AdminResortController::class, 'teams']);
+        Route::post('/teams', [AdminResortController::class, 'storeTeam']);
+        Route::match(['post', 'put'], '/teams/{team}', [AdminResortController::class, 'updateTeam']);
+        Route::delete('/teams/{team}', [AdminResortController::class, 'destroyTeam']);
+
+        Route::get('/plans', [AdminResortController::class, 'plans']);
+        Route::post('/plans', [AdminResortController::class, 'storePlan']);
+        Route::match(['post', 'put'], '/plans/{plan}', [AdminResortController::class, 'updatePlan']);
+        Route::delete('/plans/{plan}', [AdminResortController::class, 'destroyPlan']);
+
+        Route::get('/partners', [AdminResortController::class, 'partners']);
+        Route::post('/partners', [AdminResortController::class, 'storePartner']);
+        Route::match(['post', 'put'], '/partners/{partner}', [AdminResortController::class, 'updatePartner']);
+        Route::delete('/partners/{partner}', [AdminResortController::class, 'destroyPartner']);
+
+        Route::get('/bookings', [AdminResortController::class, 'bookings']);
+        Route::patch('/bookings/{booking}/status', [AdminResortController::class, 'updateBookingStatus']);
+        Route::delete('/bookings/{booking}', [AdminResortController::class, 'destroyBooking']);
+
+        Route::get('/website-orders', [AdminResortController::class, 'websiteOrders']);
+    });
 });
 
 Route::prefix('frontend')->name('frontend.')->middleware(['installed', 'apiKey', 'localization'])->group(function () {
@@ -672,6 +717,11 @@ Route::prefix('frontend')->name('frontend.')->middleware(['installed', 'apiKey',
     Route::prefix('device-token')->name('device-token.')->middleware(['auth:sanctum'])->group(function () {
         Route::post('/web', [TokenStoreController::class, 'webToken']);
         Route::post('/mobile', [TokenStoreController::class, 'deviceToken']);
+    });
+
+    Route::prefix('resort')->name('resort.')->group(function () {
+        Route::get('/content', [FrontendResortController::class, 'content']);
+        Route::post('/booking', [FrontendResortController::class, 'booking']);
     });
 });
 

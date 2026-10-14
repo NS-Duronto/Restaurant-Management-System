@@ -71,7 +71,8 @@ export default {
 
         if (env.DEMO === "true" || env.DEMO === 'TRUE' || env.DEMO === true || env.DEMO === "1" || env.DEMO === 1) {
             this.$store.dispatch("authcheck").then(res => {
-                if (res.data.status === false && (this.theme == "frontend" || this.theme == "backend")) {
+                const publicRoutes = ['resort.landing', 'frontend.rms', 'auth.login', 'auth.forgetPassword', 'auth.verifyEmail', 'auth.resetPassword'];
+                if (res.data.status === false && !publicRoutes.includes(this.$route.name) && (this.theme === "backend" || this.$route.meta?.auth === true)) {
                     this.$router.push({ name: "auth.login" });
                 };
             }).catch();

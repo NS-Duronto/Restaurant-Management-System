@@ -111,7 +111,20 @@
                             </td>
 
                             <td class="db-table-body-td">
-                                {{ textShortener(order.customer.name, 20) }}
+                                <div v-if="order.room_number" class="flex flex-col gap-0.5">
+                                    <span class="inline-flex items-center w-fit px-1.5 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-900 dark:bg-amber-900/50 dark:text-amber-200">
+                                        <i class="lab lab-home mr-1"></i> Room {{ order.room_number }}
+                                    </span>
+                                    <span class="text-xs font-medium text-heading dark:text-gray-200">
+                                        {{ order.customer_name || textShortener(order.customer.name, 18) }}
+                                    </span>
+                                    <span v-if="order.customer_phone" class="text-[11px] text-gray-500">
+                                        {{ order.customer_phone }}
+                                    </span>
+                                </div>
+                                <div v-else>
+                                    {{ textShortener(order.customer.name, 20) }}
+                                </div>
                             </td>
                             <td class="db-table-body-td">{{ order.total_amount_price }}</td>
                             <td class="db-table-body-td">

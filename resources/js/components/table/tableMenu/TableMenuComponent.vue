@@ -3,6 +3,44 @@
         <div class="container">
             <LoadingComponent :props="loading" />
 
+            <!-- Room Order Mode: Large Notice Text Only -->
+            <div v-if="$route.query.order_type === 'room'"
+                class="mb-6 py-4 px-4 sm:py-5 sm:px-6 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xs text-center">
+                <h2 class="text-base sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight leading-relaxed">
+                    {{ $t('label.room_order_large_notice') }}
+                </h2>
+            </div>
+
+            <!-- Regular Table Dining Mode: Top Resort & Table Navigation Strip -->
+            <div v-else
+                class="mb-5 p-3 sm:p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-xs flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-lg flex-shrink-0">
+                        <i class="lab lab-site"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs sm:text-sm font-bold text-gray-800 dark:text-gray-100 leading-tight">Garden Palace Resort Sylhet</h4>
+                        <span class="text-[11px] text-gray-500 dark:text-gray-400">
+                            {{ $t('label.dining_table') }}: <b class="text-primary font-bold">{{ table.name || 'Table 1' }}</b>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <router-link :to="{ name: 'resort.landing' }"
+                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-primary bg-primary/10 hover:bg-primary hover:text-white transition shadow-2xs">
+                        <i class="lab lab-site text-xs"></i>
+                        <span>{{ $t('menu.resort_website') }}</span>
+                    </router-link>
+
+                    <router-link :to="logged ? '/admin/dashboard' : '/login'"
+                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white transition shadow-2xs">
+                        <i :class="logged ? 'lab lab-dashboard' : 'lab lab-lock'" class="text-xs"></i>
+                        <span>{{ logged ? $t('menu.dashboard') : ($t('label.login') || 'Login') }}</span>
+                    </router-link>
+                </div>
+            </div>
+
             <div class="swiper mb-7 menu-swiper" v-if="categories.length > 1">
                 <Swiper :speed="1000" slidesPerView="auto" :spaceBetween="16" class="menu-slides" dir="ltr">
                     <SwiperSlide class="!w-fit relative" v-for="(category, index) in categories" :key="category"
@@ -255,6 +293,12 @@ export default {
         },
         paymentMethod: function () {
             return this.$store.getters['tableCart/paymentMethod'];
+        },
+        table: function () {
+            return this.$store.getters['tableCart/table'] || {};
+        },
+        logged: function () {
+            return !!this.$store.getters.authStatus;
         }
     },
     mounted() {

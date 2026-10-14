@@ -1,0 +1,2669 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden Palace Resort Sylhet | গার্ডেন প্যালেস রিসোর্ট সিলেট</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Hind Siliguri', 'Playfair Display', sans-serif;
+            background-color: #f9f7f2;
+            color: #2c2c2c;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            transition: 0.3s;
+        }
+
+        h1, h2, h3, .logo { font-family: 'Playfair Display', 'Hind Siliguri', serif; }
+
+        /* ---------- Top Bar ---------- */
+        .top-bar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            background: #0f1a12;
+            color: #d0c8b0;
+            padding: 7px 4%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            z-index: 1001;
+            border-bottom: 1px solid #2e4a2e;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .top-bar-left a {
+            color: #d0c8b0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.3s;
+        }
+
+        .top-bar-left a:hover { color: #c9a34e; }
+        .top-bar-left i { color: #c9a34e; }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .top-bar-right span {
+            color: #c9a34e;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .top-bar-right a {
+            color: #d0c8b0;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(201, 163, 78, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .top-bar-right a:hover {
+            background: #c9a34e;
+            color: #1e2b1e;
+            transform: translateY(-2px);
+        }
+
+        /* ---------- Navbar ---------- */
+        .navbar {
+            position: fixed;
+            top: 36px; left: 0;
+            width: 100%;
+            background: rgba(10, 40, 20, 0.95);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 4%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            color: #f5e6c8;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .logo i { color: #c9a34e; margin-right: 8px; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #f0f0e0;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 4px;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: #c9a34e;
+            border-bottom-color: #c9a34e;
+        }
+
+        .lang-toggle {
+            background: #c9a34e;
+            color: #1e2b1e;
+            border: 2px solid #c9a34e;
+            padding: 7px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        .lang-toggle:hover {
+            background: transparent;
+            color: #c9a34e;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.6rem;
+            color: #f5e6c8;
+            cursor: pointer;
+        }
+
+        /* ---------- Slider ---------- */
+        .slider {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .slide.active { opacity: 1; }
+
+        .slide::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 20, 10, 0.55);
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 900px;
+            padding: 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-content h1 {
+            font-size: 3.2rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .slide-content p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #c9a34e;
+            color: #1e2b1e;
+            padding: 12px 30px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: 0.3s;
+            border: 2px solid #c9a34e;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        .btn:hover { background: transparent; color: #c9a34e; }
+
+        .btn-outline {
+            background: transparent;
+            color: #c9a34e;
+            margin-left: 10px;
+        }
+
+        .btn-outline:hover { background: #c9a34e; color: #1e2b1e; }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+        }
+
+        .slider-dots .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .slider-dots .dot.active {
+            background: #c9a34e;
+            transform: scale(1.2);
+            border-color: #fff;
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(201, 163, 78, 0.7);
+            color: #1e2b1e;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.2rem;
+            border: none;
+        }
+
+        .slider-arrow:hover {
+            background: #c9a34e;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-arrow.prev { left: 25px; }
+        .slider-arrow.next { right: 25px; }
+
+        /* ---------- Section Common ---------- */
+        section { padding: 80px 8%; }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.4rem;
+            margin-bottom: 15px;
+            color: #1e3a2e;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: #c9a34e;
+            margin: 12px auto 0;
+            border-radius: 2px;
+        }
+
+        .section-sub {
+            text-align: center;
+            color: #5a5a4a;
+            margin-bottom: 50px;
+            font-size: 1.05rem;
+        }
+
+        /* ================================================
+           ABOUT SECTION - MERGED IMAGE + EVENTS SLIDER
+           ================================================ */
+        .about-wrap {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 55px;
+        }
+
+        .about-img {
+            flex: 1 1 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.15);
+        }
+
+        .about-img img { width: 100%; height: 100%; display: block; object-fit: cover; }
+
+        .about-text { flex: 1 1 400px; }
+
+        .about-text h3 { font-size: 1.9rem; color: #1e3a2e; margin-bottom: 20px; }
+
+        .about-text p { margin-bottom: 18px; color: #3a3a2e; }
+
+        .about-features {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .about-features span {
+            background: #e8e0d0;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 500;
+            color: #1e3a2e;
+            font-size: 0.9rem;
+        }
+
+        /* Merged About Events Slider */
+        .about-merged-slider {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.18);
+            background: #1e2b1e;
+            margin-top: 20px;
+        }
+
+        .about-merged-track {
+            display: flex;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .about-merged-slide {
+            min-width: 100%;
+            position: relative;
+            height: 540px;
+            display: flex;
+            align-items: stretch;
+            overflow: hidden;
+        }
+
+        /* Split layout: image left, content right */
+        .about-merged-slide .slide-img {
+            position: relative;
+            flex: 1 1 55%;
+            overflow: hidden;
+        }
+
+        .about-merged-slide .slide-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 7s ease;
+        }
+
+        .about-merged-slide.active .slide-img img {
+            transform: scale(1.1);
+        }
+
+        .about-merged-slide .slide-img::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 70%, rgba(30,43,30,0.85) 100%);
+        }
+
+        .about-merged-slide .slide-info {
+            flex: 1 1 45%;
+            background: linear-gradient(160deg, #1e2b1e 0%, #2e4a2e 100%);
+            color: white;
+            padding: 55px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-merged-slide .slide-info::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(201, 163, 78, 0.08);
+        }
+
+        .about-merged-slide .slide-info::after {
+            content: '';
+            position: absolute;
+            bottom: -60px;
+            left: -30px;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: rgba(201, 163, 78, 0.06);
+        }
+
+        .about-merged-tag {
+            display: inline-block;
+            background: #c9a34e;
+            color: #1e2b1e;
+            padding: 7px 20px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+            width: fit-content;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(201, 163, 78, 0.3);
+        }
+
+        .about-merged-slide .slide-info h3 {
+            font-size: 2rem;
+            margin-bottom: 18px;
+            color: #f5e6c8;
+            line-height: 1.25;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-merged-slide .slide-info p {
+            font-size: 1rem;
+            color: #d0c8b0;
+            margin-bottom: 28px;
+            font-weight: 300;
+            line-height: 1.7;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-merged-meta {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            padding-top: 20px;
+            border-top: 1px solid rgba(201, 163, 78, 0.25);
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-merged-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.92rem;
+            color: #c9a34e;
+            font-weight: 500;
+        }
+
+        .about-merged-meta i {
+            font-size: 1rem;
+        }
+
+        /* Slider Navigation */
+        .about-merged-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 6;
+            background: rgba(201, 163, 78, 0.9);
+            color: #1e2b1e;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.15rem;
+            border: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .about-merged-nav:hover {
+            background: #c9a34e;
+            transform: translateY(-50%) scale(1.12);
+        }
+
+        .about-merged-nav.prev { left: 20px; }
+        .about-merged-nav.next { right: 20px; }
+
+        .about-merged-counter {
+            position: absolute;
+            top: 22px;
+            left: 22px;
+            z-index: 6;
+            background: rgba(15, 26, 18, 0.75);
+            color: #c9a34e;
+            padding: 7px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(201, 163, 78, 0.3);
+        }
+
+        .about-merged-dots {
+            position: absolute;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 6;
+            display: flex;
+            gap: 9px;
+            background: rgba(15, 26, 18, 0.55);
+            padding: 10px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(6px);
+        }
+
+        .about-merged-dots .am-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.45);
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1.5px solid transparent;
+        }
+
+        .about-merged-dots .am-dot.active {
+            background: #c9a34e;
+            transform: scale(1.3);
+            border-color: #fff;
+        }
+
+        /* ---------- Photo Gallery ---------- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            height: 240px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover { transform: scale(1.02); }
+
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+
+        .gallery-item:hover img { transform: scale(1.1); }
+
+        /* ---------- Video Gallery ---------- */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .video-card {
+            background: #1e2b1e;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+
+        .video-card iframe { width: 100%; height: 200px; border: none; display: block; }
+
+        .video-card p {
+            padding: 14px 18px;
+            color: #f0ead0;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* ---------- Facebook Page Section ---------- */
+        .facebook-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+            background: white;
+            border-radius: 28px;
+            padding: 45px 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border: 1px solid #e8e0d0;
+        }
+
+        .facebook-text { flex: 1 1 320px; }
+
+        .facebook-text h3 {
+            font-size: 1.9rem;
+            color: #1e3a2e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .facebook-text h3 i { color: #1877f2; font-size: 2.2rem; }
+
+        .facebook-text p { color: #5a5a4a; margin-bottom: 22px; font-size: 1rem; }
+
+        .facebook-stats { display: flex; gap: 25px; margin-bottom: 25px; flex-wrap: wrap; }
+
+        .facebook-stats div { text-align: center; }
+
+        .facebook-stats .num {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #c9a34e;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .facebook-stats .label { font-size: 0.85rem; color: #7a7a6a; }
+
+        .fb-follow-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #1877f2;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(24, 119, 242, 0.3);
+        }
+
+        .fb-follow-btn:hover {
+            background: #0d5bc4;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(24, 119, 242, 0.4);
+        }
+
+        .facebook-embed { flex: 1 1 320px; display: flex; justify-content: center; }
+
+        .facebook-embed iframe {
+            width: 100%;
+            max-width: 340px;
+            height: 420px;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+        }
+
+        /* ---------- Partners Section ---------- */
+        .partners-intro {
+            max-width: 800px;
+            margin: 0 auto 50px;
+            text-align: center;
+            color: #5a5a4a;
+            font-size: 1.02rem;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .partner-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 25px;
+            text-align: center;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.07);
+            transition: 0.3s;
+            border: 1px solid #e8e0d0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .partner-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 22px 40px rgba(0,0,0,0.15);
+            border-color: #c9a34e;
+        }
+
+        .partner-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e3a2e 0%, #2e4a2e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c9a34e;
+            font-size: 2.3rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 18px;
+            border: 3px solid #c9a34e;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            letter-spacing: 1px;
+        }
+
+        .partner-card h4 {
+            font-size: 1.15rem;
+            color: #1e3a2e;
+            margin-bottom: 8px;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+        }
+
+        .partner-card .partner-type {
+            color: #c9a34e;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .partner-card .partner-desc {
+            color: #5a5a4a;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        /* ---------- Our Team ---------- */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 30px;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: 0.3s;
+            border: 1px solid #e8e0d0;
+        }
+
+        .team-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 22px 40px rgba(0,0,0,0.15);
+        }
+
+        .team-card img { width: 100%; height: 260px; object-fit: cover; }
+
+        .team-card h4 { margin: 18px 0 6px; font-size: 1.25rem; color: #1e3a2e; }
+
+        .team-card .role { color: #c9a34e; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px; }
+
+        .team-card p { padding: 0 18px 20px; color: #5a5a4a; font-size: 0.9rem; }
+
+        .team-social { padding: 0 0 20px; display: flex; justify-content: center; gap: 14px; font-size: 1.1rem; }
+
+        .team-social a { color: #1e3a2e; transition: 0.3s; }
+
+        .team-social a:hover { color: #c9a34e; transform: scale(1.2); }
+
+        /* ---------- Latest Events ---------- */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            transition: 0.3s;
+            border: 1px solid #e8e0d0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 22px 40px rgba(0,0,0,0.15);
+        }
+
+        .event-img { position: relative; height: 200px; overflow: hidden; }
+
+        .event-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+
+        .event-card:hover .event-img img { transform: scale(1.1); }
+
+        .event-date {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #c9a34e;
+            color: #1e2b1e;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-align: center;
+            line-height: 1.2;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .event-date span { display: block; font-size: 1.3rem; }
+
+        .event-body { padding: 22px 24px 25px; flex: 1; display: flex; flex-direction: column; }
+
+        .event-body h4 { font-size: 1.3rem; color: #1e3a2e; margin-bottom: 10px; }
+
+        .event-body .event-meta {
+            display: flex;
+            gap: 18px;
+            color: #7a7a6a;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .event-body .event-meta i { color: #c9a34e; margin-right: 5px; }
+
+        .event-body p { color: #5a5a4a; font-size: 0.92rem; margin-bottom: 18px; flex: 1; }
+
+        .event-btn {
+            align-self: flex-start;
+            background: transparent;
+            color: #1e3a2e;
+            border: 2px solid #1e3a2e;
+            padding: 8px 22px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .event-btn:hover { background: #1e3a2e; color: white; }
+
+        /* ---------- Membership ---------- */
+        .membership-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .membership-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            transition: 0.3s;
+            border: 2px solid #e8e0d0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .membership-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.15);
+        }
+
+        .membership-card.featured {
+            border-color: #c9a34e;
+            background: linear-gradient(160deg, #fffdf7 0%, #faf3e0 100%);
+        }
+
+        .membership-card.featured::before {
+            content: '⭐ POPULAR';
+            position: absolute;
+            top: 18px;
+            right: -38px;
+            background: #c9a34e;
+            color: #1e2b1e;
+            padding: 6px 45px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transform: rotate(45deg);
+            letter-spacing: 1px;
+        }
+
+        .membership-card .plan-icon { font-size: 2.8rem; color: #c9a34e; margin-bottom: 18px; }
+
+        .membership-card h4 { font-size: 1.5rem; color: #1e3a2e; margin-bottom: 8px; }
+
+        .membership-card .price {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #c9a34e;
+            margin: 15px 0 5px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .membership-card .price small { font-size: 0.95rem; color: #7a7a6a; font-weight: 400; }
+
+        .membership-card ul { list-style: none; margin: 25px 0; text-align: left; }
+
+        .membership-card ul li {
+            padding: 9px 0;
+            color: #3a3a2e;
+            font-size: 0.95rem;
+            border-bottom: 1px dashed #e8e0d0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .membership-card ul li i { color: #c9a34e; font-size: 0.9rem; min-width: 18px; }
+
+        .membership-btn {
+            display: inline-block;
+            width: 100%;
+            background: #1e3a2e;
+            color: white;
+            padding: 13px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: 0.3s;
+            border: 2px solid #1e3a2e;
+        }
+
+        .membership-btn:hover {
+            background: #c9a34e;
+            color: #1e2b1e;
+            border-color: #c9a34e;
+        }
+
+        /* ---------- Booking ---------- */
+        .booking-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 24px;
+            padding: 35px 30px;
+            flex: 1 1 380px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.08);
+            border: 1px solid #e2dcc8;
+        }
+
+        .booking-card h3 {
+            font-size: 1.7rem;
+            color: #1e3a2e;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .booking-card h3 i { color: #c9a34e; }
+
+        .form-group { margin-bottom: 18px; }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #d6cfb8;
+            border-radius: 14px;
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 0.95rem;
+            background: #fcfaf5;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #c9a34e;
+            box-shadow: 0 0 0 3px rgba(201, 163, 78, 0.2);
+        }
+
+        .form-group textarea { resize: vertical; min-height: 80px; }
+
+        .btn-submit {
+            width: 100%;
+            background: #1e3a2e;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        .btn-submit:hover { background: #c9a34e; color: #1e2b1e; }
+
+        /* ---------- Food Order ---------- */
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 45px;
+        }
+
+        .food-item {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            transition: 0.3s;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .food-item:hover { transform: translateY(-6px); }
+
+        .food-item img { width: 100%; height: 170px; object-fit: cover; }
+
+        .food-item h4 { margin: 15px 0 8px; font-size: 1.2rem; color: #1e3a2e; }
+
+        .food-item p { color: #c9a34e; font-weight: 700; font-size: 1.1rem; }
+
+        .food-order-form {
+            background: white;
+            border-radius: 24px;
+            padding: 35px 30px;
+            max-width: 650px;
+            margin: 0 auto;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.08);
+            border: 1px solid #e2dcc8;
+        }
+
+        .food-order-form h3 {
+            font-size: 1.7rem;
+            color: #1e3a2e;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .food-order-form .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .food-order-form .form-row .form-group { flex: 1 1 200px; }
+
+        /* ---------- Contact ---------- */
+        .contact-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            background: #1e2b1e;
+            border-radius: 30px;
+            padding: 50px 40px;
+            color: #f0ead0;
+        }
+
+        .contact-info { flex: 1 1 280px; }
+
+        .contact-info h3 { font-size: 1.9rem; color: #c9a34e; margin-bottom: 25px; }
+
+        .contact-info p {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+        }
+
+        .contact-info i { color: #c9a34e; width: 24px; font-size: 1.2rem; }
+
+        .map-container {
+            flex: 2 1 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            min-height: 300px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+
+        .map-container iframe { width: 100%; height: 100%; min-height: 300px; border: 0; }
+
+        /* ---------- Footer ---------- */
+        footer {
+            background: #0f1a12;
+            color: #b0a88a;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 0.9rem;
+        }
+
+        footer i { color: #c9a34e; }
+
+        .credit-line {
+            margin-top: 12px;
+            padding-top: 14px;
+            border-top: 1px solid #2e4a2e;
+            font-size: 0.9rem;
+        }
+
+        .credit-line a {
+            color: #c9a34e;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .credit-line a:hover {
+            color: #f5e6c8;
+            text-decoration: underline;
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 1200px) {
+            .nav-links { gap: 9px; }
+            .nav-links a { font-size: 0.78rem; }
+        }
+
+        @media (max-width: 992px) {
+            .slide-content h1 { font-size: 2.4rem; }
+            section { padding: 60px 5%; }
+            .logo { font-size: 1.05rem; }
+            .top-bar { font-size: 0.75rem; }
+            .about-merged-slide { height: 480px; }
+            .about-merged-slide .slide-info { padding: 40px 35px; }
+            .about-merged-slide .slide-info h3 { font-size: 1.6rem; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { top: 60px; }
+            .top-bar {
+                flex-direction: column;
+                gap: 5px;
+                padding: 6px 3%;
+                text-align: center;
+            }
+            .top-bar-left { gap: 12px; justify-content: center; }
+            .top-bar-right { justify-content: center; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                background: #0f1a12;
+                position: absolute;
+                top: 66px;
+                left: 0;
+                width: 100%;
+                padding: 25px 5%;
+                gap: 18px;
+                border-top: 1px solid #2e4a2e;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            .nav-links.show { display: flex; }
+            .nav-links a { font-size: 1rem; }
+            .menu-toggle { display: block; }
+            .slide-content h1 { font-size: 1.9rem; }
+            .slide-content p { font-size: 0.95rem; }
+            .btn { padding: 10px 22px; font-size: 0.9rem; }
+            .btn-outline { margin-left: 0; margin-top: 10px; }
+            .section-title { font-size: 1.8rem; }
+            .contact-wrap { padding: 30px 20px; }
+            .about-wrap { gap: 30px; }
+            .slider-arrow { width: 36px; height: 36px; font-size: 1rem; }
+            .slider-arrow.prev { left: 10px; }
+            .slider-arrow.next { right: 10px; }
+            .facebook-wrap { padding: 30px 22px; }
+
+            /* Merged slider mobile - stacked layout */
+            .about-merged-slide {
+                height: auto;
+                flex-direction: column;
+            }
+            .about-merged-slide .slide-img {
+                flex: none;
+                height: 280px;
+                width: 100%;
+            }
+            .about-merged-slide .slide-img::after {
+                background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(30,43,30,0.6) 100%);
+            }
+            .about-merged-slide .slide-info {
+                flex: none;
+                padding: 32px 25px 90px;
+            }
+            .about-merged-slide .slide-info h3 { font-size: 1.4rem; }
+            .about-merged-slide .slide-info p { font-size: 0.92rem; }
+            .about-merged-nav { width: 38px; height: 38px; font-size: 1rem; }
+            .about-merged-nav.prev { left: 10px; }
+            .about-merged-nav.next { right: 10px; }
+            .about-merged-counter { top: 14px; left: 14px; font-size: 0.78rem; padding: 5px 14px; }
+            .about-merged-dots { bottom: 14px; padding: 8px 16px; }
+        }
+
+        @media (max-width: 480px) {
+            .slide-content h1 { font-size: 1.5rem; }
+            .booking-card, .food-order-form { padding: 25px 18px; }
+            .lang-toggle { padding: 5px 12px; font-size: 0.8rem; }
+            .membership-card { padding: 30px 22px; }
+            .top-bar-left { font-size: 0.7rem; gap: 8px; }
+            .top-bar-right a { width: 22px; height: 22px; font-size: 0.7rem; }
+            .about-merged-slide .slide-img { height: 220px; }
+            .about-merged-slide .slide-info { padding: 25px 20px 85px; }
+            .about-merged-slide .slide-info h3 { font-size: 1.2rem; }
+            .about-merged-tag { font-size: 0.72rem; padding: 5px 14px; }
+            .about-merged-meta { gap: 15px; }
+            .about-merged-meta span { font-size: 0.82rem; }
+            .about-merged-nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== TOP BAR (Contact & Social) ========== -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <a href="tel:+8801711123456">
+                <i class="fas fa-phone-alt"></i>
+                <span>+৮৮০ ১৭১১-১২৩৪৫৬</span>
+            </a>
+            <a href="mailto:info@gardenpalaceresortsylhet.com">
+                <i class="fas fa-envelope"></i>
+                <span>info@gardenpalaceresortsylhet.com</span>
+            </a>
+            <a href="#contact">
+                <i class="fas fa-map-marker-alt"></i>
+                <span data-key="topLocation">সিলেট, বাংলাদেশ</span>
+            </a>
+        </div>
+        <div class="top-bar-right">
+            <span data-key="topFollow">ফলো করুন:</span>
+            <a href="https://facebook.com" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://youtube.com" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://wa.me/8801711123456" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://twitter.com" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+    </div>
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-tree"></i> <span data-key="logoText">গার্ডেন প্যালেস রিসোর্ট সিলেট</span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home" data-key="navHome">হোম</a></li>
+            <li><a href="#about" data-key="navAbout">পরিচিতি</a></li>
+            <li><a href="#gallery" data-key="navGallery">ফটো গ্যালারি</a></li>
+            <li><a href="#videos" data-key="navVideos">ভিডিও</a></li>
+            <li><a href="#facebook" data-key="navFacebook">ফেসবুক</a></li>
+            <li><a href="#partners" data-key="navPartners">পার্টনার</a></li>
+            <li><a href="#team" data-key="navTeam">আমাদের টিম</a></li>
+            <li><a href="#events" data-key="navEvents">সর্বশেষ ইভেন্ট</a></li>
+            <li><a href="#membership" data-key="navMembership">মেম্বারশিপ</a></li>
+            <li><a href="#booking" data-key="navBooking">রিসর্ট বুকিং</a></li>
+            <li><a href="#party" data-key="navParty">পার্টি বুকিং</a></li>
+            <li><a href="#food" data-key="navFood">খাবার অর্ডার</a></li>
+            <li><a href="#contact" data-key="navContact">যোগাযোগ</a></li>
+        </ul>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="lang-toggle" id="langToggle">
+                <i class="fas fa-globe"></i>
+                <span id="langLabel">English</span>
+            </button>
+            <div class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========== SLIDER (6 SLIDES) ========== -->
+    <div class="slider" id="home">
+        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80');">
+            <div class="slide-content">
+                <h1 data-key="slide1Title">গার্ডেন প্যালেস রিসোর্ট সিলেট</h1>
+                <p data-key="slide1Sub">সিলেটের সবুজ-শ্যামল প্রকৃতির মাঝে একটি স্বর্গীয় আশ্রয়</p>
+                <a href="#booking" class="btn" data-key="slide1Btn1">এখনই বুক করুন</a>
+                <a href="#about" class="btn btn-outline" data-key="slide1Btn2">আরও জানুন</a>
+            </div>
+        </div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1600&q=80');">
+            <div class="slide-content">
+                <h1 data-key="slide2Title">বিলাসবহুল রিসর্ট অভিজ্ঞতা</h1>
+                <p data-key="slide2Sub">আধুনিক সুবিধা ও প্রাকৃতিক সৌন্দর্যের নিখুঁত মিশ্রণ</p>
+                <a href="#booking" class="btn" data-key="slide2Btn">রুম দেখুন</a>
+            </div>
+        </div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80');">
+            <div class="slide-content">
+                <h1 data-key="slide3Title">সুস্বাদু খাবার ও রেস্টুরেন্ট</h1>
+                <p data-key="slide3Sub">স্থানীয় ও আন্তর্জাতিক খাবারের অসাধারণ স্বাদ</p>
+                <a href="#food" class="btn" data-key="slide3Btn">খাবার অর্ডার করুন</a>
+            </div>
+        </div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1600&q=80');">
+            <div class="slide-content">
+                <h1 data-key="slide4Title">অসাধারণ সুইমিং পুল</h1>
+                <p data-key="slide4Sub">স্বচ্ছ পানিতে সাঁতার কেটে প্রশান্তির অনুভূতি উপভোগ করুন</p>
+                <a href="#gallery" class="btn" data-key="slide4Btn">গ্যালারি দেখুন</a>
+            </div>
+        </div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=1600&q=80');">
+            <div class="slide-content">
+                <h1 data-key="slide5Title">বিশেষ ইভেন্ট ও পার্টি ভেন্যু</h1>
+                <p data-key="slide5Sub">জন্মদিন, বিবাহবার্ষিকী বা কর্পোরেট ইভেন্টের নিখুঁত আয়োজন</p>
+                <a href="#party" class="btn" data-key="slide5Btn">পার্টি বুক করুন</a>
+            </div>
+        </div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1600&q=80');">
+            <div class="slide-content">
+                <h1 data-key="slide6Title">প্রকৃতির মনোরম পরিবেশ</h1>
+                <p data-key="slide6Sub">সবুজ বাগান, পাহাড় ও নদীর অপরূপ সৌন্দর্যে ঘেরা</p>
+                <a href="#membership" class="btn" data-key="slide6Btn">মেম্বার হোন</a>
+            </div>
+        </div>
+
+        <button class="slider-arrow prev" id="prevSlide"><i class="fas fa-chevron-left"></i></button>
+        <button class="slider-arrow next" id="nextSlide"><i class="fas fa-chevron-right"></i></button>
+        <div class="slider-dots" id="sliderDots"></div>
+    </div>
+
+    <!-- ========== ABOUT (MERGED IMAGE + 10 EVENTS SLIDER) ========== -->
+    <section id="about">
+        <h2 class="section-title" data-key="aboutTitle">আমাদের সম্পর্কে</h2>
+        <p class="section-sub" data-key="aboutSub">প্রকৃতির কোলে একটি অনন্য আতিথেয়তা</p>
+
+        <!-- About Top Row -->
+        <div class="about-wrap">
+            <div class="about-img">
+                <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&q=80" alt="Resort">
+            </div>
+            <div class="about-text">
+                <h3 data-key="aboutHead">গার্ডেন প্যালেস রিসোর্ট সিলেট</h3>
+                <p data-key="aboutP1">সিলেট শহরের প্রাণকেন্দ্র থেকে মাত্র কয়েক মিনিট দূরে অবস্থিত গার্ডেন প্যালেস রিসোর্ট সিলেট। চারপাশে সবুজ চা বাগান, পাহাড় ও নদীর মনোরম দৃশ্য। আমরা আধুনিক সুবিধা ও ঐতিহ্যবাহী আতিথেয়তার এক অনন্য মিশ্রণ প্রদান করি।</p>
+                <p data-key="aboutP2">আমাদের রিসর্টে রয়েছে বিলাসবহুল কক্ষ, সুইমিং পুল, রেস্টুরেন্ট, কনফারেন্স হল, পার্টি ভেন্যু এবং বিশাল সবুজ বাগান। পরিবার, দম্পতি বা কর্পোরেট ইভেন্টের জন্য এটি আদর্শ স্থান।</p>
+                <div class="about-features">
+                    <span data-key="feat1"><i class="fas fa-wifi"></i> ফ্রি ওয়াইফাই</span>
+                    <span data-key="feat2"><i class="fas fa-swimmer"></i> সুইমিং পুল</span>
+                    <span data-key="feat3"><i class="fas fa-utensils"></i> রেস্টুরেন্ট</span>
+                    <span data-key="feat4"><i class="fas fa-parking"></i> পার্কিং</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             MERGED SLIDER: IMAGE + 10 EVENTS (Side-by-Side)
+             ============================================ -->
+        <div class="about-merged-slider" id="aboutMergedSlider">
+            <div class="about-merged-track" id="aboutMergedTrack">
+
+                <!-- Event 1 -->
+                <div class="about-merged-slide active">
+                    <div class="slide-img">
+                        <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=1200&q=80" alt="New Year">
+                    </div>
+                    <div class="slide-info">
+                        <span class="about-merged-tag" data-key="am1Tag">নববর্ষ ২০২৬</span>
+                        <h3 data-key="am1Title">নববর্ষ সেলিব্রেশন</h3>
+                        <p data-key="am1Desc">সাংস্কৃতিক অনুষ্ঠান, লাইভ মিউজিক, বিশেষ ডিনার ও আতশবাজি সহ দুর্দান্ত নববর্ষ উদযাপন।</p>
+                        <div class="about-merged-meta">
+                            <span><i class="fas fa-calendar"></i> ৩১ ডিসেম্বর</span>
+                            <span><i class="fas fa-users"></i> ৫০০+ অতিথি</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 2 -->
+                <div class="about-merged-slide">
+                    <div class="slide-img">
+                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80" alt="Food Fest">
+                    </div>
+                    <div class="slide-info">
+                        <span class="about-merged-tag" data-key="am2Tag">ফুড ফেস্ট</span>
+                        <h3 data-key="am2Title">আন্তর্জাতিক ফুড ফেস্টিভ্যাল</h3>
+                        <p data-key="am2Desc">স্থানীয় ও আন্তর্জাতিক ৫০+ খাবারের স্বাদ গ্রহণের অনন্য সুযোগ, লাইভ কুকিং শো সহ।</p>
+                        <div class="about-merged-meta">
+                            <span><i class="fas fa-calendar"></i> ২২ ডিসেম্বর</span>
+                            <span><i class="fas fa-users"></i> ৩০০+ অতিথি</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 3 -->
+                <div class="about-merged-slide">
+                    <div class="slide-img">
+                        <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200&q=80" alt="Wedding">
+                    </div>
+                    <div class="slide-info">
+                        <span class="about-merged-tag" data-key="am3Tag">ওয়েডিং</span>
+                        <h3 data-key="am3Title">সিলেট রয়্যাল ওয়েডিং</h3>
+                        <p data-key="am3Desc">রিসোর্টের মনোরম পরিবেশে জমকালো বিয়ে ও বিবাহবার্ষিকী আয়োজনের বিশেষ আয়োজন।</p>
+                        <div class="about-merged-meta">
+                            <span><i class="fas fa-calendar"></i> ১৫ নভেম্বর</span>
+                            <span><i class="fas fa-users"></i> ৮০০+ অতিথি</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 4 -->
+                <div class="about-merged-slide">
+                    <div class="slide-img">
+                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200&q=80" alt="Concert">
+                    </div>
+                    <div class="slide-info">
+                        <span class="about-merged-tag" data-key="am4Tag">কনসার্ট</span>
+                        <h3 data-key="am4Title">লাইভ মিউজিক নাইট</h3>
+                        <p data-key="am4Desc">দেশের জনপ্রিয় শিল্পীদের পরিবেশনায় জমকালো লাইভ কনসার্ট ও সাংস্কৃতিক সন্ধ্যা।</p>
+                        <div class="about-merged-meta">
+                            <span><i class="fas fa-calendar"></i> ১০ অক্টোবর</span>
+                            <span><i class="fas fa-users"></i> ৬০০+ অতিথি</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 5 -->
+                <div class="about-merged-slide">
+                    <div class="slide-img">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80" alt="Corporate">
+                    </div>
+                    <div class="slide-info">
+                        <span class="about-merged-tag" data-key="am5Tag">কর্পোরেট</span>
+                        <h3 data-key="am5Title">কর্পোরেট কনফারেন্স</h3>
+                        <p data-key="am5Desc">আধুনিক সুবিধাসম্পন্ন কনফারেন্স হল, প্রজেক্টর, সাউন্ড সিস্টেম ও ক্যাটারিং সেবা সহ।</p>
+                        <div class="about-merged-meta">
+                            <span><i class="fas fa-calendar"></i> ৫ সেপ্টেম্বর</span>
+                            <span><i class="fas fa-users"></i> ২০০+ প্রতিনিধি</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 6 -->
+                <div class="about-merged-slide">
+                    <div class="slide-img">
+                        <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1200&q=80" alt="Birthday">
+                    </div>
+                    <div class="slide-info">
+                        <span class="about-merged-tag" data-key="am6Tag">জন্মদিন</span>
+                        <h3 data-key="am6Title">শিশুদের জন্মদিন উদযাপন</h3>
+                        <p data-key="am6Desc">রঙিন সাজসজ্জা, কেক, বেলুন, গেমস ও শিশুদের জন্য বিশেষ আয়োজনসহ স্মরণীয় জন্মদিন।</p>
+                        <div class="about-merged-meta">
+                            <span><i class="fas fa-calendar"></i> ২০ আগস্ট</span>
+                            <span><i class="fas fa-users"></i> ১০০+ অতিথি</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 7 -->
+                <div class="about-merged-slide">
+                    <div class="slide-img">
+                        <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1200&q=80" alt="Sports">
+                    </div>
+                    <div class="slide-info">
+                        <span class="about-merged-tag" data-key="am7Tag">স্পোর্টস</span>
+                        <h3 data-key="am7Title">বার্ষিক স্পোর্টস ডে</h3>
+                        <p data-key="am7Desc">বিভিন্ন ইনডোর ও আউটডোর খেলাধুলা, ট্রফি বিতরণ ও সবার জন্য মনোরম পুরস্কার আয়োজন।</p>
+                        <div class="about-merged-meta">
+                            <span><i class="fas fa-calendar"></i> ১৫ জুলাই</span>
+                            <span><i class="fas fa-users"></i> ৪০০+ অংশগ্রহণকারী</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 8 -->
+                <div class="about-merged-slide">
+                    <div class="slide-img">
+                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80" alt="Garden Party">
+                    </div>
+                    <div class="slide-info">
+                        <span class="about-merged-tag" data-key="am8Tag">গার্ডেন পার্টি</span>
+                        <h3 data-key="am8Title">সমার গার্ডেন পার্টি</h3>
+                        <p data-key="am8Desc">সবুজ বাগানের মাঝে সন্ধ্যার নৈশভোজ, লাইভ মিউজিক ও তারার নিচে অনন্য পার্টির আয়োজন।</p>
+                        <div class="about-merged-meta">
+                            <span><i class="fas fa-calendar"></i> ২৫ জুন</span>
+                            <span><i class="fas fa-users"></i> ২৫০+ অতিথি</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 9 -->
+                <div class="about-merged-slide">
+                    <div class="slide-img">
+                        <img src="https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?w=1200&q=80" alt="Family">
+                    </div>
+                    <div class="slide-info">
+                        <span class="about-merged-tag" data-key="am9Tag">ফ্যামিলি</span>
+                        <h3 data-key="am9Title">ফ্যামিলি গেট-টুগেদার</h3>
+                        <p data-key="am9Desc">পরিবারের সকল সদস্যের জন্য বারবিকিউ, গেমস, পুল অ্যাক্সেস ও সারাদিনের আনন্দ।</p>
+                        <div class="about-merged-meta">
+                            <span><i class="fas fa-calendar"></i> ১০ মে</span>
+                            <span><i class="fas fa-users"></i> ৩০০+ অতিথি</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 10 -->
+                <div class="about-merged-slide">
+                    <div class="slide-img">
+                        <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1200&q=80" alt="Graduation">
+                    </div>
+                    <div class="slide-info">
+                        <span class="about-merged-tag" data-key="am10Tag">গ্র্যাজুয়েশন</span>
+                        <h3 data-key="am10Title">গ্র্যাজুয়েশন সেলিব্রেশন</h3>
+                        <p data-key="am10Desc">শিক্ষার্থীদের কৃতিত্ব উদযাপনে রিসোর্টের বিলাসবহুল পরিবেশে জমকালো আয়োজন।</p>
+                        <div class="about-merged-meta">
+                            <span><i class="fas fa-calendar"></i> ৫ এপ্রিল</span>
+                            <span><i class="fas fa-users"></i> ৩৫০+ অতিথি</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="about-merged-nav prev" id="amPrev"><i class="fas fa-chevron-left"></i></button>
+            <button class="about-merged-nav next" id="amNext"><i class="fas fa-chevron-right"></i></button>
+            <div class="about-merged-counter"><span id="amCurrent">1</span> / 10</div>
+            <div class="about-merged-dots" id="amDots"></div>
+        </div>
+    </section>
+
+    <!-- ========== PHOTO GALLERY ========== -->
+    <section id="gallery" style="background: #f2efe8;">
+        <h2 class="section-title" data-key="galleryTitle">ফটো গ্যালারি</h2>
+        <p class="section-sub" data-key="gallerySub">আমাদের রিসোর্টের কিছু সুন্দর মুহূর্ত</p>
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80" alt="Resort"></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&q=80" alt="Room"></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&q=80" alt="Pool"></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Restaurant"></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80" alt="Garden"></div>
+            <div class="gallery-item"><img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&q=80" alt="Lobby"></div>
+        </div>
+    </section>
+
+    <!-- ========== VIDEO GALLERY ========== -->
+    <section id="videos">
+        <h2 class="section-title" data-key="videoTitle">ভিডিও গ্যালারি</h2>
+        <p class="section-sub" data-key="videoSub">রিসোর্টের পরিবেশ ও সুবিধাগুলো দেখুন</p>
+        <div class="video-grid">
+            <div class="video-card">
+                <iframe src="https://www.youtube.com/embed/1La4QzGeaaQ" title="Resort Tour" allowfullscreen></iframe>
+                <p data-key="vid1">রিসোর্ট ট্যুর</p>
+            </div>
+            <div class="video-card">
+                <iframe src="https://www.youtube.com/embed/6i6V1B6sR8k" title="Swimming Pool" allowfullscreen></iframe>
+                <p data-key="vid2">সুইমিং পুল ও বাগান</p>
+            </div>
+            <div class="video-card">
+                <iframe src="https://www.youtube.com/embed/9No-FiEInLA" title="Restaurant" allowfullscreen></iframe>
+                <p data-key="vid3">রেস্টুরেন্ট ও খাবার</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FACEBOOK PAGE ========== -->
+    <section id="facebook" style="background: #f2efe8;">
+        <h2 class="section-title" data-key="fbSectionTitle">আমাদের ফেসবুক পেজ</h2>
+        <p class="section-sub" data-key="fbSectionSub">আমাদের ফেসবুক পেজে লাইক ও ফলো করে আপডেট পান</p>
+        <div class="facebook-wrap">
+            <div class="facebook-text">
+                <h3><i class="fab fa-facebook-square"></i> <span data-key="fbHead">Garden Palace Resort Sylhet</span></h3>
+                <p data-key="fbDesc">আমাদের অফিসিয়াল ফেসবুক পেজে লাইক দিয়ে থাকুন সব আপডেট, অফার এবং ইভেন্টের খবরের সাথে। আমাদের সাথে যুক্ত হয়ে বিশেষ ছাড় ও ইভেন্টে অংশ নিন।</p>
+                <div class="facebook-stats">
+                    <div>
+                        <div class="num">১৫K+</div>
+                        <div class="label" data-key="fbLikes">লাইক</div>
+                    </div>
+                    <div>
+                        <div class="num">১৮K+</div>
+                        <div class="label" data-key="fbFollowers">ফলোয়ার</div>
+                    </div>
+                    <div>
+                        <div class="num">৪.৮★</div>
+                        <div class="label" data-key="fbRating">রেটিং</div>
+                    </div>
+                </div>
+                <a href="https://facebook.com" target="_blank" class="fb-follow-btn">
+                    <i class="fab fa-facebook-f"></i>
+                    <span data-key="fbFollowBtn">পেজ লাইক করুন</span>
+                </a>
+            </div>
+            <div class="facebook-embed">
+                <iframe 
+                    src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook&tabs=timeline&width=340&height=420&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" 
+                    width="340" 
+                    height="420" 
+                    style="border:none;overflow:hidden;border-radius:16px;" 
+                    scrolling="no" 
+                    frameborder="0" 
+                    allowfullscreen="true" 
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== PARTNERS SECTION ========== -->
+    <section id="partners">
+        <h2 class="section-title" data-key="partnersTitle">আমাদের পার্টনার</h2>
+        <p class="section-sub" data-key="partnersSub">বিশ্বস্ত প্রতিষ্ঠানসমূহের সাথে আমাদের গৌরবময় অংশীদারিত্ব</p>
+        <p class="partners-intro" data-key="partnersIntro">
+            গার্ডেন প্যালেস রিসোর্ট সিলেট দেশের শীর্ষস্থানীয় বিভিন্ন প্রতিষ্ঠানের সাথে অংশীদারিত্বের মাধ্যমে অতিথিদের সেরা সেবা ও সুবিধা প্রদান করে আসছে। আমাদের সকল পার্টনার প্রতিষ্ঠানসমূহ নিচে তালিকাভুক্ত করা হলো।
+        </p>
+
+        <div class="partners-grid">
+            <div class="partner-card">
+                <div class="partner-logo">BL</div>
+                <h4 data-key="p1Name">বাংলালিংক</h4>
+                <div class="partner-type" data-key="p1Type">টেলিকমিউনিকেশন</div>
+                <p class="partner-desc" data-key="p1Desc">হাই-স্পিড ইন্টারনেট ও কর্পোরেট টেলিকম সেবা প্রদানকারী।</p>
+            </div>
+            <div class="partner-card">
+                <div class="partner-logo">BK</div>
+                <h4 data-key="p2Name">বিকাশ</h4>
+                <div class="partner-type" data-key="p2Type">ডিজিটাল পেমেন্ট</div>
+                <p class="partner-desc" data-key="p2Desc">নিরাপদ ও সহজ ডিজিটাল পেমেন্ট সেবা প্রদানকারী।</p>
+            </div>
+            <div class="partner-card">
+                <div class="partner-logo">GP</div>
+                <h4 data-key="p3Name">গ্রামীণফোন</h4>
+                <div class="partner-type" data-key="p3Type">টেলিকমিউনিকেশন</div>
+                <p class="partner-desc" data-key="p3Desc">দেশের শীর্ষস্থানীয় মোবাইল নেটওয়ার্ক সেবা প্রদানকারী।</p>
+            </div>
+            <div class="partner-card">
+                <div class="partner-logo">SQ</div>
+                <h4 data-key="p4Name">স্কয়ার ফুড</h4>
+                <div class="partner-type" data-key="p4Type">খাদ্য ও পানীয়</div>
+                <p class="partner-desc" data-key="p4Desc">উন্নত মানের খাদ্যপণ্য ও পানীয় সরবরাহকারী প্রতিষ্ঠান।</p>
+            </div>
+            <div class="partner-card">
+                <div class="partner-logo">RC</div>
+                <h4 data-key="p5Name">রেনক্যাট</h4>
+                <div class="partner-type" data-key="p5Type">আতিথেয়তা সেবা</div>
+                <p class="partner-desc" data-key="p5Desc">দেশের অন্যতম সেরা আতিথেয়তা সেবা প্রদানকারী প্রতিষ্ঠান।</p>
+            </div>
+            <div class="partner-card">
+                <div class="partner-logo">UCB</div>
+                <h4 data-key="p6Name">ইউসিবি ব্যাংক</h4>
+                <div class="partner-type" data-key="p6Type">আর্থিক প্রতিষ্ঠান</div>
+                <p class="partner-desc" data-key="p6Desc">কর্পোরেট ব্যাংকিং ও পেমেন্ট সেবা প্রদানকারী।</p>
+            </div>
+            <div class="partner-card">
+                <div class="partner-logo">SP</div>
+                <h4 data-key="p7Name">শীতল স্প্রে</h4>
+                <div class="partner-type" data-key="p7Type">বেভারেজ</div>
+                <p class="partner-desc" data-key="p7Desc">দেশের জনপ্রিয় মিনারেল ওয়াটার ও পানীয় সরবরাহকারী।</p>
+            </div>
+            <div class="partner-card">
+                <div class="partner-logo">ITC</div>
+                <h4 data-key="p8Name">গ্লিসেন আইটি করপোরেশন</h4>
+                <div class="partner-type" data-key="p8Type">টেকনোলজি পার্টনার</div>
+                <p class="partner-desc" data-key="p8Desc">ওয়েব ডেভেলপমেন্ট, সফটওয়্যার ও ডিজিটাল সলিউশন প্রদানকারী।</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== OUR TEAM ========== -->
+    <section id="team" style="background: #f2efe8;">
+        <h2 class="section-title" data-key="teamTitle">আমাদের টিম</h2>
+        <p class="section-sub" data-key="teamSub">আমাদের অভিজ্ঞ ও নিবেদিতপ্রাণ পেশাদার টিম</p>
+        <div class="team-grid">
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80" alt="Team Member">
+                <h4 data-key="team1Name">মোঃ রফিকুল ইসলাম</h4>
+                <div class="role" data-key="team1Role">জেনারেল ম্যানেজার</div>
+                <p data-key="team1Bio">১৫ বছরের অভিজ্ঞতাসম্পন্ন হসপিটালিটি বিশেষজ্ঞ।</p>
+                <div class="team-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80" alt="Team Member">
+                <h4 data-key="team2Name">ফারজানা আক্তার</h4>
+                <div class="role" data-key="team2Role">হেড শেফ</div>
+                <p data-key="team2Bio">আন্তর্জাতিক ও দেশীয় রান্নায় দক্ষ অভিজ্ঞ শেফ।</p>
+                <div class="team-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=80" alt="Team Member">
+                <h4 data-key="team3Name">সাদিয়া হক</h4>
+                <div class="role" data-key="team3Role">ফ্রন্ট ডেস্ক ম্যানেজার</div>
+                <p data-key="team3Bio">অতিথি সেবায় সর্বদা নিবেদিত ও আন্তরিক।</p>
+                <div class="team-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="Team Member">
+                <h4 data-key="team4Name">আরিফুল হাসান</h4>
+                <div class="role" data-key="team4Role">ইভেন্ট কো-অর্ডিনেটর</div>
+                <p data-key="team4Bio">পার্টি ও কর্পোরেট ইভেন্ট আয়োজনে বিশেষজ্ঞ।</p>
+                <div class="team-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== LATEST EVENTS ========== -->
+    <section id="events">
+        <h2 class="section-title" data-key="eventsTitle">সর্বশেষ ইভেন্ট</h2>
+        <p class="section-sub" data-key="eventsSub">আমাদের রিসোর্টে আসন্ন ও সাম্প্রতিক ইভেন্টসমূহ</p>
+        <div class="events-grid">
+            <div class="event-card">
+                <div class="event-img">
+                    <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=600&q=80" alt="Event">
+                    <div class="event-date"><span>১৫</span>ডিসেম্বর</div>
+                </div>
+                <div class="event-body">
+                    <h4 data-key="event1Title">নববর্ষ সেলিব্রেশন ২০২৬</h4>
+                    <div class="event-meta">
+                        <span><i class="fas fa-clock"></i> <span data-key="event1Time">সন্ধ্যা ৭টা</span></span>
+                        <span><i class="fas fa-map-marker-alt"></i> <span data-key="event1Place">মেইন গার্ডেন</span></span>
+                    </div>
+                    <p data-key="event1Desc">সাংস্কৃতিক অনুষ্ঠান, লাইভ মিউজিক, বিশেষ ডিনার ও আতশবাজি সহ নববর্ষ উদযাপন।</p>
+                    <a href="#booking" class="event-btn" data-key="eventBtn">বিস্তারিত</a>
+                </div>
+            </div>
+            <div class="event-card">
+                <div class="event-img">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Event">
+                    <div class="event-date"><span>২২</span>ডিসেম্বর</div>
+                </div>
+                <div class="event-body">
+                    <h4 data-key="event2Title">ফুড ফেস্টিভ্যাল</h4>
+                    <div class="event-meta">
+                        <span><i class="fas fa-clock"></i> <span data-key="event2Time">দুপুর ১২টা - রাত ১০টা</span></span>
+                        <span><i class="fas fa-map-marker-alt"></i> <span data-key="event2Place">রেস্টুরেন্ট টেরেস</span></span>
+                    </div>
+                    <p data-key="event2Desc">স্থানীয় ও আন্তর্জাতিক ৫০+ খাবারের স্বাদ গ্রহণের অনন্য সুযোগ।</p>
+                    <a href="#booking" class="event-btn" data-key="eventBtn">বিস্তারিত</a>
+                </div>
+            </div>
+            <div class="event-card">
+                <div class="event-img">
+                    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80" alt="Event">
+                    <div class="event-date"><span>৩১</span>ডিসেম্বর</div>
+                </div>
+                <div class="event-body">
+                    <h4 data-key="event3Title">কাউন্টডাউন পার্টি</h4>
+                    <div class="event-meta">
+                        <span><i class="fas fa-clock"></i> <span data-key="event3Time">রাত ৯টা</span></span>
+                        <span><i class="fas fa-map-marker-alt"></i> <span data-key="event3Place">পুলসাইড ভেন্যু</span></span>
+                    </div>
+                    <p data-key="event3Desc">DJ, ডান্স, লাইভ কনসার্ট ও বিশেষ নৈশভোজের মাধ্যমে নতুন বছর বরণ।</p>
+                    <a href="#booking" class="event-btn" data-key="eventBtn">বিস্তারিত</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== MEMBERSHIP ========== -->
+    <section id="membership" style="background: #f2efe8;">
+        <h2 class="section-title" data-key="membershipTitle">মেম্বারশিপ প্ল্যান</h2>
+        <p class="section-sub" data-key="membershipSub">আমাদের বিশেষ মেম্বারশিপে যোগ দিয়ে পান অসাধারণ সুবিধা</p>
+        <div class="membership-grid">
+            <div class="membership-card">
+                <div class="plan-icon"><i class="fas fa-leaf"></i></div>
+                <h4 data-key="plan1Name">বেসিক</h4>
+                <div class="price">৳ ৫,০০০ <small>/বছর</small></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> <span data-key="plan1F1">১০% ছাড় সব বুকিংয়ে</span></li>
+                    <li><i class="fas fa-check"></i> <span data-key="plan1F2">ফ্রি ওয়াইফাই</span></li>
+                    <li><i class="fas fa-check"></i> <span data-key="plan1F3">মাসিক নিউজলেটার</span></li>
+                    <li><i class="fas fa-check"></i> <span data-key="plan1F4">সাধারণ পার্কিং</span></li>
+                </ul>
+                <a href="#booking" class="membership-btn" data-key="joinNow">এখনই যোগ দিন</a>
+            </div>
+            <div class="membership-card featured">
+                <div class="plan-icon"><i class="fas fa-crown"></i></div>
+                <h4 data-key="plan2Name">প্রিমিয়াম</h4>
+                <div class="price">৳ ১২,০০০ <small>/বছর</small></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> <span data-key="plan2F1">২৫% ছাড় সব বুকিংয়ে</span></li>
+                    <li><i class="fas fa-check"></i> <span data-key="plan2F2">ফ্রি ব্রেকফাস্ট</span></li>
+                    <li><i class="fas fa-check"></i> <span data-key="plan2F3">ফ্রি সুইমিং পুল অ্যাক্সেস</span></li>
+                    <li><i class="fas fa-check"></i> <span data-key="plan2F4">VIP পার্কিং</span></li>
+                    <li><i class="fas fa-check"></i> <span data-key="plan2F5">প্রায়োরিটি বুকিং</span></li>
+                </ul>
+                <a href="#booking" class="membership-btn" data-key="joinNow">এখনই যোগ দিন</a>
+            </div>
+            <div class="membership-card">
+                <div class="plan-icon"><i class="fas fa-gem"></i></div>
+                <h4 data-key="plan3Name">ভিআইপি</h4>
+                <div class="price">৳ ২৫,০০০ <small>/বছর</small></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> <span data-key="plan3F1">৪০% ছাড় সব বুকিংয়ে</span></li>
+                    <li><i class="fas fa-check"></i> <span data-key="plan3F2">ফ্রি সব খাবার ও ড্রিংকস</span></li>
+                    <li><i class="fas fa-check"></i> <span data-key="plan3F3">ফ্রি স্পা ও জিম অ্যাক্সেস</span></li>
+                    <li><i class="fas fa-check"></i> <span data-key="plan3F4">ব্যক্তিগত কনসিয়ার্জ</span></li>
+                    <li><i class="fas fa-check"></i> <span data-key="plan3F5">বছরে ২টি ফ্রি রাত</span></li>
+                </ul>
+                <a href="#booking" class="membership-btn" data-key="joinNow">এখনই যোগ দিন</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== BOOKING ========== -->
+    <section id="booking">
+        <h2 class="section-title" data-key="bookingTitle">বুকিং করুন</h2>
+        <p class="section-sub" data-key="bookingSub">রিসর্ট রুম অথবা পার্টি ভেন্যু বুক করুন সহজেই</p>
+        <div class="booking-container">
+            <div class="booking-card">
+                <h3><i class="fas fa-bed"></i> <span data-key="resortBookHead">রিসর্ট বুকিং</span></h3>
+                <form onsubmit="event.preventDefault(); alert(currentLang === 'bn' ? 'রিসর্ট বুকিং রিকোয়েস্ট পাঠানো হয়েছে! আমরা শীঘ্রই যোগাযোগ করব।' : 'Resort booking request sent! We will contact you soon.');">
+                    <div class="form-group">
+                        <input type="text" data-key="phName" placeholder="আপনার নাম" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" data-key="phPhone" placeholder="মোবাইল নম্বর" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group">
+                        <select required data-key="roomSelect">
+                            <option value="">রুমের ধরন নির্বাচন করুন</option>
+                            <option>ডিলাক্স রুম</option>
+                            <option>সুপেরিয়র রুম</option>
+                            <option>এক্সিকিউটিভ স্যুইট</option>
+                            <option>ফ্যামিলি স্যুইট</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" data-key="phGuests" placeholder="কতজন অতিথি" min="1" required>
+                    </div>
+                    <button type="submit" class="btn-submit" data-key="resortBookBtn">বুকিং কনফার্ম করুন</button>
+                </form>
+            </div>
+
+            <div class="booking-card" id="party">
+                <h3><i class="fas fa-glass-cheers"></i> <span data-key="partyBookHead">পার্টি বুকিং</span></h3>
+                <form onsubmit="event.preventDefault(); alert(currentLang === 'bn' ? 'পার্টি বুকিং রিকোয়েস্ট পাঠানো হয়েছে! আমরা শীঘ্রই যোগাযোগ করব।' : 'Party booking request sent! We will contact you soon.');">
+                    <div class="form-group">
+                        <input type="text" data-key="phName2" placeholder="আপনার নাম" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" data-key="phPhone2" placeholder="মোবাইল নম্বর" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group">
+                        <select required data-key="partySelect">
+                            <option value="">পার্টির ধরন</option>
+                            <option>জন্মদিন</option>
+                            <option>বিবাহবার্ষিকী</option>
+                            <option>কর্পোরেট ইভেন্ট</option>
+                            <option>সেমিনার</option>
+                            <option>অন্যান্য</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" data-key="phGuests2" placeholder="আনুমানিক অতিথি সংখ্যা" min="1" required>
+                    </div>
+                    <button type="submit" class="btn-submit" data-key="partyBookBtn">পার্টি বুক করুন</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOD ORDER ========== -->
+    <section id="food" style="background: #f2efe8;">
+        <h2 class="section-title" data-key="foodTitle">রেস্টুরেন্ট ফুড অর্ডার</h2>
+        <p class="section-sub" data-key="foodSub">আমাদের জনপ্রিয় খাবারগুলো অর্ডার করুন</p>
+
+        <div class="food-grid">
+            <div class="food-item">
+                <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=400&q=80" alt="Biriyani">
+                <h4 data-key="food1Name">চিকেন বিরিয়ানি</h4>
+                <p>৳ ৩২০</p>
+            </div>
+            <div class="food-item">
+                <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&q=80" alt="Kacchi">
+                <h4 data-key="food2Name">কাচ্চি বিরিয়ানি</h4>
+                <p>৳ ৪৫০</p>
+            </div>
+            <div class="food-item">
+                <img src="https://images.unsplash.com/photo-1626777553635-4a4a4a4a4a4a?w=400&q=80" alt="Grill">
+                <h4 data-key="food3Name">চিকেন গ্রিল</h4>
+                <p>৳ ৩৮০</p>
+            </div>
+            <div class="food-item">
+                <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&q=80" alt="Dessert">
+                <h4 data-key="food4Name">ডেজার্ট</h4>
+                <p>৳ ১৮০</p>
+            </div>
+        </div>
+
+        <div class="food-order-form">
+            <h3><i class="fas fa-utensils"></i> <span data-key="orderFormHead">খাবার অর্ডার ফর্ম</span></h3>
+            <form onsubmit="event.preventDefault(); alert(currentLang === 'bn' ? 'আপনার খাবার অর্ডার সফলভাবে গ্রহণ করা হয়েছে!' : 'Your food order has been placed successfully!');">
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" data-key="phName3" placeholder="আপনার নাম" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" data-key="phPhone3" placeholder="মোবাইল নম্বর" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <select required data-key="foodSelect">
+                        <option value="">খাবার নির্বাচন করুন</option>
+                        <option>চিকেন বিরিয়ানি - ৳৩২০</option>
+                        <option>কাচ্চি বিরিয়ানি - ৳৪৫০</option>
+                        <option>চিকেন গ্রিল - ৳৩৮০</option>
+                        <option>ডেজার্ট - ৳১৮০</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="number" data-key="phQty" placeholder="পরিমাণ" min="1" value="1" required>
+                </div>
+                <div class="form-group">
+                    <textarea data-key="phNote" placeholder="বিশেষ নির্দেশনা (ঐচ্ছিক)"></textarea>
+                </div>
+                <button type="submit" class="btn-submit" data-key="orderBtn">অর্ডার করুন</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ========== CONTACT & MAP ========== -->
+    <section id="contact" style="background: #1e2b1e; padding-bottom: 0;">
+        <div class="contact-wrap">
+            <div class="contact-info">
+                <h3 data-key="contactHead">যোগাযোগ</h3>
+                <p><i class="fas fa-map-marker-alt"></i> <span data-key="contactAddr">গার্ডেন প্যালেস রিসোর্ট সিলেট, বাংলাদেশ</span></p>
+                <p><i class="fas fa-phone-alt"></i> +৮৮০ ১৭১১-১২৩৪৫৬</p>
+                <p><i class="fas fa-envelope"></i> info@gardenpalaceresortsylhet.com</p>
+                <p><i class="fas fa-clock"></i> <span data-key="contactTime">চেক-ইন: দুপুর ১২টা | চেক-আউট: দুপুর ১২টা</span></p>
+                <p style="margin-top: 25px; font-size: 1.15rem; color: #c9a34e;" data-key="followUs">
+                    <i class="fas fa-share-alt"></i> আমাদের ফলো করুন:
+                </p>
+                <div style="display: flex; gap: 15px; font-size: 1.5rem; margin-top: 10px;">
+                    <a href="#" style="color: #c9a34e;"><i class="fab fa-facebook"></i></a>
+                    <a href="#" style="color: #c9a34e;"><i class="fab fa-instagram"></i></a>
+                    <a href="#" style="color: #c9a34e;"><i class="fab fa-youtube"></i></a>
+                    <a href="#" style="color: #c9a34e;"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115612.5470919157!2d91.7990432!3d24.8949298!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3750558b9c0e5c5f%3A0x9a6e5b1c5b1c5b1c!2sSylhet!5e0!3m2!1sen!2sbd!4v1700000000000" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+        <p data-key="footerText">© ২০২৫ গার্ডেন প্যালেস রিসোর্ট সিলেট। সর্বস্বত্ব সংরক্ষিত।</p>
+        <div class="credit-line">
+            <span data-key="creditLabel">ডিজাইন ও ডেভেলপ বাই</span>
+            <a href="https://www.glistenit.com.bd" target="_blank" rel="noopener">
+                <i class="fas fa-code"></i> Glisten IT Corporation <span data-key="creditBangla">(গ্লিসেন আইটি করপোরেশন)</span>
+            </a>
+            <br>
+            <span style="font-size: 0.82rem; display: inline-block; margin-top: 6px;">
+                🌐 <a href="https://www.glistenit.com.bd" target="_blank" rel="noopener">www.glistenit.com.bd</a>
+            </span>
+        </div>
+    </footer>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // ==========================================
+        // TRANSLATION DICTIONARY
+        // ==========================================
+        const translations = {
+            bn: {
+                topLocation: "সিলেট, বাংলাদেশ",
+                topFollow: "ফলো করুন:",
+                logoText: "গার্ডেন প্যালেস রিসোর্ট সিলেট",
+                navHome: "হোম",
+                navAbout: "পরিচিতি",
+                navGallery: "ফটো গ্যালারি",
+                navVideos: "ভিডিও",
+                navFacebook: "ফেসবুক",
+                navPartners: "পার্টনার",
+                navTeam: "আমাদের টিম",
+                navEvents: "সর্বশেষ ইভেন্ট",
+                navMembership: "মেম্বারশিপ",
+                navBooking: "রিসর্ট বুকিং",
+                navParty: "পার্টি বুকিং",
+                navFood: "খাবার অর্ডার",
+                navContact: "যোগাযোগ",
+                slide1Title: "গার্ডেন প্যালেস রিসোর্ট সিলেট",
+                slide1Sub: "সিলেটের সবুজ-শ্যামল প্রকৃতির মাঝে একটি স্বর্গীয় আশ্রয়",
+                slide1Btn1: "এখনই বুক করুন",
+                slide1Btn2: "আরও জানুন",
+                slide2Title: "বিলাসবহুল রিসর্ট অভিজ্ঞতা",
+                slide2Sub: "আধুনিক সুবিধা ও প্রাকৃতিক সৌন্দর্যের নিখুঁত মিশ্রণ",
+                slide2Btn: "রুম দেখুন",
+                slide3Title: "সুস্বাদু খাবার ও রেস্টুরেন্ট",
+                slide3Sub: "স্থানীয় ও আন্তর্জাতিক খাবারের অসাধারণ স্বাদ",
+                slide3Btn: "খাবার অর্ডার করুন",
+                slide4Title: "অসাধারণ সুইমিং পুল",
+                slide4Sub: "স্বচ্ছ পানিতে সাঁতার কেটে প্রশান্তির অনুভূতি উপভোগ করুন",
+                slide4Btn: "গ্যালারি দেখুন",
+                slide5Title: "বিশেষ ইভেন্ট ও পার্টি ভেন্যু",
+                slide5Sub: "জন্মদিন, বিবাহবার্ষিকী বা কর্পোরেট ইভেন্টের নিখুঁত আয়োজন",
+                slide5Btn: "পার্টি বুক করুন",
+                slide6Title: "প্রকৃতির মনোরম পরিবেশ",
+                slide6Sub: "সবুজ বাগান, পাহাড় ও নদীর অপরূপ সৌন্দর্যে ঘেরা",
+                slide6Btn: "মেম্বার হোন",
+                aboutTitle: "আমাদের সম্পর্কে",
+                aboutSub: "প্রকৃতির কোলে একটি অনন্য আতিথেয়তা",
+                aboutHead: "গার্ডেন প্যালেস রিসোর্ট সিলেট",
+                aboutP1: "সিলেট শহরের প্রাণকেন্দ্র থেকে মাত্র কয়েক মিনিট দূরে অবস্থিত গার্ডেন প্যালেস রিসোর্ট সিলেট। চারপাশে সবুজ চা বাগান, পাহাড় ও নদীর মনোরম দৃশ্য। আমরা আধুনিক সুবিধা ও ঐতিহ্যবাহী আতিথেয়তার এক অনন্য মিশ্রণ প্রদান করি।",
+                aboutP2: "আমাদের রিসর্টে রয়েছে বিলাসবহুল কক্ষ, সুইমিং পুল, রেস্টুরেন্ট, কনফারেন্স হল, পার্টি ভেন্যু এবং বিশাল সবুজ বাগান। পরিবার, দম্পতি বা কর্পোরেট ইভেন্টের জন্য এটি আদর্শ স্থান।",
+                feat1: "ফ্রি ওয়াইফাই",
+                feat2: "সুইমিং পুল",
+                feat3: "রেস্টুরেন্ট",
+                feat4: "পার্কিং",
+
+                // Merged About Slider (10 Events)
+                am1Tag: "নববর্ষ ২০২৬",
+                am1Title: "নববর্ষ সেলিব্রেশন",
+                am1Desc: "সাংস্কৃতিক অনুষ্ঠান, লাইভ মিউজিক, বিশেষ ডিনার ও আতশবাজি সহ দুর্দান্ত নববর্ষ উদযাপন।",
+                am2Tag: "ফুড ফেস্ট",
+                am2Title: "আন্তর্জাতিক ফুড ফেস্টিভ্যাল",
+                am2Desc: "স্থানীয় ও আন্তর্জাতিক ৫০+ খাবারের স্বাদ গ্রহণের অনন্য সুযোগ, লাইভ কুকিং শো সহ।",
+                am3Tag: "ওয়েডিং",
+                am3Title: "সিলেট রয়্যাল ওয়েডিং",
+                am3Desc: "রিসোর্টের মনোরম পরিবেশে জমকালো বিয়ে ও বিবাহবার্ষিকী আয়োজনের বিশেষ আয়োজন।",
+                am4Tag: "কনসার্ট",
+                am4Title: "লাইভ মিউজিক নাইট",
+                am4Desc: "দেশের জনপ্রিয় শিল্পীদের পরিবেশনায় জমকালো লাইভ কনসার্ট ও সাংস্কৃতিক সন্ধ্যা।",
+                am5Tag: "কর্পোরেট",
+                am5Title: "কর্পোরেট কনফারেন্স",
+                am5Desc: "আধুনিক সুবিধাসম্পন্ন কনফারেন্স হল, প্রজেক্টর, সাউন্ড সিস্টেম ও ক্যাটারিং সেবা সহ।",
+                am6Tag: "জন্মদিন",
+                am6Title: "শিশুদের জন্মদিন উদযাপন",
+                am6Desc: "রঙিন সাজসজ্জা, কেক, বেলুন, গেমস ও শিশুদের জন্য বিশেষ আয়োজনসহ স্মরণীয় জন্মদিন।",
+                am7Tag: "স্পোর্টস",
+                am7Title: "বার্ষিক স্পোর্টস ডে",
+                am7Desc: "বিভিন্ন ইনডোর ও আউটডোর খেলাধুলা, ট্রফি বিতরণ ও সবার জন্য মনোরম পুরস্কার আয়োজন।",
+                am8Tag: "গার্ডেন পার্টি",
+                am8Title: "সমার গার্ডেন পার্টি",
+                am8Desc: "সবুজ বাগানের মাঝে সন্ধ্যার নৈশভোজ, লাইভ মিউজিক ও তারার নিচে অনন্য পার্টির আয়োজন।",
+                am9Tag: "ফ্যামিলি",
+                am9Title: "ফ্যামিলি গেট-টুগেদার",
+                am9Desc: "পরিবারের সকল সদস্যের জন্য বারবিকিউ, গেমস, পুল অ্যাক্সেস ও সারাদিনের আনন্দ।",
+                am10Tag: "গ্র্যাজুয়েশন",
+                am10Title: "গ্র্যাজুয়েশন সেলিব্রেশন",
+                am10Desc: "শিক্ষার্থীদের কৃতিত্ব উদযাপনে রিসর্টের বিলাসবহুল পরিবেশে জমকালো আয়োজন।",
+
+                galleryTitle: "ফটো গ্যালারি",
+                gallerySub: "আমাদের রিসোর্টের কিছু সুন্দর মুহূর্ত",
+                videoTitle: "ভিডিও গ্যালারি",
+                videoSub: "রিসোর্টের পরিবেশ ও সুবিধাগুলো দেখুন",
+                vid1: "রিসোর্ট ট্যুর",
+                vid2: "সুইমিং পুল ও বাগান",
+                vid3: "রেস্টুরেন্ট ও খাবার",
+
+                fbSectionTitle: "আমাদের ফেসবুক পেজ",
+                fbSectionSub: "আমাদের ফেসবুক পেজে লাইক ও ফলো করে আপডেট পান",
+                fbHead: "Garden Palace Resort Sylhet",
+                fbDesc: "আমাদের অফিসিয়াল ফেসবুক পেজে লাইক দিয়ে থাকুন সব আপডেট, অফার এবং ইভেন্টের খবরের সাথে। আমাদের সাথে যুক্ত হয়ে বিশেষ ছাড় ও ইভেন্টে অংশ নিন।",
+                fbLikes: "লাইক",
+                fbFollowers: "ফলোয়ার",
+                fbRating: "রেটিং",
+                fbFollowBtn: "পেজ লাইক করুন",
+
+                partnersTitle: "আমাদের পার্টনার",
+                partnersSub: "বিশ্বস্ত প্রতিষ্ঠানসমূহের সাথে আমাদের গৌরবময় অংশীদারিত্ব",
+                partnersIntro: "গার্ডেন প্যালেস রিসোর্ট সিলেট দেশের শীর্ষস্থানীয় বিভিন্ন প্রতিষ্ঠানের সাথে অংশীদারিত্বের মাধ্যমে অতিথিদের সেরা সেবা ও সুবিধা প্রদান করে আসছে। আমাদের সকল পার্টনার প্রতিষ্ঠানসমূহ নিচে তালিকাভুক্ত করা হলো।",
+                p1Name: "বাংলালিংক",
+                p1Type: "টেলিকমিউনিকেশন",
+                p1Desc: "হাই-স্পিড ইন্টারনেট ও কর্পোরেট টেলিকম সেবা প্রদানকারী।",
+                p2Name: "বিকাশ",
+                p2Type: "ডিজিটাল পেমেন্ট",
+                p2Desc: "নিরাপদ ও সহজ ডিজিটাল পেমেন্ট সেবা প্রদানকারী।",
+                p3Name: "গ্রামীণফোন",
+                p3Type: "টেলিকমিউনিকেশন",
+                p3Desc: "দেশের শীর্ষস্থানীয় মোবাইল নেটওয়ার্ক সেবা প্রদানকারী।",
+                p4Name: "স্কয়ার ফুড",
+                p4Type: "খাদ্য ও পানীয়",
+                p4Desc: "উন্নত মানের খাদ্যপণ্য ও পানীয় সরবরাহকারী প্রতিষ্ঠান।",
+                p5Name: "রেনক্যাট",
+                p5Type: "আতিথেয়তা সেবা",
+                p5Desc: "দেশের অন্যতম সেরা আতিথেয়তা সেবা প্রদানকারী প্রতিষ্ঠান।",
+                p6Name: "ইউসিবি ব্যাংক",
+                p6Type: "আর্থিক প্রতিষ্ঠান",
+                p6Desc: "কর্পোরেট ব্যাংকিং ও পেমেন্ট সেবা প্রদানকারী।",
+                p7Name: "শীতল স্প্রে",
+                p7Type: "বেভারেজ",
+                p7Desc: "দেশের জনপ্রিয় মিনারেল ওয়াটার ও পানীয় সরবরাহকারী।",
+                p8Name: "গ্লিসেন আইটি করপোরেশন",
+                p8Type: "টেকনোলজি পার্টনার",
+                p8Desc: "ওয়েব ডেভেলপমেন্ট, সফটওয়্যার ও ডিজিটাল সলিউশন প্রদানকারী।",
+
+                teamTitle: "আমাদের টিম",
+                teamSub: "আমাদের অভিজ্ঞ ও নিবেদিতপ্রাণ পেশাদার টিম",
+                team1Name: "মোঃ রফিকুল ইসলাম",
+                team1Role: "জেনারেল ম্যানেজার",
+                team1Bio: "১৫ বছরের অভিজ্ঞতাসম্পন্ন হসপিটালিটি বিশেষজ্ঞ।",
+                team2Name: "ফারজানা আক্তার",
+                team2Role: "হেড শেফ",
+                team2Bio: "আন্তর্জাতিক ও দেশীয় রান্নায় দক্ষ অভিজ্ঞ শেফ।",
+                team3Name: "সাদিয়া হক",
+                team3Role: "ফ্রন্ট ডেস্ক ম্যানেজার",
+                team3Bio: "অতিথি সেবায় সর্বদা নিবেদিত ও আন্তরিক।",
+                team4Name: "আরিফুল হাসান",
+                team4Role: "ইভেন্ট কো-অর্ডিনেটর",
+                team4Bio: "পার্টি ও কর্পোরেট ইভেন্ট আয়োজনে বিশেষজ্ঞ।",
+
+                eventsTitle: "সর্বশেষ ইভেন্ট",
+                eventsSub: "আমাদের রিসোর্টে আসন্ন ও সাম্প্রতিক ইভেন্টসমূহ",
+                event1Title: "নববর্ষ সেলিব্রেশন ২০২৬",
+                event1Time: "সন্ধ্যা ৭টা",
+                event1Place: "মেইন গার্ডেন",
+                event1Desc: "সাংস্কৃতিক অনুষ্ঠান, লাইভ মিউজিক, বিশেষ ডিনার ও আতশবাজি সহ নববর্ষ উদযাপন।",
+                event2Title: "ফুড ফেস্টিভ্যাল",
+                event2Time: "দুপুর ১২টা - রাত ১০টা",
+                event2Place: "রেস্টুরেন্ট টেরেস",
+                event2Desc: "স্থানীয় ও আন্তর্জাতিক ৫০+ খাবারের স্বাদ গ্রহণের অনন্য সুযোগ।",
+                event3Title: "কাউন্টডাউন পার্টি",
+                event3Time: "রাত ৯টা",
+                event3Place: "পুলসাইড ভেন্যু",
+                event3Desc: "DJ, ডান্স, লাইভ কনসার্ট ও বিশেষ নৈশভোজের মাধ্যমে নতুন বছর বরণ।",
+                eventBtn: "বিস্তারিত",
+
+                membershipTitle: "মেম্বারশিপ প্ল্যান",
+                membershipSub: "আমাদের বিশেষ মেম্বারশিপে যোগ দিয়ে পান অসাধারণ সুবিধা",
+                plan1Name: "বেসিক",
+                plan1F1: "১০% ছাড় সব বুকিংয়ে",
+                plan1F2: "ফ্রি ওয়াইফাই",
+                plan1F3: "মাসিক নিউজলেটার",
+                plan1F4: "সাধারণ পার্কিং",
+                plan2Name: "প্রিমিয়াম",
+                plan2F1: "২৫% ছাড় সব বুকিংয়ে",
+                plan2F2: "ফ্রি ব্রেকফাস্ট",
+                plan2F3: "ফ্রি সুইমিং পুল অ্যাক্সেস",
+                plan2F4: "VIP পার্কিং",
+                plan2F5: "প্রায়োরিটি বুকিং",
+                plan3Name: "ভিআইপি",
+                plan3F1: "৪০% ছাড় সব বুকিংয়ে",
+                plan3F2: "ফ্রি সব খাবার ও ড্রিংকস",
+                plan3F3: "ফ্রি স্পা ও জিম অ্যাক্সেস",
+                plan3F4: "ব্যক্তিগত কনসিয়ার্জ",
+                plan3F5: "বছরে ২টি ফ্রি রাত",
+                joinNow: "এখনই যোগ দিন",
+
+                bookingTitle: "বুকিং করুন",
+                bookingSub: "রিসর্ট রুম অথবা পার্টি ভেন্যু বুক করুন সহজেই",
+                resortBookHead: "রিসর্ট বুকিং",
+                phName: "আপনার নাম",
+                phPhone: "মোবাইল নম্বর",
+                roomSelect: "রুমের ধরন নির্বাচন করুন",
+                phGuests: "কতজন অতিথি",
+                resortBookBtn: "বুকিং কনফার্ম করুন",
+                partyBookHead: "পার্টি বুকিং",
+                phName2: "আপনার নাম",
+                phPhone2: "মোবাইল নম্বর",
+                partySelect: "পার্টির ধরন",
+                phGuests2: "আনুমানিক অতিথি সংখ্যা",
+                partyBookBtn: "পার্টি বুক করুন",
+                foodTitle: "রেস্টুরেন্ট ফুড অর্ডার",
+                foodSub: "আমাদের জনপ্রিয় খাবারগুলো অর্ডার করুন",
+                food1Name: "চিকেন বিরিয়ানি",
+                food2Name: "কাচ্চি বিরিয়ানি",
+                food3Name: "চিকেন গ্রিল",
+                food4Name: "ডেজার্ট",
+                orderFormHead: "খাবার অর্ডার ফর্ম",
+                phName3: "আপনার নাম",
+                phPhone3: "মোবাইল নম্বর",
+                foodSelect: "খাবার নির্বাচন করুন",
+                phQty: "পরিমাণ",
+                phNote: "বিশেষ নির্দেশনা (ঐচ্ছিক)",
+                orderBtn: "অর্ডার করুন",
+                contactHead: "যোগাযোগ",
+                contactAddr: "গার্ডেন প্যালেস রিসোর্ট সিলেট, বাংলাদেশ",
+                contactTime: "চেক-ইন: দুপুর ১২টা | চেক-আউট: দুপুর ১২টা",
+                followUs: "আমাদের ফলো করুন:",
+                footerText: "© ২০২৫ গার্ডেন প্যালেস রিসোর্ট সিলেট। সর্বস্বত্ব সংরক্ষিত।",
+                creditLabel: "ডিজাইন ও ডেভেলপ বাই",
+                creditBangla: "(গ্লিসেন আইটি করপোরেশন)"
+            },
+            en: {
+                topLocation: "Sylhet, Bangladesh",
+                topFollow: "Follow:",
+                logoText: "Garden Palace Resort Sylhet",
+                navHome: "Home",
+                navAbout: "About",
+                navGallery: "Photo Gallery",
+                navVideos: "Videos",
+                navFacebook: "Facebook",
+                navPartners: "Partners",
+                navTeam: "Our Team",
+                navEvents: "Latest Events",
+                navMembership: "Membership",
+                navBooking: "Resort Booking",
+                navParty: "Party Booking",
+                navFood: "Food Order",
+                navContact: "Contact",
+                slide1Title: "Garden Palace Resort Sylhet",
+                slide1Sub: "A heavenly retreat amidst the lush greenery of Sylhet",
+                slide1Btn1: "Book Now",
+                slide1Btn2: "Learn More",
+                slide2Title: "Luxurious Resort Experience",
+                slide2Sub: "A perfect blend of modern amenities and natural beauty",
+                slide2Btn: "View Rooms",
+                slide3Title: "Delicious Food & Restaurant",
+                slide3Sub: "Exceptional taste of local and international cuisine",
+                slide3Btn: "Order Food",
+                slide4Title: "Amazing Swimming Pool",
+                slide4Sub: "Enjoy the serenity of swimming in crystal-clear water",
+                slide4Btn: "View Gallery",
+                slide5Title: "Special Events & Party Venue",
+                slide5Sub: "Perfect arrangement for birthdays, anniversaries, or corporate events",
+                slide5Btn: "Book Party",
+                slide6Title: "Scenic Natural Environment",
+                slide6Sub: "Surrounded by lush gardens, hills, and beautiful river views",
+                slide6Btn: "Become Member",
+                aboutTitle: "About Us",
+                aboutSub: "A unique hospitality in the lap of nature",
+                aboutHead: "Garden Palace Resort Sylhet",
+                aboutP1: "Garden Palace Resort Sylhet is located just a few minutes away from the heart of Sylhet city. Surrounded by lush tea gardens, hills, and scenic river views. We offer a unique blend of modern amenities and traditional hospitality.",
+                aboutP2: "Our resort features luxurious rooms, a swimming pool, a restaurant, a conference hall, party venues, and a vast green garden. It is an ideal place for families, couples, or corporate events.",
+                feat1: "Free WiFi",
+                feat2: "Swimming Pool",
+                feat3: "Restaurant",
+                feat4: "Parking",
+
+                // Merged About Slider (10 Events)
+                am1Tag: "New Year 2026",
+                am1Title: "New Year Celebration",
+                am1Desc: "Grand New Year celebration with cultural programs, live music, special dinner, and fireworks.",
+                am2Tag: "Food Fest",
+                am2Title: "International Food Festival",
+                am2Desc: "A unique opportunity to taste 50+ local and international dishes with live cooking shows.",
+                am3Tag: "Wedding",
+                am3Title: "Sylhet Royal Wedding",
+                am3Desc: "Grand wedding and anniversary arrangements in the resort's scenic environment.",
+                am4Tag: "Concert",
+                am4Title: "Live Music Night",
+                am4Desc: "Grand live concert and cultural evening featuring popular artists of the country.",
+                am5Tag: "Corporate",
+                am5Title: "Corporate Conference",
+                am5Desc: "Conference hall with modern facilities, projector, sound system, and catering service.",
+                am6Tag: "Birthday",
+                am6Title: "Kids Birthday Celebration",
+                am6Desc: "Memorable birthday with colorful decoration, cake, balloons, games, and special arrangements.",
+                am7Tag: "Sports",
+                am7Title: "Annual Sports Day",
+                am7Desc: "Indoor and outdoor sports, trophy distribution, and wonderful prizes for all.",
+                am8Tag: "Garden Party",
+                am8Title: "Summer Garden Party",
+                am8Desc: "An evening dinner, live music, and unique party under the stars in a green garden.",
+                am9Tag: "Family",
+                am9Title: "Family Get-Together",
+                am9Desc: "Barbecue, games, pool access, and a full day of fun for all family members.",
+                am10Tag: "Graduation",
+                am10Title: "Graduation Celebration",
+                am10Desc: "Grand celebration honoring students' achievements in the resort's luxurious environment.",
+
+                galleryTitle: "Photo Gallery",
+                gallerySub: "Some beautiful moments of our resort",
+                videoTitle: "Video Gallery",
+                videoSub: "Explore the environment and facilities of the resort",
+                vid1: "Resort Tour",
+                vid2: "Swimming Pool & Garden",
+                vid3: "Restaurant & Food",
+
+                fbSectionTitle: "Our Facebook Page",
+                fbSectionSub: "Like and follow our Facebook page to get updates",
+                fbHead: "Garden Palace Resort Sylhet",
+                fbDesc: "Stay updated with all offers and events by liking our official Facebook page. Join us to get special discounts and event invitations.",
+                fbLikes: "Likes",
+                fbFollowers: "Followers",
+                fbRating: "Rating",
+                fbFollowBtn: "Like Page",
+
+                partnersTitle: "Our Partners",
+                partnersSub: "Our glorious partnerships with trusted organizations",
+                partnersIntro: "Garden Palace Resort Sylhet provides the best services and facilities to guests through partnerships with leading organizations of the country. All our partner organizations are listed below.",
+                p1Name: "Banglalink",
+                p1Type: "Telecommunication",
+                p1Desc: "Provider of high-speed internet and corporate telecom services.",
+                p2Name: "bKash",
+                p2Type: "Digital Payment",
+                p2Desc: "Provider of secure and easy digital payment services.",
+                p3Name: "Grameenphone",
+                p3Type: "Telecommunication",
+                p3Desc: "The country's leading mobile network service provider.",
+                p4Name: "Square Food",
+                p4Type: "Food & Beverage",
+                p4Desc: "Supplier of high-quality food products and beverages.",
+                p5Name: "Renkat",
+                p5Type: "Hospitality Service",
+                p5Desc: "One of the best hospitality service providers in the country.",
+                p6Name: "UCB Bank",
+                p6Type: "Financial Institution",
+                p6Desc: "Provider of corporate banking and payment services.",
+                p7Name: "Shitol Spray",
+                p7Type: "Beverage",
+                p7Desc: "Popular mineral water and beverage supplier of the country.",
+                p8Name: "Glisten IT Corporation",
+                p8Type: "Technology Partner",
+                p8Desc: "Provider of web development, software, and digital solutions.",
+
+                teamTitle: "Our Team",
+                teamSub: "Our experienced and dedicated professional team",
+                team1Name: "Md. Rafiqul Islam",
+                team1Role: "General Manager",
+                team1Bio: "Hospitality expert with 15 years of experience.",
+                team2Name: "Farzana Akter",
+                team2Role: "Head Chef",
+                team2Bio: "Experienced chef skilled in international & local cuisine.",
+                team3Name: "Sadia Haque",
+                team3Role: "Front Desk Manager",
+                team3Bio: "Always dedicated and cordial in guest service.",
+                team4Name: "Ariful Hasan",
+                team4Role: "Event Coordinator",
+                team4Bio: "Expert in organizing parties & corporate events.",
+
+                eventsTitle: "Latest Events",
+                eventsSub: "Upcoming and recent events at our resort",
+                event1Title: "New Year Celebration 2026",
+                event1Time: "7:00 PM",
+                event1Place: "Main Garden",
+                event1Desc: "New Year celebration with cultural program, live music, special dinner & fireworks.",
+                event2Title: "Food Festival",
+                event2Time: "12:00 PM - 10:00 PM",
+                event2Place: "Restaurant Terrace",
+                event2Desc: "A unique opportunity to taste 50+ local and international dishes.",
+                event3Title: "Countdown Party",
+                event3Time: "9:00 PM",
+                event3Place: "Poolside Venue",
+                event3Desc: "Welcome the new year with DJ, dance, live concert & special dinner.",
+                eventBtn: "Details",
+
+                membershipTitle: "Membership Plans",
+                membershipSub: "Join our special membership and enjoy amazing benefits",
+                plan1Name: "Basic",
+                plan1F1: "10% off on all bookings",
+                plan1F2: "Free WiFi",
+                plan1F3: "Monthly Newsletter",
+                plan1F4: "Standard Parking",
+                plan2Name: "Premium",
+                plan2F1: "25% off on all bookings",
+                plan2F2: "Free Breakfast",
+                plan2F3: "Free Swimming Pool Access",
+                plan2F4: "VIP Parking",
+                plan2F5: "Priority Booking",
+                plan3Name: "VIP",
+                plan3F1: "40% off on all bookings",
+                plan3F2: "Free all food & drinks",
+                plan3F3: "Free Spa & Gym Access",
+                plan3F4: "Personal Concierge",
+                plan3F5: "2 Free Nights per year",
+                joinNow: "Join Now",
+
+                bookingTitle: "Book Now",
+                bookingSub: "Book your resort room or party venue easily",
+                resortBookHead: "Resort Booking",
+                phName: "Your Name",
+                phPhone: "Mobile Number",
+                roomSelect: "Select Room Type",
+                phGuests: "Number of Guests",
+                resortBookBtn: "Confirm Booking",
+                partyBookHead: "Party Booking",
+                phName2: "Your Name",
+                phPhone2: "Mobile Number",
+                partySelect: "Party Type",
+                phGuests2: "Estimated Guest Count",
+                partyBookBtn: "Book Party",
+                foodTitle: "Restaurant Food Order",
+                foodSub: "Order our popular dishes",
+                food1Name: "Chicken Biriyani",
+                food2Name: "Kacchi Biriyani",
+                food3Name: "Chicken Grill",
+                food4Name: "Dessert",
+                orderFormHead: "Food Order Form",
+                phName3: "Your Name",
+                phPhone3: "Mobile Number",
+                foodSelect: "Select Food Item",
+                phQty: "Quantity",
+                phNote: "Special Instructions (Optional)",
+                orderBtn: "Place Order",
+                contactHead: "Contact",
+                contactAddr: "Garden Palace Resort Sylhet, Bangladesh",
+                contactTime: "Check-in: 12:00 PM | Check-out: 12:00 PM",
+                followUs: "Follow Us:",
+                footerText: "© 2025 Garden Palace Resort Sylhet. All rights reserved.",
+                creditLabel: "Designed & Developed by",
+                creditBangla: ""
+            }
+        };
+
+        let currentLang = 'bn';
+
+        // ==========================================
+        // LANGUAGE SWITCH
+        // ==========================================
+        function switchLanguage(lang) {
+            currentLang = lang;
+            const elements = document.querySelectorAll('[data-key]');
+
+            elements.forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    const translation = translations[lang][key];
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.setAttribute('placeholder', translation);
+                    } else if (el.tagName === 'OPTION') {
+                        el.textContent = translation;
+                    } else if (el.tagName === 'SELECT') {
+                        if (el.options.length > 0 && el.options[0].value === '') {
+                            el.options[0].textContent = translation;
+                        }
+                    } else {
+                        el.innerHTML = translation;
+                    }
+                }
+            });
+
+            const langLabel = document.getElementById('langLabel');
+            langLabel.textContent = lang === 'bn' ? 'English' : 'বাংলা';
+
+            document.documentElement.lang = lang;
+
+            document.title = lang === 'bn' 
+                ? 'গার্ডেন প্যালেস রিসোর্ট সিলেট | Garden Palace Resort Sylhet' 
+                : 'Garden Palace Resort Sylhet | গার্ডেন প্যালেস রিসোর্ট সিলেট';
+        }
+
+        const langToggle = document.getElementById('langToggle');
+        langToggle.addEventListener('click', () => {
+            const newLang = currentLang === 'bn' ? 'en' : 'bn';
+            switchLanguage(newLang);
+        });
+
+        switchLanguage('bn');
+
+        // ==========================================
+        // MOBILE MENU
+        // ==========================================
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('show');
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+                navLinks.classList.remove('show');
+            }
+        });
+
+        // ==========================================
+        // MAIN SLIDER
+        // ==========================================
+        let slides = document.querySelectorAll('.slider .slide');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        const sliderDots = document.getElementById('sliderDots');
+
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            sliderDots.appendChild(dot);
+        }
+
+        const dots = document.querySelectorAll('.slider-dots .dot');
+
+        function updateDots() {
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (index + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            updateDots();
+        }
+
+        function nextSlide() { goToSlide(currentSlide + 1); }
+        function prevSlideFunc() { goToSlide(currentSlide - 1); }
+
+        document.getElementById('nextSlide').addEventListener('click', nextSlide);
+        document.getElementById('prevSlide').addEventListener('click', prevSlideFunc);
+
+        let sliderInterval = setInterval(nextSlide, 5000);
+
+        const sliderEl = document.querySelector('.slider');
+        sliderEl.addEventListener('mouseenter', () => clearInterval(sliderInterval));
+        sliderEl.addEventListener('mouseleave', () => {
+            sliderInterval = setInterval(nextSlide, 5000);
+        });
+
+        // ==========================================
+        // MERGED ABOUT EVENTS SLIDER (10 EVENTS)
+        // ==========================================
+        const amTrack = document.getElementById('aboutMergedTrack');
+        const amSlides = document.querySelectorAll('.about-merged-slide');
+        const amTotal = amSlides.length;
+        let amCurrent = 0;
+        const amDotsContainer = document.getElementById('amDots');
+        const amCurrentEl = document.getElementById('amCurrent');
+
+        for (let i = 0; i < amTotal; i++) {
+            const d = document.createElement('div');
+            d.classList.add('am-dot');
+            if (i === 0) d.classList.add('active');
+            d.addEventListener('click', () => amGoTo(i));
+            amDotsContainer.appendChild(d);
+        }
+
+        const amDots = document.querySelectorAll('.am-dot');
+
+        function amUpdateUI() {
+            amTrack.style.transform = `translateX(-${amCurrent * 100}%)`;
+            amSlides.forEach((s, i) => s.classList.toggle('active', i === amCurrent));
+            amDots.forEach((d, i) => d.classList.toggle('active', i === amCurrent));
+            amCurrentEl.textContent = amCurrent + 1;
+        }
+
+        function amGoTo(index) {
+            amCurrent = (index + amTotal) % amTotal;
+            amUpdateUI();
+        }
+
+        function amNext() { amGoTo(amCurrent + 1); }
+        function amPrevFn() { amGoTo(amCurrent - 1); }
+
+        document.getElementById('amNext').addEventListener('click', amNext);
+        document.getElementById('amPrev').addEventListener('click', amPrevFn);
+
+        let amInterval = setInterval(amNext, 6000);
+
+        const amSlider = document.getElementById('aboutMergedSlider');
+        amSlider.addEventListener('mouseenter', () => clearInterval(amInterval));
+        amSlider.addEventListener('mouseleave', () => {
+            amInterval = setInterval(amNext, 6000);
+        });
+
+        amUpdateUI();
+
+        // ==========================================
+        // SELECT OPTIONS TRANSLATION
+        // ==========================================
+        const roomOptions = {
+            bn: ["ডিলাক্স রুম", "সুপেরিয়র রুম", "এক্সিকিউটিভ স্যুইট", "ফ্যামিলি স্যুইট"],
+            en: ["Deluxe Room", "Superior Room", "Executive Suite", "Family Suite"]
+        };
+
+        const partyOptions = {
+            bn: ["জন্মদিন", "বিবাহবার্ষিকী", "কর্পোরেট ইভেন্ট", "সেমিনার", "অন্যান্য"],
+            en: ["Birthday", "Anniversary", "Corporate Event", "Seminar", "Others"]
+        };
+
+        const foodOptions = {
+            bn: ["চিকেন বিরিয়ানি - ৳৩২০", "কাচ্চি বিরিয়ানি - ৳৪৫০", "চিকেন গ্রিল - ৳৩৮০", "ডেজার্ট - ৳১৮০"],
+            en: ["Chicken Biriyani - ৳320", "Kacchi Biriyani - ৳450", "Chicken Grill - ৳380", "Dessert - ৳180"]
+        };
+
+        const originalSwitchLanguage = switchLanguage;
+        switchLanguage = function(lang) {
+            originalSwitchLanguage(lang);
+
+            const roomSelect = document.querySelector('select[data-key="roomSelect"]');
+            if (roomSelect) {
+                for (let i = 1; i < roomSelect.options.length; i++) {
+                    roomSelect.options[i].textContent = roomOptions[lang][i - 1];
+                }
+            }
+
+            const partySelect = document.querySelector('select[data-key="partySelect"]');
+            if (partySelect) {
+                for (let i = 1; i < partySelect.options.length; i++) {
+                    partySelect.options[i].textContent = partyOptions[lang][i - 1];
+                }
+            }
+
+            const foodSelect = document.querySelector('select[data-key="foodSelect"]');
+            if (foodSelect) {
+                for (let i = 1; i < foodSelect.options.length; i++) {
+                    foodSelect.options[i].textContent = foodOptions[lang][i - 1];
+                }
+            }
+        };
+
+        switchLanguage('bn');
+    </script>
+</body>
+</html>

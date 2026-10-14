@@ -9,8 +9,38 @@
                     <img class="w-28 sm:w-40" :src="setting.theme_logo" alt="logo">
                 </router-link>
 
+                <!-- Desktop / Tablet quick nav to Resort & Dashboard -->
+                <div class="hidden sm:flex items-center gap-2">
+                    <router-link :to="{ name: 'resort.landing' }"
+                        class="flex items-center gap-1.5 h-8 px-3 rounded-3xl text-xs font-semibold text-primary bg-primary/10 hover:bg-primary hover:text-white transition whitespace-nowrap"
+                        :title="$t('menu.resort_website')">
+                        <i class="lab lab-site text-sm"></i>
+                        <span>{{ $t('menu.resort_website') }}</span>
+                    </router-link>
+
+                    <router-link :to="logged ? '/admin/dashboard' : '/login'"
+                        class="flex items-center gap-1.5 h-8 px-3 rounded-3xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-white transition whitespace-nowrap"
+                        :title="logged ? $t('menu.dashboard') : ($t('label.login') || 'Login')">
+                        <i :class="logged ? 'lab lab-dashboard' : 'lab lab-lock'" class="text-sm"></i>
+                        <span>{{ logged ? $t('menu.dashboard') : ($t('label.login') || 'Login') }}</span>
+                    </router-link>
+                </div>
+
                 <!-- This code for mobile device -->
-                <div class="flex items-center gap-2 lg:hidden">
+                <div class="flex items-center gap-1.5 sm:gap-2 lg:hidden">
+                    <router-link :to="{ name: 'resort.landing' }"
+                        class="flex sm:hidden items-center justify-center gap-1 w-fit rounded-3xl text-xs font-semibold h-8 px-2 transition text-primary bg-primary/10 hover:bg-primary hover:text-white"
+                        :title="$t('menu.resort_website')">
+                        <i class="lab lab-site text-xs"></i>
+                        <span class="text-[10px] whitespace-nowrap">{{ $t('menu.resort_website') }}</span>
+                    </router-link>
+
+                    <router-link :to="logged ? '/admin/dashboard' : '/login'"
+                        class="flex sm:hidden items-center justify-center gap-1 w-fit rounded-3xl text-xs font-semibold h-8 px-2 transition text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-primary hover:text-white"
+                        :title="logged ? $t('menu.dashboard') : ($t('label.login') || 'Login')">
+                        <i :class="logged ? 'lab lab-dashboard' : 'lab lab-lock'" class="text-xs"></i>
+                    </router-link>
+
                     <button @click="toggleTheme" type="button"
                         class="w-8 h-8 rounded-3xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-amber-400 border border-gray-300 dark:border-gray-700 flex items-center justify-center transition shadow-xs"
                         :title="$t('button.toggle_theme')">
@@ -134,6 +164,9 @@ export default {
         },
         subtotal: function () {
             return this.$store.getters['tableCart/subtotal'];
+        },
+        logged: function () {
+            return !!this.$store.getters.authStatus;
         }
     },
     mounted() {

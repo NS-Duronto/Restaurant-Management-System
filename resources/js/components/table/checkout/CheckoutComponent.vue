@@ -10,9 +10,83 @@
 
             <div class="row">
                 <div class="col-12 md:col-7">
-                    <div class="mb-6 rounded-2xl shadow-xs bg-white">
-                        <h3 class="capitalize font-medium p-4 border-b border-gray-100">{{ $t('label.table') }}</h3>
-                        <p class="capitalize p-4 text-heading">{{ $t('label.inside') }} - {{ table.name }}</p>
+                    <!-- Order Type Selector (Table Dine-In vs Room Service) -->
+                    <div class="mb-6 rounded-2xl shadow-xs bg-white p-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-gray-100 flex-wrap gap-2">
+                            <h3 class="capitalize font-medium text-heading">{{ $t('label.order_type') }}</h3>
+                            <div class="flex gap-2">
+                                <button type="button" @click="isRoomOrder = false"
+                                    class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition"
+                                    :class="!isRoomOrder ? 'bg-primary text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'">
+                                    <i class="lab lab-restaurant mr-1"></i> {{ $t('label.table_order') || 'টেবিল অর্ডার' }}
+                                </button>
+                                <button type="button" @click="isRoomOrder = true"
+                                    class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition"
+                                    :class="isRoomOrder ? 'bg-amber-600 text-white shadow-xs' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'">
+                                    <i class="lab lab-home mr-1"></i> {{ $t('label.room_order') || 'রুম অর্ডার' }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="pt-3">
+                            <p class="text-xs text-heading flex items-center gap-1.5" v-if="!isRoomOrder">
+                                <i class="lab lab-chair text-primary"></i>
+                                <span>{{ $t('label.inside') }} - <b class="text-primary">{{ table.name }}</b></span>
+                            </p>
+                            <p class="text-xs text-amber-800 flex items-center gap-1.5" v-else>
+                                <i class="lab lab-home text-amber-600"></i>
+                                <span>রিসোর্ট রুম / কটেজে সার্ভিস ডেলিভারি (বেস: <b class="text-amber-900">{{ table.name }}</b>)</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Room Service Details Card when isRoomOrder is active -->
+                    <div v-if="isRoomOrder" class="mb-6 rounded-2xl shadow-xs bg-white border border-amber-200 overflow-hidden">
+                        <div class="p-4 bg-amber-50/70 border-b border-amber-100 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i class="lab lab-home text-amber-600 text-base"></i>
+                                <h3 class="font-bold text-sm text-amber-950">{{ $t('label.room_delivery_details') || 'রুম সার্ভিস ও গেস্টের তথ্য' }}</h3>
+                            </div>
+                            <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-semibold uppercase tracking-wider">Room Service</span>
+                        </div>
+
+                        <div class="p-4 flex flex-col gap-4">
+                            <!-- Room Number (Nullable / Optional) -->
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">
+                                    {{ $t('label.room_number') || 'রুম বা কটেজ নম্বর' }}
+                                    <span class="text-gray-400 font-normal">({{ $t('label.optional') || 'ঐচ্ছিক' }})</span>
+                                </label>
+                                <input type="text" v-model="checkoutProps.form.room_number"
+                                    class="w-full h-11 px-3.5 text-sm rounded-xl border border-gray-200 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition"
+                                    :placeholder="$t('label.room_number_placeholder') || 'যেমন: রুম ২০৪, কটেজ ৩'" />
+                            </div>
+
+                            <!-- Customer Name (Required for Room) -->
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">
+                                    {{ $t('label.customer_name') || 'আপনার নাম' }}
+                                    <span class="text-red-500 font-bold">*</span>
+                                </label>
+                                <input type="text" v-model="checkoutProps.form.customer_name"
+                                    class="w-full h-11 px-3.5 text-sm rounded-xl border border-gray-200 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition"
+                                    :class="{ 'border-red-500': nameError }"
+                                    :placeholder="$t('label.customer_name_placeholder') || 'আপনার পুরো নাম লিখুন'" />
+                                <small v-if="nameError" class="text-red-500 text-xs mt-1 block">{{ nameError }}</small>
+                            </div>
+
+                            <!-- Customer Phone (Required for Room) -->
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">
+                                    {{ $t('label.customer_phone') || 'মোবাইল নম্বর' }}
+                                    <span class="text-red-500 font-bold">*</span>
+                                </label>
+                                <input type="tel" v-model="checkoutProps.form.customer_phone"
+                                    class="w-full h-11 px-3.5 text-sm rounded-xl border border-gray-200 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition"
+                                    :class="{ 'border-red-500': phoneError }"
+                                    :placeholder="$t('label.customer_phone_placeholder') || '০১৭১XXXXXXXX'" />
+                                <small v-if="phoneError" class="text-red-500 text-xs mt-1 block">{{ phoneError }}</small>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -169,11 +243,17 @@ export default {
             loading: {
                 isActive: false,
             },
+            isRoomOrder: false,
+            nameError: "",
+            phoneError: "",
             placeOrderShow: false,
             paymentMethod: null,
             checkoutProps: {
                 form: {
                     dining_table_id: null,
+                    room_number: "",
+                    customer_name: "",
+                    customer_phone: "",
                     customer_id: 2,
                     branch_id: null,
                     subtotal: 0,
@@ -191,6 +271,9 @@ export default {
         }
     },
     mounted() {
+        if (this.$route.query.order_type === 'room') {
+            this.isRoomOrder = true;
+        }
         if (this.$store.getters['tableCart/lists'].length === 0) {
             this.$router.push({ name: 'table.menu.table', params: { slug: this.$route.params.slug } });
         }
@@ -214,6 +297,22 @@ export default {
             return appService.currencyFormat(amount, decimal, currency, position);
         },
         orderSubmit: function () {
+            this.nameError = "";
+            this.phoneError = "";
+
+            if (this.isRoomOrder) {
+                if (!this.checkoutProps.form.customer_name || !this.checkoutProps.form.customer_name.trim()) {
+                    this.nameError = this.$t('label.customer_name_placeholder') || 'আপনার নাম আবশ্যক';
+                    return alertService.error(this.nameError);
+                }
+                if (!this.checkoutProps.form.customer_phone || !this.checkoutProps.form.customer_phone.trim()) {
+                    this.phoneError = this.$t('label.customer_phone_placeholder') || 'মোবাইল নম্বর আবশ্যক';
+                    return alertService.error(this.phoneError);
+                }
+            } else {
+                this.checkoutProps.form.room_number = "";
+            }
+
             if (!this.paymentMethod) {
                 return alertService.error(this.$t('message.payment_method'));
             }
@@ -284,6 +383,9 @@ export default {
                 this.checkoutProps.form.delivery_charge = 0;
                 this.checkoutProps.form.delivery_time = null;
                 this.checkoutProps.form.total = 0;
+                this.checkoutProps.form.room_number = "";
+                this.checkoutProps.form.customer_name = "";
+                this.checkoutProps.form.customer_phone = "";
                 this.checkoutProps.form.items = [];
 
                 this.$store.dispatch('tableCart/resetCart').then(res => {

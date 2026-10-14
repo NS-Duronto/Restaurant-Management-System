@@ -385,6 +385,16 @@ class MenuTableSeeder extends Seeder
                 ]
             ],
             [
+                'name'       => 'Resort Settings',
+                'language'   => 'resort_settings',
+                'url'        => 'resort-settings',
+                'icon'       => 'fa-solid fa-building',
+                'priority'   => 125,
+                'status'     => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
                 'name'       => 'Settings',
                 'language'   => 'settings',
                 'url'        => 'settings',

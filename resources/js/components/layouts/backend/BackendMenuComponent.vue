@@ -21,6 +21,14 @@
 
         <!-- Scrollable Navigation Area -->
         <nav class="db-sidebar-nav flex-1 overflow-y-auto overflow-x-hidden space-y-1 pr-1">
+            <div class="px-2 mb-2">
+                <router-link :to="{ name: 'resort.landing' }"
+                    class="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white transition font-medium text-xs">
+                    <i class="lab lab-site text-sm"></i>
+                    <span class="flex-auto font-semibold">{{ $t('menu.resort_website') }}</span>
+                    <i class="lab lab-arrow-right text-[10px]"></i>
+                </router-link>
+            </div>
             <ul class="db-sidebar-nav-list space-y-1" v-if="menus.length > 0" v-for="menu in menus" :key="menu">
                 <li class="db-sidebar-nav-item" v-if="menu.url === '#'">
                     <span
@@ -142,8 +150,10 @@ export default {
         },
         logout: function () {
             this.$store.dispatch("logout").then(res => {
-                this.$router.push({ name: "auth.login" });
-            }).catch();
+                this.$router.push({ name: "resort.landing" });
+            }).catch(() => {
+                this.$router.push({ name: "resort.landing" });
+            });
         },
         sidebarActive: function (e) {
             const activeMenu = document.querySelector('.db-sidebar-nav-item.active');

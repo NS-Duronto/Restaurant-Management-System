@@ -87,7 +87,7 @@
                     </h4>
                 </div>
                 <router-link @click.prevent="closeSidebar"
-                    :to="{ name: 'table.checkout', params: { slug: this.$route.params.slug } }"
+                    :to="{ name: 'table.checkout', params: { slug: this.$route.params.slug }, query: this.$route.query }"
                     class="rounded-3xl text-center capitalize text-[15px] py-3 px-3 w-full text-white bg-primary">
                     {{ $t('button.proceed_checkout') }}
                 </router-link>

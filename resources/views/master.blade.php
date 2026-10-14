@@ -10,6 +10,12 @@
         return hexdec(substr($hex, 0, 2)) . ' ' . hexdec(substr($hex, 2, 2)) . ' ' . hexdec(substr($hex, 4, 2));
     };
     $themePrimary = $hexToChannels(Settings::group('theme')->get('theme_primary_color'), '249 115 22');
+    $resortName = Settings::group('resort')->get('resort_name');
+    $companyName = Settings::group('company')->get('company_name');
+    if (is_array($companyName)) {
+        $companyName = reset($companyName);
+    }
+    $brandTitle = $resortName ?: ($companyName ?: config('app.name'));
 @endphp
 <!DOCTYPE html>
 {{-- DYNAMIC THEME COLOR: set as an inline style attribute (not a <style> block) so it always
@@ -50,7 +56,7 @@
     <link rel="stylesheet" href="{{ asset('themes/default/css/custom.css') }}">
     <!-- PAGE TITLE -->
 
-    <title>{{ is_array($companyName = Settings::group('company')->get('company_name')) ? (reset($companyName) ?: config('app.name')) : ($companyName ?: config('app.name')) }}</title>
+    <title>{{ $brandTitle }}</title>
 
     <!-- FAV ICON -->
     <link rel="icon" type="image" href="{{ $favicon }}">
@@ -83,25 +89,26 @@
 
     <div id="app">
         <default-component>
-            <div id="rms-initial-preloader" style="position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #ffffff; z-index: 99999;" class="dark:bg-[#0f172a]">
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 32px; border-radius: 24px; background: rgba(255, 255, 255, 0.95); box-shadow: 0 20px 40px -15px rgba(249, 115, 22, 0.25); border: 1px solid rgba(249, 115, 22, 0.15);">
-                    <div style="position: relative; width: 76px; height: 76px; display: flex; align-items: center; justify-content: center;">
-                        <div style="position: absolute; inset: 0; border-radius: 50%; border: 3px solid transparent; border-top-color: #f97316; border-right-color: #fb923c; animation: rmsSpin 1s linear infinite;"></div>
-                        <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); display: flex; align-items: center; justify-content: center; color: #ffffff; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);">
-                            <svg style="width: 22px; height: 22px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4 3V11C4 12.6569 5.34315 14 7 14C8.65685 14 10 12.6569 10 11V3M7 3V21M4 7H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M15 3V21M15 3C16.5 3 20 4.5 20 8C20 11.5 16.5 13 15 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <div id="rms-initial-preloader" style="position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #faf8f5; z-index: 99999;" class="dark:bg-[#0f1a12]">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px 36px; border-radius: 24px; background: rgba(255, 255, 255, 0.98); box-shadow: 0 20px 45px -10px rgba(18, 31, 21, 0.12); border: 1px solid rgba(201, 163, 78, 0.28);">
+                    <div style="position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                        <div style="position: absolute; inset: 0; border-radius: 50%; border: 3px solid transparent; border-top-color: #c9a34e; border-right-color: #1b2e20; animation: rmsSpin 1.1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;"></div>
+                        <div style="position: absolute; inset: 6px; border-radius: 50%; border: 2px dashed rgba(201, 163, 78, 0.35); animation: rmsSpinReverse 4s linear infinite;"></div>
+                        <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #1b2e20 0%, #101c13 100%); display: flex; align-items: center; justify-content: center; color: #c9a34e; box-shadow: 0 4px 14px rgba(27, 46, 32, 0.3);">
+                            <svg style="width: 24px; height: 24px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9h1M9 13h1M9 17h1"/>
                             </svg>
                         </div>
                     </div>
-                    <div style="margin-top: 14px; text-align: center;">
-                        <span style="font-size: 0.95rem; font-weight: 700; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Sohoj RMS</span>
-                        <div style="font-size: 0.78rem; font-weight: 500; color: #64748b; margin-top: 2px;">লোড হচ্ছে...</div>
+                    <div style="margin-top: 16px; text-align: center;">
+                        <span style="font-size: 1.05rem; font-weight: 700; color: #172419; letter-spacing: -0.2px; display: block;">{{ $brandTitle }}</span>
+                        <div style="font-size: 0.8rem; font-weight: 500; color: #667568; margin-top: 4px;">লোড হচ্ছে...</div>
                     </div>
                 </div>
             </div>
             <style>
                 @keyframes rmsSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                @keyframes rmsSpinReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
             </style>
         </default-component>
     </div>

@@ -58,6 +58,24 @@
                                 {{ order.table_name }}
                             </span>
                         </li>
+                        <li class="text-xs" v-if="order.room_number">
+                            <span class="font-bold text-amber-600 dark:text-amber-400">{{ $t("label.room_number") }}:</span>
+                            <span class="text-amber-700 dark:text-amber-300 font-bold ml-1 bg-amber-100 dark:bg-amber-900/40 px-2 py-0.5 rounded">
+                                {{ order.room_number }}
+                            </span>
+                        </li>
+                        <li class="text-xs" v-if="order.customer_name">
+                            {{ $t("label.customer_name") }}:
+                            <span class="text-heading dark:text-gray-100 font-medium">
+                                {{ order.customer_name }}
+                            </span>
+                        </li>
+                        <li class="text-xs" v-if="order.customer_phone">
+                            {{ $t("label.phone") }}:
+                            <span class="text-heading dark:text-gray-100 font-medium">
+                                {{ order.customer_phone }}
+                            </span>
+                        </li>
                         <li class="text-xs" v-if="order.token">
                             {{ $t("label.token_no") }}:
                             <span class="text-heading dark:text-gray-100 font-medium">
@@ -229,21 +247,29 @@
                         <h3 class="db-card-title">{{ $t("label.delivery_information") }}</h3>
                     </div>
                     <div class="db-card-body">
+                        <div v-if="order.room_number" class="mb-4 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 flex items-center justify-between">
+                            <span class="text-xs font-bold text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
+                                <i class="lab lab-home text-amber-600"></i> {{ $t('label.room_number') }}
+                            </span>
+                            <span class="text-sm font-extrabold text-amber-700 dark:text-amber-300">
+                                {{ order.room_number }}
+                            </span>
+                        </div>
                         <div class="flex items-center gap-3 mb-4">
                             <img class="w-8 rounded-full" :src="orderUser.image" alt="avatar" />
                             <h4 class="font-semibold text-sm capitalize text-gray-800 dark:text-gray-100">
-                                {{ textShortener(orderUser.name, 20) }}
+                                {{ order.customer_name || textShortener(orderUser.name, 20) }}
                             </h4>
                         </div>
                         <ul class="flex flex-col gap-3 py-4 border-t border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300">
-                            <li class="flex items-center gap-2.5">
+                            <li class="flex items-center gap-2.5" v-if="orderUser.email">
                                 <i class="lab lab-mail lab-font-size-14 text-primary"></i>
                                 <span class="text-xs">{{ orderUser.email }}</span>
                             </li>
-                            <li v-if="orderUser.phone" class="flex items-center gap-2.5">
+                            <li v-if="order.customer_phone || orderUser.phone" class="flex items-center gap-2.5">
                                 <i class="lab lab-call-calling-linear lab-font-size-14 text-primary"></i>
-                                <span class="text-xs">
-                                    {{ orderUser.country_code + orderUser.phone }}
+                                <span class="text-xs font-medium">
+                                    {{ order.customer_phone || (orderUser.country_code + orderUser.phone) }}
                                 </span>
                             </li>
                         </ul>

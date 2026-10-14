@@ -5,8 +5,16 @@
         <div class="container">
             <div class="flex flex-col-reverse flex-col md:flex-row items-center justify-between gap-5 py-8">
                 <p class="text-sm text-white">{{ setting.site_copyright }}</p>
-                <nav v-if="pages.length > 0" class="flex items-center gap-6">
-                    <router-link v-for="page in pages" class="text-sm capitalize text-white"
+                <nav class="flex flex-wrap items-center gap-4 sm:gap-6">
+                    <router-link :to="{ name: 'resort.landing' }" class="text-sm font-semibold capitalize text-white hover:underline flex items-center gap-1.5">
+                        <i class="lab lab-site text-xs"></i>
+                        <span>{{ $t('menu.resort_website') }}</span>
+                    </router-link>
+                    <router-link :to="logged ? '/admin/dashboard' : '/login'" class="text-sm font-semibold capitalize text-white hover:underline flex items-center gap-1.5">
+                        <i :class="logged ? 'lab lab-dashboard' : 'lab lab-lock'" class="text-xs"></i>
+                        <span>{{ logged ? $t('menu.dashboard') : ($t('label.login') || 'Login') }}</span>
+                    </router-link>
+                    <router-link v-for="page in pages" :key="page.id" class="text-sm capitalize text-white hover:underline"
                         :to="{ name: 'table.page', params: { slug: this.$route.params.slug, pageSlug: page.slug } }">
                         {{ page.title }}
                     </router-link>
@@ -38,6 +46,9 @@ export default {
         },
         pages: function () {
             return this.$store.getters['frontendPage/lists'];
+        },
+        logged: function () {
+            return !!this.$store.getters.authStatus;
         }
     },
     mounted() {

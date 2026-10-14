@@ -32,13 +32,37 @@ import purchaseRoutes from "./modules/purchaseRoutes";
 import kitchenGoodsRoutes from "./modules/kitchenGoodsRoutes";
 import sendToKitchenRoutes from "./modules/sendToKitchenRoutes";
 import profitLossReportRoutes from "./modules/profitLossReportRoutes";
+import resortRoutes from "./modules/resortRoutes";
+import ResortLandingComponent from "../components/frontend/resort/ResortLandingComponent.vue";
+import RmsFoodComponent from "../components/frontend/resort/RmsFoodComponent.vue";
 
 
 const baseRoutes = [
     {
         path: "/",
-        redirect: { name: "auth.login" },
-        name: "root"
+        component: ResortLandingComponent,
+        name: "resort.landing",
+        meta: {
+            isFrontend: true,
+            auth: false,
+        },
+    },
+    {
+        path: "/rms",
+        name: "frontend.rms",
+        redirect: to => {
+            const slug = to.query.table || "table-1";
+            return { name: "table.menu.table", params: { slug: slug } };
+        },
+        meta: {
+            isFrontend: false,
+            isTable: true,
+            auth: false,
+        },
+    },
+    {
+        path: "/dashboard",
+        redirect: { name: "admin.dashboard" },
     },
     {
         path: "/:pathMatch(.*)*",
@@ -93,7 +117,8 @@ export const routes = baseRoutes.concat(
     purchaseRoutes,
     kitchenGoodsRoutes,
     sendToKitchenRoutes,
-    profitLossReportRoutes
+    profitLossReportRoutes,
+    resortRoutes
 );
 
 const permission = store.getters.authPermission;

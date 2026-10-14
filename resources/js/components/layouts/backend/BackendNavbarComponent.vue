@@ -74,6 +74,14 @@
                             $t('label.pos_terminal_active') }}
                     </span>
 
+                    <router-link :to="{ name: 'resort.landing' }"
+                        class="flex items-center gap-2 h-9 px-3 rounded-lg bg-primary/10 hover:bg-primary text-primary hover:text-white transition text-xs font-semibold"
+                        :title="$t('menu.resort_website')">
+                        <i class="lab lab-site text-sm"></i>
+                        <span class="hidden md:inline">{{ $t('menu.resort_website') }}</span>
+                        <i class="lab lab-arrow-right text-[10px]"></i>
+                    </router-link>
+
                     <button @click="toggleTheme" type="button"
                         class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-orange-400 border border-gray-300 dark:border-gray-700 flex items-center justify-center transition shadow-sm"
                         :title="$t('button.toggle_theme')">
@@ -303,8 +311,10 @@ export default {
         },
         logout: function () {
             this.$store.dispatch("logout").then(res => {
-                this.$router.push({ name: "auth.login" });
-            }).catch();
+                this.$router.push({ name: "resort.landing" });
+            }).catch(() => {
+                this.$router.push({ name: "resort.landing" });
+            });
         },
         handleBackdropClick: function () {
             const activeDrawer = document?.querySelector(".drawer.active");
