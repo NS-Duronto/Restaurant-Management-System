@@ -16,15 +16,15 @@ class BackupController extends AdminController
      */
     public function downloadDbBackup(): StreamedResponse
     {
-        $databaseName = config('database.connections.mysql.database') ?: 'foodking';
-        $filename = 'foodking_db_backup_' . date('Y_m_d_His') . '.sql';
+        $databaseName = config('database.connections.mysql.database') ?: 'sohoj_rms';
+        $filename = 'sohoj_rms_db_backup_' . date('Y_m_d_His') . '.sql';
 
         return response()->streamDownload(function () use ($databaseName) {
             $handle = fopen('php://output', 'w');
             $pdo = DB::getPdo();
 
             fwrite($handle, "-- --------------------------------------------------------\n");
-            fwrite($handle, "-- FoodKing RMS Database Backup\n");
+            fwrite($handle, "-- Sohoj RMS Database Backup\n");
             fwrite($handle, "-- Database: `{$databaseName}`\n");
             fwrite($handle, "-- Date / Time: " . date('Y-m-d H:i:s') . "\n");
             fwrite($handle, "-- --------------------------------------------------------\n\n");

@@ -45,7 +45,7 @@
                 {{ trans('installer.database.label.database_name') }} <span class="req">*</span>
             </label>
             <input name="database_name" type="text"
-                   value="{{ old('database_name', env('DB_DATABASE', 'foodking')) }}"
+                   value="{{ old('database_name', env('DB_DATABASE', 'sohoj_rms')) }}"
                    class="form-input">
             @if ($errors->has('database_name'))
                 <div class="form-error">{{ $errors->first('database_name') }}</div>

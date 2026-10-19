@@ -18,7 +18,7 @@
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
             <span style="color: #64748b;">ইমেইল:</span>
-            <strong style="color: #0f172a; font-family: monospace;">admin@foodking.com</strong>
+            <strong style="color: #0f172a; font-family: monospace;">admin@example.com</strong>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 13px;">
             <span style="color: #64748b;">পাসওয়ার্ড:</span>

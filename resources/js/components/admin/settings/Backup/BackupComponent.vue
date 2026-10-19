@@ -59,7 +59,7 @@ export default {
                 const link = document.createElement('a');
                 link.href = url;
                 const dateStr = new Date().toISOString().slice(0, 10);
-                link.download = `foodking_db_backup_${dateStr}.sql`;
+                link.download = `sohoj_rms_db_backup_${dateStr}.sql`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);

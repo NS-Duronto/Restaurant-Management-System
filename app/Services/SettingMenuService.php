@@ -30,7 +30,7 @@ class SettingMenuService
                 );
                 $menus = SettingMenu::where('status', Status::ACTIVE)->orderBy('priority', 'desc')->get();
             }
-            return $menus;
+            return $menus->unique('url')->values();
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
             throw new Exception(QueryExceptionLibrary::message($exception), 422);

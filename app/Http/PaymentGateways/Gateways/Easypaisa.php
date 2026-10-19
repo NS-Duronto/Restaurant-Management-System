@@ -34,7 +34,7 @@ class Easypaisa extends PaymentAbstract
 
             Config::set("easypaisa.mode", $this->mode);
             Config::set("easypaisa.type", 'Hosted');
-            Config::set("easypaisa.callback", 'http://foodking.lrvl/payment/success/easypaisa');
+            Config::set("easypaisa.callback", url('/payment/success/easypaisa'));
             Config::set("easypaisa.hosted", '');
 
             Config::set("easypaisa.sandbox_url", $this->apiUrl);
