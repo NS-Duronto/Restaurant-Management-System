@@ -5,7 +5,7 @@
             <div class="header-container">
                 <router-link to="/" class="back-link">
                     <i class="fas fa-arrow-left"></i>
-                    <span>রিসোর্ট হোমপেজে ফিরুন</span>
+                    <span>{{ $t('resort.return_resort_home') }}</span>
                 </router-link>
 
                 <div class="brand">
@@ -26,13 +26,13 @@
         <!-- HERO BANNER -->
         <div class="rms-banner">
             <div class="banner-content">
-                <h2>সুস্বাদু ও স্বাস্থ্যসম্মত খাবারের স্বর্গরাজ্য</h2>
-                <p>সিলেটের ঐতিহ্যবাহী ও আন্তর্জাতিক মানের সেরা খাবারগুলো অর্ডার করুন আপনার রুমে বা টেবিলে।</p>
+                <h2>{{ $t('resort.food_hero_title') }}</h2>
+                <p>{{ $t('resort.food_hero_sub') }}</p>
                 
                 <div class="search-wrap">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" v-model="searchQuery" placeholder="খাবারের নাম দিয়ে খুঁজুন (যেমন: বিরিয়ানি, গ্রিল, জুস...)" />
+                        <input type="text" v-model="searchQuery" :placeholder="$t('resort.food_search_placeholder')" />
                         <button v-if="searchQuery" @click="searchQuery = ''" class="clear-btn">&times;</button>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
             <!-- CATEGORY PILLS -->
             <div class="categories-bar">
                 <button type="button" class="cat-pill" :class="{ 'active': selectedCategory === 'all' }" @click="selectedCategory = 'all'">
-                    <i class="fas fa-th-large"></i> সব মেনু
+                    <i class="fas fa-th-large"></i> {{ $t('resort.all_menus') }}
                 </button>
                 <button type="button" v-for="cat in categories" :key="cat.id"
                     class="cat-pill" :class="{ 'active': selectedCategory === cat.id }"
@@ -56,22 +56,22 @@
             <div class="food-section-wrap">
                 <div class="section-meta">
                     <h3>{{ getSelectedCategoryName() }}</h3>
-                    <span class="item-count">মোট {{ filteredItems.length }}টি খাবার পাওয়া গেছে</span>
+                    <span class="item-count">{{ $t('resort.foods_found_count', { count: filteredItems.length }) }}</span>
                 </div>
 
                 <div class="items-grid" v-if="filteredItems.length > 0">
                     <div v-for="item in filteredItems" :key="item.id" class="menu-card">
                         <div class="card-img-wrap">
                             <img :src="item.thumb || item.cover || 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=400&q=80'" :alt="item.name" />
-                            <span v-if="item.is_featured" class="featured-badge">স্পেশাল</span>
+                            <span v-if="item.is_featured" class="featured-badge">{{ $t('resort.tag_special') }}</span>
                         </div>
                         <div class="card-content">
                             <h4>{{ item.name }}</h4>
-                            <p class="desc">{{ item.description || 'তাজা উপাদান ও সেরা স্বাদে তৈরি।' }}</p>
+                            <p class="desc">{{ item.description || '' }}</p>
                             <div class="card-footer">
                                 <span class="price">৳{{ item.price }}</span>
                                 <button type="button" class="add-btn" @click="addToCart(item)">
-                                    <i class="fas fa-plus"></i> যোগ করুন
+                                    <i class="fas fa-plus"></i> {{ $t('resort.add_to_cart') }}
                                 </button>
                             </div>
                         </div>
@@ -80,8 +80,8 @@
 
                 <div v-else class="empty-state">
                     <i class="fas fa-utensils"></i>
-                    <h4>কোনো খাবার পাওয়া যায়নি</h4>
-                    <p>অনুগ্রহ করে অন্য কোনো ক্যাটাগরি অথবা সার্চ কি-ওয়ার্ড চেষ্টা করুন।</p>
+                    <h4>{{ $t('resort.no_food_found') }}</h4>
+                    <p>{{ $t('resort.no_food_found_sub') }}</p>
                 </div>
             </div>
         </div>
@@ -89,11 +89,11 @@
         <!-- FLOATING BOTTOM CART BAR (MOBILE) -->
         <div class="mobile-cart-bar" v-if="cartTotalItems > 0" @click="cartOpen = true">
             <div class="cart-info">
-                <span class="badge">{{ cartTotalItems }} আইটেম</span>
+                <span class="badge">{{ $t('resort.cart_items_count', { count: cartTotalItems }) }}</span>
                 <span class="total">৳{{ cartSubtotal }}</span>
             </div>
             <button class="view-cart-btn">
-                <span>অর্ডার সম্পূর্ণ করুন</span>
+                <span>{{ $t('resort.complete_order') }}</span>
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>
@@ -104,7 +104,7 @@
                 <div class="drawer-header">
                     <div class="title">
                         <i class="fas fa-shopping-bag text-orange-500"></i>
-                        <h3>আপনার ফুড কার্ট ({{ cartTotalItems }})</h3>
+                        <h3>{{ $t('resort.your_food_cart') }} ({{ cartTotalItems }})</h3>
                     </div>
                     <button class="close-btn" @click="cartOpen = false">&times;</button>
                 </div>
@@ -128,55 +128,55 @@
                         <!-- BILL BREAKDOWN -->
                         <div class="bill-summary">
                             <div class="row">
-                                <span>সাবটোটাল</span>
+                                <span>{{ $t('resort.subtotal') }}</span>
                                 <span>৳{{ cartSubtotal }}</span>
                             </div>
                             <div class="row grand-total">
-                                <span>সর্বমোট প্রদেয়</span>
+                                <span>{{ $t('resort.grand_total') }}</span>
                                 <span>৳{{ cartSubtotal }}</span>
                             </div>
                         </div>
 
                         <!-- CHECKOUT FORM -->
                         <div class="checkout-form">
-                            <h4><i class="fas fa-receipt"></i> ডেলিভারি ও গ্রাহক তথ্য</h4>
+                            <h4><i class="fas fa-receipt"></i> {{ $t('resort.delivery_customer_info') }}</h4>
                             <div class="input-field">
-                                <label>আপনার পূর্ণ নাম *</label>
-                                <input v-model="orderForm.name" type="text" placeholder="যেমন: মোঃ সাব্বির" required />
+                                <label>{{ $t('resort.fullName') }} *</label>
+                                <input v-model="orderForm.name" type="text" :placeholder="$t('resort.ph_customer_name')" required />
                             </div>
                             <div class="input-field">
-                                <label>মোবাইল নম্বর *</label>
-                                <input v-model="orderForm.phone" type="tel" placeholder="যেমন: ০১৭১১-১২৩৪৫৬" required />
+                                <label>{{ $t('resort.phone') }} *</label>
+                                <input v-model="orderForm.phone" type="tel" :placeholder="$t('resort.phPhone')" required />
                             </div>
                             <div class="input-field">
-                                <label>রুম নম্বর / টেবিল নম্বর / ঠিকানা *</label>
-                                <input v-model="orderForm.address" type="text" placeholder="যেমন: রুম ২০৪ / কটেজ ৩ / টেবিল ৫" required />
+                                <label>{{ $t('resort.room_table_address') }} *</label>
+                                <input v-model="orderForm.address" type="text" :placeholder="$t('resort.ph_room_table_address')" required />
                             </div>
                             <div class="input-field">
-                                <label>বিশেষ নির্দেশনা (ঐচ্ছিক)</label>
-                                <textarea v-model="orderForm.instruction" rows="2" placeholder="ঝাল কম বা বিশেষ কোনো অনুরোধ..."></textarea>
+                                <label>{{ $t('resort.specialNote') }}</label>
+                                <textarea v-model="orderForm.instruction" rows="2" :placeholder="$t('resort.ph_food_instruction')"></textarea>
                             </div>
                             <div class="input-field">
-                                <label>পেমেন্ট মেথড</label>
+                                <label>{{ $t('resort.payment_method') }}</label>
                                 <select v-model="orderForm.payment_method">
-                                    <option value="cash">ক্যাশ অন ডেলিভারি / রুমে পে করুন</option>
-                                    <option value="digital">অনলাইন পেমেন্ট / বিকাশ / কার্ড</option>
+                                    <option value="cash">{{ $t('resort.cod_room_pay') }}</option>
+                                    <option value="digital">{{ $t('resort.online_payment_option') }}</option>
                                 </select>
                             </div>
 
                             <button type="button" class="place-order-btn" @click="placeOrder" :disabled="isPlacingOrder">
                                 <span v-if="!isPlacingOrder">
-                                    <i class="fas fa-check-circle"></i> অর্ডার নিশ্চিত করুন (৳{{ cartSubtotal }})
+                                    <i class="fas fa-check-circle"></i> {{ $t('resort.confirm_order_btn') }} (৳{{ cartSubtotal }})
                                 </span>
-                                <span v-else>প্রসেসিং হচ্ছে...</span>
+                                <span v-else>{{ $t('resort.processing') }}</span>
                             </button>
                         </div>
                     </div>
 
                     <div v-else class="empty-cart">
                         <i class="fas fa-shopping-basket"></i>
-                        <h4>আপনার কার্ট খালি</h4>
-                        <p>মেনু থেকে আপনার পছন্দের খাবার কার্টে যুক্ত করুন।</p>
+                        <h4>{{ $t('resort.cart_is_empty') }}</h4>
+                        <p>{{ $t('resort.cart_is_empty_sub') }}</p>
                     </div>
                 </div>
             </div>
@@ -188,12 +188,12 @@
                 <div class="success-icon">
                     <i class="fas fa-check"></i>
                 </div>
-                <h3>অর্ডার সফলভাবে গ্রহণ করা হয়েছে!</h3>
-                <p>ধন্যবাদ! আপনার খাবার তৈরির কাজ শুরু হয়েছে। আমাদের টিম খুব শীঘ্রই খাবার আপনার কাছে পৌঁছে দেবে।</p>
+                <h3>{{ $t('resort.order_success_title') }}</h3>
+                <p>{{ $t('resort.order_success_sub') }}</p>
                 <div class="order-id-badge" v-if="lastOrderId">
-                    অর্ডার ট্র্যাকিং আইডি: #{{ lastOrderId }}
+                    {{ $t('resort.order_tracking_id') }}: #{{ lastOrderId }}
                 </div>
-                <button class="ok-btn" @click="orderSuccessModal = false">ঠিক আছে</button>
+                <button class="ok-btn" @click="orderSuccessModal = false">{{ $t('resort.btn_ok') }}</button>
             </div>
         </div>
     </div>
@@ -248,9 +248,9 @@ export default {
     },
     methods: {
         getSelectedCategoryName() {
-            if (this.selectedCategory === "all") return "সকল জনপ্রিয় খাবার";
+            if (this.selectedCategory === "all") return this.$t('resort.all_popular_foods');
             const cat = this.categories.find(c => c.id === this.selectedCategory);
-            return cat ? cat.name : "মেনু আইটেমসমূহ";
+            return cat ? cat.name : this.$t('resort.menu_items');
         },
         addToCart(item) {
             const existing = this.cart.find(ci => ci.id === item.id);
@@ -278,7 +278,7 @@ export default {
         },
         placeOrder() {
             if (!this.orderForm.name || !this.orderForm.phone || !this.orderForm.address) {
-                alert('অনুগ্রহ করে নাম, মোবাইল নম্বর এবং রুম/ঠিকানা পূরণ করুন।');
+                alert(this.$t('resort.fill_required_order_fields'));
                 return;
             }
             if (this.cart.length === 0) return;

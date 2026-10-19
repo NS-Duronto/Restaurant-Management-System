@@ -14,10 +14,37 @@ use DateTime;
 
 class AppLibrary
 {
+    private static ?string $cachedDateFormat = null;
+    private static ?string $cachedTimeFormat = null;
+
+    public static function getDateFormat(): string
+    {
+        if (self::$cachedDateFormat === null) {
+            try {
+                self::$cachedDateFormat = Settings::group('site')->get('site_date_format') ?: (env('DATE_FORMAT') ?: 'd-m-Y');
+            } catch (\Throwable $e) {
+                self::$cachedDateFormat = env('DATE_FORMAT') ?: 'd-m-Y';
+            }
+        }
+        return self::$cachedDateFormat;
+    }
+
+    public static function getTimeFormat(): string
+    {
+        if (self::$cachedTimeFormat === null) {
+            try {
+                self::$cachedTimeFormat = Settings::group('site')->get('site_time_format') ?: (env('TIME_FORMAT') ?: 'h:i A');
+            } catch (\Throwable $e) {
+                self::$cachedTimeFormat = env('TIME_FORMAT') ?: 'h:i A';
+            }
+        }
+        return self::$cachedTimeFormat;
+    }
+
     public static function date($date, $pattern = null): string
     {
         if (!$pattern) {
-            $pattern = env('DATE_FORMAT');
+            $pattern = self::getDateFormat();
         }
         return Carbon::parse($date)->format($pattern);
     }
@@ -25,7 +52,7 @@ class AppLibrary
     public static function time($time, $pattern = null): string
     {
         if (!$pattern) {
-            $pattern = env('TIME_FORMAT');
+            $pattern = self::getTimeFormat();
         }
         return Carbon::parse($time)->format($pattern);
     }
@@ -33,7 +60,7 @@ class AppLibrary
     public static function datetime($dateTime, $pattern = null): string
     {
         if (!$pattern) {
-            $pattern = env('TIME_FORMAT') . ', ' . env('DATE_FORMAT');
+            $pattern = self::getTimeFormat() . ', ' . self::getDateFormat();
         }
         return Carbon::parse($dateTime)->format($pattern);
     }
@@ -41,7 +68,7 @@ class AppLibrary
     public static function increaseDate($dateTime, $days, $pattern = null): string
     {
         if (!$pattern) {
-            $pattern = env('DATE_FORMAT');
+            $pattern = self::getDateFormat();
         }
         return Carbon::parse($dateTime)->addDays($days)->format($pattern);
     }
@@ -49,7 +76,7 @@ class AppLibrary
     public static function deliveryTime($dateTime, $pattern = null): string
     {
         if (!$pattern) {
-            $pattern = env('TIME_FORMAT');
+            $pattern = self::getTimeFormat();
         }
         $explode = explode('-', $dateTime);
         if (count($explode) == 2) {

@@ -58,6 +58,7 @@ use App\Http\Controllers\Admin\SimpleUserController;
 use App\Http\Controllers\Admin\SiteController;
 use App\Http\Controllers\Admin\SmsGatewayController;
 use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\ResortController as AdminResortController;
 use App\Http\Controllers\Admin\TableOrderController as AdminTableOrderController;
 use App\Http\Controllers\Admin\TaxController;
@@ -642,6 +643,8 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::delete('/{expense}', [ExpenseController::class, 'destroy']);
     });
 
+    Route::get('/backup/database', [BackupController::class, 'downloadDbBackup']);
+
     Route::prefix('resort')->name('resort.')->group(function () {
         Route::get('/settings', [AdminResortController::class, 'getSettings']);
         Route::match(['post', 'put'], '/settings', [AdminResortController::class, 'updateSettings']);
@@ -650,6 +653,7 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
 
         Route::get('/sliders', [AdminResortController::class, 'sliders']);
         Route::post('/sliders', [AdminResortController::class, 'storeSlider']);
+        Route::post('/sliders/reorder', [AdminResortController::class, 'updateSlidersOrder']);
         Route::match(['post', 'put'], '/sliders/{slider}', [AdminResortController::class, 'updateSlider']);
         Route::delete('/sliders/{slider}', [AdminResortController::class, 'destroySlider']);
 
@@ -665,6 +669,7 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
 
         Route::get('/teams', [AdminResortController::class, 'teams']);
         Route::post('/teams', [AdminResortController::class, 'storeTeam']);
+        Route::post('/teams/reorder', [AdminResortController::class, 'updateTeamsOrder']);
         Route::match(['post', 'put'], '/teams/{team}', [AdminResortController::class, 'updateTeam']);
         Route::delete('/teams/{team}', [AdminResortController::class, 'destroyTeam']);
 
@@ -675,6 +680,7 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
 
         Route::get('/partners', [AdminResortController::class, 'partners']);
         Route::post('/partners', [AdminResortController::class, 'storePartner']);
+        Route::post('/partners/reorder', [AdminResortController::class, 'updatePartnersOrder']);
         Route::match(['post', 'put'], '/partners/{partner}', [AdminResortController::class, 'updatePartner']);
         Route::delete('/partners/{partner}', [AdminResortController::class, 'destroyPartner']);
 

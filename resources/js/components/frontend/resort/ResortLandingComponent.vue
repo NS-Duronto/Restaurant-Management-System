@@ -128,7 +128,7 @@
                     <!-- Merged About Event Showcase Slider -->
                     <div class="about-showcase-wrap" v-if="aboutSliders.length > 0">
                         <div class="about-showcase-header">
-                            <h4><i class="fas fa-star text-gold"></i> রিসোর্ট স্পেশাল ইভেন্টস ও ফিচারস</h4>
+                            <h4><i class="fas fa-star text-gold"></i> {{ t('special_events_features') }}</h4>
                             <div class="showcase-nav">
                                 <button @click="prevAboutEvent"><i class="fas fa-chevron-left"></i></button>
                                 <span>{{ activeAboutIndex + 1 }} / {{ aboutSliders.length }}</span>
@@ -138,7 +138,7 @@
                         <div class="showcase-card" v-if="aboutSliders[activeAboutIndex]">
                             <img :src="aboutSliders[activeAboutIndex].image" alt="showcase" class="showcase-img" />
                             <div class="showcase-content">
-                                <span class="showcase-tag">{{ aboutSliders[activeAboutIndex].tag || 'স্পেশাল' }}</span>
+                                <span class="showcase-tag">{{ aboutSliders[activeAboutIndex].tag || t('tag_special') }}</span>
                                 <h4>{{ aboutSliders[activeAboutIndex].title }}</h4>
                                 <p>{{ aboutSliders[activeAboutIndex].description }}</p>
                                 <a href="#booking" class="btn btn-outline-sm">{{ t('bookNow') }}</a>
@@ -200,12 +200,12 @@
                                 <i class="fab fa-facebook text-primary text-3xl"></i>
                                 <div>
                                     <h4>{{ settings.resort_name || 'Garden Palace Resort Sylhet' }}</h4>
-                                    <p>অফিসিয়াল ফেসবুক পেজ</p>
+                                    <p>{{ t('official_fb_page') }}</p>
                                 </div>
                             </div>
-                            <p class="fb-text">আমাদের সকল আপডেট, বিশেষ ডিসকাউন্ট এবং ফটো নিয়মিত দেখতে ফেসবুক পেজে যুক্ত থাকুন।</p>
+                            <p class="fb-text">{{ t('fb_page_cta') }}</p>
                             <a :href="settings.resort_facebook || 'https://facebook.com'" target="_blank" class="btn btn-primary">
-                                <i class="fab fa-facebook"></i> ভিজিট ফেসবুক পেজ
+                                <i class="fab fa-facebook"></i> {{ t('visit_fb_page') }}
                             </a>
                         </div>
                     </div>
@@ -253,7 +253,7 @@
                         <div v-for="ev in latestEvents" :key="ev.id" class="event-card">
                             <div class="event-img">
                                 <img :src="ev.image" :alt="ev.title" />
-                                <div class="event-badge">{{ ev.tag || 'ইভেন্ট' }}</div>
+                                <div class="event-badge">{{ ev.tag || t('tag_event') }}</div>
                             </div>
                             <div class="event-body">
                                 <h4>{{ ev.title }}</h4>
@@ -277,7 +277,7 @@
                             <span v-if="pl.badge" class="plan-badge">{{ pl.badge }}</span>
                             <div class="plan-icon"><i class="fas fa-crown"></i></div>
                             <h4>{{ pl.title }}</h4>
-                            <div class="price">৳{{ pl.price }} <small>/{{ pl.duration || 'বছর' }}</small></div>
+                            <div class="price">৳{{ pl.price }} <small>/{{ pl.duration || t('year') }}</small></div>
                             <ul>
                                 <li v-for="(feat, idx) in parsePlanFeatures(pl.features)" :key="idx">
                                     <i class="fas fa-check"></i> {{ feat }}
@@ -308,15 +308,15 @@
                             <div class="success-icon-wrap">
                                 <i class="fas fa-check-circle"></i>
                             </div>
-                            <h4>{{ currentLang === 'bn' ? 'ধন্যবাদ! আপনার বুকিং রিকোয়েস্ট সফলভাবে গ্রহণ করা হয়েছে' : 'Thank You! Booking Request Received' }}</h4>
+                            <h4>{{ t('booking_received_title') }}</h4>
                             <p class="success-msg-desc">{{ bookingSuccessMessage }}</p>
                             <div class="success-contact-badge">
                                 <i class="fas fa-phone-alt"></i>
-                                <span>{{ currentLang === 'bn' ? 'জরুরি প্রয়োজনে সরাসরি যোগাযোগ করতে পারেন:' : 'For urgent assistance, feel free to call:' }}</span>
-                                <strong>{{ settings.resort_phone || '+৮৮০ ১৭১১-১২৩৪৫৬' }}</strong>
+                                <span>{{ t('urgent_contact_prompt') }}</span>
+                                <strong>{{ settings.resort_phone || '+880 1711-123456' }}</strong>
                             </div>
                             <button type="button" @click="bookingSuccessMessage = null" class="btn-new-booking">
-                                <i class="fas fa-calendar-plus mr-1"></i> {{ currentLang === 'bn' ? 'আরেকটি বুকিং করুন' : 'Make Another Booking' }}
+                                <i class="fas fa-calendar-plus mr-1"></i> {{ t('make_another_booking') }}
                             </button>
                         </div>
 
@@ -339,22 +339,22 @@
                                 <div class="form-group">
                                     <label>{{ activeBookingTab === 'resort' ? t('roomType') : t('eventType') }}</label>
                                     <select v-if="activeBookingTab === 'resort'" v-model="bookingForm.room_type">
-                                        <option value="ডিলাক্স কটেজ">ডিলাক্স কটেজ (Deluxe Cottage)</option>
-                                        <option value="ফ্যামিলি সুইট">ফ্যামিলি সুইট (Family Suite)</option>
-                                        <option value="ভিআইপি ভিলা">ভিআইপি ভিলা (VIP Villa)</option>
-                                        <option value="কাপল রুম">কাপল রুম (Couple Room)</option>
+                                        <option :value="t('opt_deluxe_cottage')">{{ t('opt_deluxe_cottage') }}</option>
+                                        <option :value="t('opt_family_suite')">{{ t('opt_family_suite') }}</option>
+                                        <option :value="t('opt_vip_villa')">{{ t('opt_vip_villa') }}</option>
+                                        <option :value="t('opt_couple_room')">{{ t('opt_couple_room') }}</option>
                                     </select>
                                     <select v-else v-model="bookingForm.event_type">
-                                        <option value="জন্মদিন উদযাপন">জন্মদিন উদযাপন (Birthday Party)</option>
-                                        <option value="বিবাহবার্ষিকী ও ওয়েডিং">বিবাহবার্ষিকী ও ওয়েডিং (Wedding Party)</option>
-                                        <option value="কর্পোরেট কনফারেন্স">কর্পোরেট কনফারেন্স (Corporate Meeting)</option>
-                                        <option value="ফ্যামিলি গেট-টুগেদার">ফ্যামিলি গেট-টুগেদার (Family Gathering)</option>
+                                        <option :value="t('opt_birthday_party')">{{ t('opt_birthday_party') }}</option>
+                                        <option :value="t('opt_wedding_party')">{{ t('opt_wedding_party') }}</option>
+                                        <option :value="t('opt_corporate_meeting')">{{ t('opt_corporate_meeting') }}</option>
+                                        <option :value="t('opt_family_gathering')">{{ t('opt_family_gathering') }}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>{{ activeBookingTab === 'resort' ? 'চেক-ইন তারিখ' : 'অনুষ্ঠানের তারিখ' }} *</label>
+                                    <label>{{ activeBookingTab === 'resort' ? t('checkin_date') : t('event_date') }} *</label>
                                     <input v-model="bookingForm.booking_date" type="date" required />
                                 </div>
                                 <div class="form-group">
@@ -367,7 +367,7 @@
                                 <textarea v-model="bookingForm.notes" rows="3" :placeholder="t('phNote')"></textarea>
                             </div>
                             <button type="submit" class="btn btn-submit" :disabled="bookingSubmitting">
-                                {{ bookingSubmitting ? 'প্রসেসিং হচ্ছে...' : (activeBookingTab === 'resort' ? t('bookNow') : 'পার্টি বুকিং নিশ্চিত করুন') }}
+                                {{ bookingSubmitting ? t('processing') : (activeBookingTab === 'resort' ? t('bookNow') : t('confirm_party_booking')) }}
                             </button>
                         </form>
                     </div>
@@ -382,7 +382,7 @@
                     <div class="tables-qr-container">
                         <!-- Table Chips / Selector -->
                         <div class="table-chips-header" v-if="diningTables.length > 0">
-                            <span class="chips-title"><i class="fas fa-chair text-gold"></i> {{ currentLang === 'bn' ? 'টেবিল নির্বাচন করুন:' : 'Select Table:' }}</span>
+                            <span class="chips-title"><i class="fas fa-chair text-gold"></i> {{ t('select_table') }}</span>
                             <div class="table-chips">
                                 <button type="button" v-for="table in diningTables" :key="table.id"
                                     class="table-chip" :class="{ 'active': activeTable && activeTable.id === table.id }"
@@ -404,22 +404,22 @@
                             </div>
                             <div class="table-qr-details">
                                 <h3 class="room-order-heading">
-                                    {{ currentLang === 'bn' ? 'রিসোর্ট রুম সার্ভিস ও টেবিল অর্ডার' : 'Resort Room Service & Table Dining' }}
+                                    {{ t('room_service_table_order_title') }}
                                 </h3>
                                 <p class="room-order-desc">
-                                    {{ currentLang === 'bn' ? 'আপনি রিসোর্টের রুমে বসে সরাসরি খাবার অর্ডার করতে পারেন কিংবা রেস্টুরেন্ট টেবিলে বসে উপভোগ করতে পারেন।' : 'Order food directly to your resort room/cottage or dine-in at the restaurant table.' }}
+                                    {{ t('room_service_table_order_sub') }}
                                 </p>
 
                                 <div class="table-action-btns">
                                     <router-link :to="'/menu/' + activeTable.slug + '?order_type=room'" class="btn btn-room-order">
                                         <i class="fas fa-bed mr-2"></i>
-                                        <span>{{ currentLang === 'bn' ? 'রুম থেকে খাবার অর্ডার করুন' : 'Order Food from Room' }}</span>
+                                        <span>{{ t('order_food_from_room') }}</span>
                                         <i class="fas fa-arrow-right ml-2 text-xs"></i>
                                     </router-link>
 
                                     <router-link :to="'/menu/' + activeTable.slug" class="btn btn-table-direct">
                                         <i class="fas fa-utensils mr-2"></i>
-                                        <span>{{ currentLang === 'bn' ? activeTable.name + ' থেকে মেনু ও অর্ডার' : 'View Menu & Order from ' + activeTable.name }}</span>
+                                        <span>{{ activeTable.name }} - {{ t('view_menu_order_from_table') }}</span>
                                     </router-link>
                                 </div>
                             </div>
@@ -428,7 +428,7 @@
                         <!-- All Tables Grid (Alternative Quick View) -->
                         <div class="all-tables-section" v-if="diningTables.length > 1">
                             <h4 class="all-tables-head">
-                                <i class="fas fa-th text-gold mr-1"></i> {{ currentLang === 'bn' ? 'সকল উপলব্ধ টেবিলসমূহ ও তাদের নিজস্ব QR কোড' : 'All Available Dining Tables & QR Codes' }}
+                                <i class="fas fa-th text-gold mr-1"></i> {{ t('all_tables_qr_title') }}
                             </h4>
                             <div class="tables-grid">
                                 <div v-for="table in diningTables" :key="'grid-' + table.id" class="table-grid-item"
@@ -443,7 +443,7 @@
                                     </div>
                                     <p class="grid-branch" v-if="table.branch_name">{{ table.branch_name }}</p>
                                     <router-link :to="'/menu/' + table.slug" class="grid-order-link" @click.stop>
-                                        {{ currentLang === 'bn' ? 'মেনু খুলুন' : 'Open Menu' }} <i class="fas fa-arrow-right ml-1"></i>
+                                        {{ t('open_menu') }} <i class="fas fa-arrow-right ml-1"></i>
                                     </router-link>
                                 </div>
                             </div>
@@ -510,7 +510,7 @@
                             <p><i class="fas fa-map-marker-alt"></i> {{ settings.resort_address || 'গার্ডেন প্যালেস রিসোর্ট সিলেট, বাংলাদেশ' }}</p>
                             <p><i class="fas fa-phone-alt"></i> {{ settings.resort_phone || '+৮৮০ ১৭১১-১২৩৪৫৬' }}</p>
                             <p><i class="fas fa-envelope"></i> {{ settings.resort_email || 'info@gardenpalaceresortsylhet.com' }}</p>
-                            <p><i class="fas fa-clock"></i> চেক-ইন: {{ settings.resort_checkin || 'দুপুর ১২টা' }} | চেক-আউট: {{ settings.resort_checkout || 'দুপুর ১২টা' }}</p>
+                            <p><i class="fas fa-clock"></i> {{ t('checkin_checkout_time', { checkin: settings.resort_checkin || '12:00 PM', checkout: settings.resort_checkout || '12:00 PM' }) }}</p>
 
                             <div class="contact-social">
                                 <h4>{{ t('followUs') }}:</h4>
@@ -539,20 +539,20 @@
                     <p>{{ settings.resort_tagline || 'সিলেটের সবুজ-শ্যামল প্রকৃতির মাঝে একটি স্বর্গীয় আশ্রয়।' }}</p>
                 </div>
                 <div class="footer-col">
-                    <h4>কুইক লিংকস</h4>
+                    <h4>{{ t('quick_links') }}</h4>
                     <ul>
-                        <li><a href="#about">আমাদের সম্পর্কে</a></li>
-                        <li><a href="#gallery">ফটো গ্যালারি</a></li>
-                        <li><a href="#booking">রুম বুকিং</a></li>
-                        <li><router-link to="/rms">রেস্টুরেন্ট ফুড মেনু</router-link></li>
+                        <li><a href="#about">{{ t('about_us') }}</a></li>
+                        <li><a href="#gallery">{{ t('galleryTitle') }}</a></li>
+                        <li><a href="#booking">{{ t('room_booking') }}</a></li>
+                        <li><router-link to="/rms">{{ t('restaurant_food_menu') }}</router-link></li>
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h4>রেস্টুরেন্ট সার্ভিস</h4>
+                    <h4>{{ t('restaurant_services') }}</h4>
                     <ul>
-                        <li><router-link to="/rms">অনলাইন ফুড অর্ডার</router-link></li>
-                        <li><a href="#food">টেবিল কিউআর স্ক্যান</a></li>
-                        <li><a href="#booking">পার্টি ও ক্যাটারিং বুকিং</a></li>
+                        <li><router-link to="/rms">{{ t('online_food_order') }}</router-link></li>
+                        <li><a href="#food">{{ t('table_qr_scan') }}</a></li>
+                        <li><a href="#booking">{{ t('party_catering_booking') }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -605,8 +605,8 @@ export default {
                 phone: "",
                 email: "",
                 booking_date: "",
-                room_type: "ডিলাক্স কটেজ",
-                event_type: "জন্মদিন উদযাপন",
+                room_type: "",
+                event_type: "",
                 guests_count: 2,
                 notes: "",
             },
@@ -790,6 +790,8 @@ export default {
         if (this.$i18n && this.$i18n.locale) {
             this.currentLang = this.$i18n.locale;
         }
+        this.bookingForm.room_type = this.t('opt_deluxe_cottage');
+        this.bookingForm.event_type = this.t('opt_birthday_party');
         this.$store.dispatch('resort/fetchLandingContent');
         window.addEventListener('scroll', this.handleScroll);
         this.startSlideTimer();
@@ -799,14 +801,20 @@ export default {
         if (this.slideTimer) clearInterval(this.slideTimer);
     },
     methods: {
-        t(key) {
+        t(key, params = {}) {
             if (this.$te && this.$te('resort.' + key)) {
-                return this.$t('resort.' + key);
+                return this.$t('resort.' + key, params);
             }
             if (this.$te && this.$te(key)) {
-                return this.$t(key);
+                return this.$t(key, params);
             }
-            return (this.dict[this.currentLang] && this.dict[this.currentLang][key]) || key;
+            let str = (this.dict[this.currentLang] && this.dict[this.currentLang][key]) || key;
+            if (params && typeof params === 'object') {
+                Object.keys(params).forEach(p => {
+                    str = str.replace(`{${p}}`, params[p]);
+                });
+            }
+            return str;
         },
         toggleLanguage() {
             this.currentLang = this.currentLang === 'bn' ? 'en' : 'bn';

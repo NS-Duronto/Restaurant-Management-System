@@ -40,12 +40,12 @@ class ResortService
                 ->orderBy('sort_order', 'asc')
                 ->get();
 
-            $photos = ResortGallery::where('status', Status::ACTIVE)
+            $photos = ResortGallery::whereIn('status', [Status::ACTIVE, 1])
                 ->where('type', 'photo')
                 ->orderBy('sort_order', 'asc')
                 ->get();
 
-            $videos = ResortGallery::where('status', Status::ACTIVE)
+            $videos = ResortGallery::whereIn('status', [Status::ACTIVE, 1])
                 ->where('type', 'video')
                 ->orderBy('sort_order', 'asc')
                 ->get();
@@ -266,6 +266,22 @@ class ResortService
         }
     }
 
+    public function updateSlidersOrder($request): array
+    {
+        try {
+            $sliders = $request->input('sliders', []);
+            foreach ($sliders as $index => $item) {
+                ResortSlider::where('id', $item['id'])->update([
+                    'sort_order' => $index + 1,
+                ]);
+            }
+            return ResortSlider::orderBy('sort_order', 'asc')->get()->toArray();
+        } catch (Exception $exception) {
+            Log::info($exception->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
+
     // ------------------- GALLERIES -------------------
     public function galleries()
     {
@@ -280,7 +296,11 @@ class ResortService
     public function storeGallery($request): ResortGallery
     {
         try {
-            $gallery = ResortGallery::create($request->validated());
+            $data = $request->validated();
+            if (empty($data['status'])) {
+                $data['status'] = Status::ACTIVE;
+            }
+            $gallery = ResortGallery::create($data);
             if ($request->hasFile('image')) {
                 $gallery->addMediaFromRequest('image')->toMediaCollection('gallery');
             }
@@ -294,7 +314,11 @@ class ResortService
     public function updateGallery(ResortGallery $gallery, $request): ResortGallery
     {
         try {
-            $gallery->update($request->validated());
+            $data = $request->validated();
+            if (empty($data['status']) && empty($gallery->status)) {
+                $data['status'] = Status::ACTIVE;
+            }
+            $gallery->update($data);
             if ($request->hasFile('image')) {
                 $gallery->clearMediaCollection('gallery');
                 $gallery->addMediaFromRequest('image')->toMediaCollection('gallery');
@@ -419,6 +443,22 @@ class ResortService
         }
     }
 
+    public function updateTeamsOrder($request): array
+    {
+        try {
+            $teams = $request->input('teams', []);
+            foreach ($teams as $index => $item) {
+                ResortTeam::where('id', $item['id'])->update([
+                    'sort_order' => $index + 1,
+                ]);
+            }
+            return ResortTeam::orderBy('sort_order', 'asc')->get()->toArray();
+        } catch (Exception $exception) {
+            Log::info($exception->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
+
     // ------------------- MEMBERSHIP PLANS -------------------
     public function plans()
     {
@@ -514,6 +554,22 @@ class ResortService
         try {
             $partner->clearMediaCollection('partner');
             return $partner->delete();
+        } catch (Exception $exception) {
+            Log::info($exception->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
+
+    public function updatePartnersOrder($request): array
+    {
+        try {
+            $partners = $request->input('partners', []);
+            foreach ($partners as $index => $item) {
+                ResortPartner::where('id', $item['id'])->update([
+                    'sort_order' => $index + 1,
+                ]);
+            }
+            return ResortPartner::orderBy('sort_order', 'asc')->get()->toArray();
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
             throw new Exception(QueryExceptionLibrary::message($exception), 422);

@@ -161,6 +161,14 @@ export const resort = {
                 }).catch((err) => reject(err));
             });
         },
+        updateSlidersOrder(context, payload) {
+            return new Promise((resolve, reject) => {
+                axios.post("admin/resort/sliders/reorder", { sliders: payload }).then((res) => {
+                    context.commit("setSliders", res.data.data);
+                    resolve(res);
+                }).catch((err) => reject(err));
+            });
+        },
 
         // Galleries
         getGalleries(context) {
@@ -254,6 +262,14 @@ export const resort = {
                 }).catch((err) => reject(err));
             });
         },
+        updateTeamsOrder(context, payload) {
+            return new Promise((resolve, reject) => {
+                axios.post("admin/resort/teams/reorder", { teams: payload }).then((res) => {
+                    context.commit("setTeams", res.data.data);
+                    resolve(res);
+                }).catch((err) => reject(err));
+            });
+        },
 
         // Plans
         getPlans(context) {
@@ -318,6 +334,14 @@ export const resort = {
                 }).catch((err) => reject(err));
             });
         },
+        updatePartnersOrder(context, payload) {
+            return new Promise((resolve, reject) => {
+                axios.post("admin/resort/partners/reorder", { partners: payload }).then((res) => {
+                    context.commit("setPartners", res.data.data);
+                    resolve(res);
+                }).catch((err) => reject(err));
+            });
+        },
 
         // Bookings
         getBookings(context) {
@@ -350,6 +374,13 @@ export const resort = {
             return new Promise((resolve, reject) => {
                 axios.get("admin/resort/website-orders").then((res) => {
                     context.commit("setWebsiteOrders", res.data.data);
+                    resolve(res);
+                }).catch((err) => reject(err));
+            });
+        },
+        downloadDbBackup(context) {
+            return new Promise((resolve, reject) => {
+                axios.get("admin/backup/database", { responseType: 'blob' }).then((res) => {
                     resolve(res);
                 }).catch((err) => reject(err));
             });

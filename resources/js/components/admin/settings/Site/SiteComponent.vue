@@ -499,7 +499,7 @@ export default {
                 this.loading.isActive = false;
                 alertService.error(err);
             }
-        },
+        }
     }
 }
 </script>

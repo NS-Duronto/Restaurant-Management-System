@@ -113,6 +113,15 @@ class ResortController extends AdminController
         }
     }
 
+    public function updateSlidersOrder(Request $request)
+    {
+        try {
+            return response(['status' => true, 'data' => $this->resortService->updateSlidersOrder($request)], 200);
+        } catch (Exception $exception) {
+            return response(['status' => false, 'message' => $exception->getMessage()], 422);
+        }
+    }
+
     // ----------------- GALLERIES -----------------
     public function galleries()
     {
@@ -227,6 +236,15 @@ class ResortController extends AdminController
         }
     }
 
+    public function updateTeamsOrder(Request $request)
+    {
+        try {
+            return response(['status' => true, 'data' => $this->resortService->updateTeamsOrder($request)], 200);
+        } catch (Exception $exception) {
+            return response(['status' => false, 'message' => $exception->getMessage()], 422);
+        }
+    }
+
     // ----------------- MEMBERSHIP PLANS -----------------
     public function plans()
     {
@@ -298,6 +316,15 @@ class ResortController extends AdminController
         try {
             $this->resortService->deletePartner($partner);
             return response(['status' => true, 'message' => 'Partner deleted successfully'], 202);
+        } catch (Exception $exception) {
+            return response(['status' => false, 'message' => $exception->getMessage()], 422);
+        }
+    }
+
+    public function updatePartnersOrder(Request $request)
+    {
+        try {
+            return response(['status' => true, 'data' => $this->resortService->updatePartnersOrder($request)], 200);
         } catch (Exception $exception) {
             return response(['status' => false, 'message' => $exception->getMessage()], 422);
         }
