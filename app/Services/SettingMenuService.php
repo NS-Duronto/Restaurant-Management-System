@@ -16,7 +16,21 @@ class SettingMenuService
     public function list()
     {
         try {
-            return SettingMenu::where('status', Status::ACTIVE)->orderBy('priority', 'desc')->get();
+            $menus = SettingMenu::where('status', Status::ACTIVE)->orderBy('priority', 'desc')->get();
+            if (!$menus->contains('url', 'backup')) {
+                SettingMenu::firstOrCreate(
+                    ['url' => 'backup'],
+                    [
+                        'name'       => 'Backup',
+                        'language'   => 'backup',
+                        'icon'       => 'fa-solid fa-database',
+                        'priority'   => 908,
+                        'status'     => Status::ACTIVE,
+                    ]
+                );
+                $menus = SettingMenu::where('status', Status::ACTIVE)->orderBy('priority', 'desc')->get();
+            }
+            return $menus->unique('url')->values();
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
             throw new Exception(QueryExceptionLibrary::message($exception), 422);

@@ -58,6 +58,7 @@ use App\Http\Controllers\Admin\SimpleUserController;
 use App\Http\Controllers\Admin\SiteController;
 use App\Http\Controllers\Admin\SmsGatewayController;
 use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\TableOrderController as AdminTableOrderController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\ThemeController;
@@ -639,6 +640,8 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::match(['post', 'put', 'patch'], '/{expense}', [ExpenseController::class, 'update']);
         Route::delete('/{expense}', [ExpenseController::class, 'destroy']);
     });
+
+    Route::get('/backup/database', [BackupController::class, 'downloadDbBackup']);
 });
 
 Route::prefix('frontend')->name('frontend.')->middleware(['installed', 'apiKey', 'localization'])->group(function () {

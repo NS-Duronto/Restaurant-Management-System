@@ -4,6 +4,7 @@
         "settings": "Settings",
         "company": "Company",
         "site": "Site",
+        "backup": "Database Backup",
         "item_categories": "Item Categories",
         "item_attributes": "Item Attributes",
         "sliders": "Sliders",
@@ -99,6 +100,10 @@
         "previous": "Previous",
         "next": "Next",
         "default": "Default",
+        "db_backup": "Database Backup",
+        "download_db_backup": "Download Database Backup (.sql)",
+        "db_backup_desc": "Download complete database (all tables and records) as a .sql file. Essential for backups and server migrations.",
+        "downloading": "Downloading...",
         "action": "Action",
         "id": "Id",
         "name": "Name",
@@ -945,6 +950,8 @@
         "trx_id_required": "Please enter the Transaction ID.",
         "payment_note_required": "Please enter payment note.",
         "received_amount_required": "Please enter the received amount.",
-        "received_amount_less_than_total": "Received amount cannot be less than total amount."
+        "received_amount_less_than_total": "Received amount cannot be less than total amount.",
+        "db_backup_success": "Database backup downloaded successfully",
+        "db_backup_failed": "Failed to download database backup"
     }
 }

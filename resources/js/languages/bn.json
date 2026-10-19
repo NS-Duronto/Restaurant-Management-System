@@ -4,6 +4,7 @@
         "settings": "সেটিংস",
         "company": "কোম্পানি",
         "site": "সাইট",
+        "backup": "ডাটাবেজ ব্যাকআপ",
         "item_categories": "পন্যের বিভাগ",
         "item_attributes": "পন্যের অ্যাট্রিবিউট",
         "sliders": "স্লাইডার",
@@ -100,6 +101,10 @@
         "previous": "আগের",
         "next": "পরবর্তী",
         "default": "ডিফল্ট",
+        "db_backup": "ডাটাবেজ ব্যাকআপ (Database Backup)",
+        "download_db_backup": "ডাটাবেজ ব্যাকআপ ডাউনলোড (.sql)",
+        "db_backup_desc": "সম্পূর্ণ ডাটাবেজ (সকল টেবিল ও রেকর্ডসহ) .sql ফাইল আকারে ডাউনলোড করুন। সার্ভার ট্রান্সফার ও ব্যাকআপের জন্য এটি অত্যন্ত গুরুত্বপূর্ণ।",
+        "downloading": "ডাউনলোড হচ্ছে...",
         "action": "অ্যাকশন",
         "id": "আইডি",
         "name": "নাম",
@@ -937,6 +942,8 @@
         "trx_id_required": "দয়া করে ট্রানজেকশন আইডি (Trx ID) দিন।",
         "payment_note_required": "দয়া করে পেমেন্ট নোট লিখুন।",
         "received_amount_required": "দয়া করে প্রাপ্ত টাকার পরিমাণ (Received Amount) লিখুন।",
-        "received_amount_less_than_total": "প্রাপ্ত টাকার পরিমাণ মোট বিলের চেয়ে কম হতে পারবে না।"
+        "received_amount_less_than_total": "প্রাপ্ত টাকার পরিমাণ মোট বিলের চেয়ে কম হতে পারবে না।",
+        "db_backup_success": "ডাটাবেজ ব্যাকআপ সফলভাবে ডাউনলোড হয়েছে",
+        "db_backup_failed": "ডাটাবেজ ব্যাকআপ ডাউনলোড করতে ব্যর্থ হয়েছে"
     }
 }

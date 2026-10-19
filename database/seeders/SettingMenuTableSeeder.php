@@ -216,6 +216,16 @@ class SettingMenuTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now()
             ],
+            [
+                'name'       => 'Backup',
+                'language'   => 'backup',
+                'url'        => 'backup',
+                'icon'       => 'fa-solid fa-database',
+                'priority'   => 908,
+                'status'     => Status::ACTIVE,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
         ];
 
         SettingMenu::insert($menus);

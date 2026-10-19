@@ -34,6 +34,7 @@ import SmsGatewayComponent from "../../components/admin/settings/SmsGateway/SmsG
 import NotificationAlertComponent from "../../components/admin/settings/NotificationAlert/NotificationAlertComponent";
 import NotificationComponent from "../../components/admin/settings/Notification/NotificationComponent";
 import PosPaymentComponent from "../../components/admin/settings/PosPayment/PosPaymentComponent";
+import BackupComponent from "../../components/admin/settings/Backup/BackupComponent";
 
 export default [
     {
@@ -412,6 +413,17 @@ export default [
                     auth: true,
                     permissionUrl: "settings",
                     breadcrumb: "pos_payment",
+                },
+            },
+            {
+                path: "backup",
+                component: BackupComponent,
+                name: "admin.settings.backup",
+                meta: {
+                    isFrontend: false,
+                    auth: true,
+                    permissionUrl: "settings",
+                    breadcrumb: "backup",
                 },
             },
         ],

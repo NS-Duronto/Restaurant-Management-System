@@ -21,7 +21,14 @@ export default {
     name: "MenuComponent",
     computed: {
         settingMenus: function () {
-            return this.$store.getters['settingMenu/lists'];
+            const list = this.$store.getters['settingMenu/lists'] || [];
+            const seen = new Set();
+            return list.filter(item => {
+                if (!item || !item.url) return false;
+                if (seen.has(item.url)) return false;
+                seen.add(item.url);
+                return true;
+            });
         }
     },
     mounted() {
