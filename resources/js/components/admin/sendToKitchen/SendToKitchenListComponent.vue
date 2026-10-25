@@ -5,6 +5,12 @@
                 <h3 class="db-card-title">{{ $t('menu.send_to_kitchen') }}</h3>
                 <div class="db-card-filter">
                     <TableLimitComponent :method="list" :search="props.search" :page="paginationPage" />
+                    <div class="dropdown-group">
+                        <ExportComponent />
+                        <div class="dropdown-list db-card-filter-dropdown-list transition-all duration-300 scale-y-0 origin-top">
+                            <PrintComponent :props="printObj" />
+                        </div>
+                    </div>
                     <SendToKitchenCreateComponent :props="props" />
                 </div>
             </div>
@@ -16,7 +22,7 @@
                 </div>
 
                 <div class="db-table-responsive">
-                    <table class="db-table stripe">
+                    <table class="db-table stripe" id="print">
                         <thead class="db-table-head">
                             <tr class="db-table-head-tr">
                                 <th class="db-table-head-th">{{ $t('label.reference_no') }}</th>
@@ -24,7 +30,7 @@
                                 <th class="db-table-head-th">{{ $t('label.total_items') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.issued_by') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.note') }}</th>
-                                <th class="db-table-head-th">{{ $t('label.action') }}</th>
+                                <th class="db-table-head-th hidden-print">{{ $t('label.action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="db-table-body" v-if="issues.length > 0">
@@ -34,8 +40,9 @@
                                 <td class="db-table-body-td font-semibold">{{ item.total_items }} {{ $t('label.items') }}</td>
                                 <td class="db-table-body-td font-medium">{{ item.user_name || $t('label.storekeeper') }}</td>
                                 <td class="db-table-body-td">{{ item.note || '-' }}</td>
-                                <td class="db-table-body-td">
+                                <td class="db-table-body-td hidden-print">
                                     <div class="flex items-center gap-2">
+                                        <SmIconSidebarModalEditComponent @click="edit(item)" />
                                         <button @click.prevent="destroy(item.id)" class="db-table-action delete">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
@@ -60,6 +67,9 @@ import SendToKitchenCreateComponent from "./SendToKitchenCreateComponent.vue";
 import TableLimitComponent from "../components/TableLimitComponent.vue";
 import PaginationTextComponent from "../components/pagination/PaginationTextComponent.vue";
 import PaginationBox from "../components/pagination/PaginationBox.vue";
+import ExportComponent from "../components/buttons/export/ExportComponent.vue";
+import PrintComponent from "../components/buttons/export/PrintComponent.vue";
+import SmIconSidebarModalEditComponent from "../components/buttons/SmIconSidebarModalEditComponent.vue";
 import alertService from "../../../services/alertService";
 import appService from "../../../services/appService";
 
@@ -69,12 +79,19 @@ export default {
         SendToKitchenCreateComponent,
         TableLimitComponent,
         PaginationTextComponent,
-        PaginationBox
+        PaginationBox,
+        ExportComponent,
+        PrintComponent,
+        SmIconSidebarModalEditComponent
     },
     data() {
         return {
             loading: {
                 isActive: false
+            },
+            printObj: {
+                id: "print",
+                popTitle: this.$t('menu.send_to_kitchen')
             },
             props: {
                 form: {
@@ -119,6 +136,26 @@ export default {
                 this.loading.isActive = false;
             });
         },
+        edit: function (item) {
+            this.loading.isActive = true;
+            this.$store.dispatch('sendToKitchen/show', item.id).then((res) => {
+                this.loading.isActive = false;
+                const issue = res.data.data;
+                this.props.form = {
+                    date: issue.raw_date || issue.date,
+                    note: issue.note || '',
+                    items: issue.items && issue.items.length > 0 ? issue.items.map(i => ({
+                        kitchen_goods_id: i.kitchen_goods_id,
+                        quantity: i.quantity,
+                    })) : [{ kitchen_goods_id: null, quantity: "" }]
+                };
+                this.$store.dispatch('sendToKitchen/edit', item.id);
+                appService.sideDrawerShow();
+            }).catch((err) => {
+                this.loading.isActive = false;
+                alertService.error(err.response?.data?.message || 'Error loading issue details');
+            });
+        },
         destroy: function (id) {
             appService.destroyConfirmation().then((res) => {
                 if (res.isConfirmed) {
@@ -136,3 +173,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+@media print {
+    .hidden-print {
+        display: none !important;
+    }
+}
+</style>

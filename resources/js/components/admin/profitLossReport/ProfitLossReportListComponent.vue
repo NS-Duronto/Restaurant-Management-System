@@ -12,11 +12,17 @@
                             </template>
                         </Datepicker>
                     </div>
+                    <div class="dropdown-group">
+                        <ExportComponent />
+                        <div class="dropdown-list db-card-filter-dropdown-list transition-all duration-300 scale-y-0 origin-top">
+                            <PrintComponent :props="printObj" />
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Summary Cards -->
-            <div class="p-5">
+            <div class="p-5" id="print">
                 <div class="row mb-6">
                     <div class="col-12 sm:col-6 xl:col-4 mb-4">
                         <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/20 transition-transform hover:-translate-y-1 duration-300">
@@ -125,10 +131,12 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { startOfMonth, endOfMonth, startOfYear, endOfYear, subMonths, subYears } from "date-fns";
 import appService from "../../../services/appService";
+import ExportComponent from "../components/buttons/export/ExportComponent.vue";
+import PrintComponent from "../components/buttons/export/PrintComponent.vue";
 
 export default {
     name: "ProfitLossReportListComponent",
-    components: { Datepicker },
+    components: { Datepicker, ExportComponent, PrintComponent },
     data() {
         return {
             loading: { isActive: false },
@@ -137,6 +145,10 @@ export default {
             last_date: null,
             summary: {},
             chartReady: false,
+            printObj: {
+                id: "print",
+                popTitle: this.$t('menu.profit_loss_report')
+            },
             presetRanges: [
                 { label: "Today", range: [new Date(), new Date()] },
                 { label: "This month", range: [startOfMonth(new Date()), endOfMonth(new Date())] },
@@ -194,3 +206,11 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+@media print {
+    .hidden-print {
+        display: none !important;
+    }
+}
+</style>

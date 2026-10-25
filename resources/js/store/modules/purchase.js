@@ -39,13 +39,20 @@ export const purchase = {
         },
         save: (context, payload) => {
             return new Promise((resolve, reject) => {
-                axios.post('/admin/purchase', payload.form).then(res => {
+                let method = axios.post;
+                let url = '/admin/purchase';
+                if (context.state.temp.isEditing) {
+                    method = axios.put;
+                    url = `/admin/purchase/${context.state.temp.temp_id}`;
+                }
+                method(url, payload.form).then(res => {
                     context.dispatch('lists', payload.search).then().catch();
                     context.commit('reset');
                     resolve(res);
                 }).catch((err) => reject(err));
             });
         },
+        edit: (context, payload) => context.commit('temp', payload),
         destroy: (context, payload) => {
             return new Promise((resolve, reject) => {
                 axios.delete(`admin/purchase/${payload.id}`).then((res) => {

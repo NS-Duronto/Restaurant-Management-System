@@ -3,9 +3,9 @@
         <div class="modal-dialog max-w-[340px] rounded-none" id="print" :dir="direction">
             <div class="modal-body">
                 <div class="text-center pb-3.5 border-b border-dashed border-gray-400">
-                    <h3 class="text-2xl font-bold mb-1">{{ company.company_name }}</h3>
-                    <h4 class="text-sm font-normal">{{ branch.address }}</h4>
-                    <h5 class="text-sm font-normal">Tel: {{ branch.phone }}</h5>
+                    <h3 class="text-2xl font-bold mb-1">{{ company.company_name || branch.name }}</h3>
+                    <h4 class="text-sm font-normal">{{ company.company_address || branch.address }}</h4>
+                    <h5 class="text-sm font-normal" v-if="company.company_phone || branch.phone">{{ $t('label.phone') }}: {{ company.company_phone || branch.phone }}</h5>
                 </div>
 
                 <table class="w-full my-1.5">

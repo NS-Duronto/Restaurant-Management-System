@@ -35,9 +35,9 @@
                 <!-- ================= 1. CUSTOMER INVOICE SLIP ================= -->
                 <div v-if="activeSlip === 'customer'">
                     <div class="text-center pb-3 border-b border-dashed border-gray-400">
-                        <h3 class="text-xl font-extrabold text-orange-500 mb-0.5">{{ company.company_name }}</h3>
-                        <h4 class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ branch.address }}</h4>
-                        <h5 class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ $t('label.mobile') }}: {{ branch.phone }}</h5>
+                        <h3 class="text-xl font-extrabold text-orange-500 mb-0.5">{{ company.company_name || branch.name }}</h3>
+                        <h4 class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ company.company_address || branch.address }}</h4>
+                        <h5 class="text-xs font-medium text-gray-500 dark:text-gray-400" v-if="company.company_phone || branch.phone">{{ $t('label.phone') }}: {{ company.company_phone || branch.phone }}</h5>
                         <div class="mt-2 text-center">
                             <span class="text-xs font-black uppercase tracking-wider px-2 py-0.5 border border-dashed border-gray-600 dark:border-gray-400 rounded inline-block text-gray-900 dark:text-white">
                                 {{ $t('label.payment_invoice') }} {{ order.order_serial_no }}

@@ -67,7 +67,7 @@ class PurchaseService
         try {
             return DB::transaction(function () use ($request) {
                 $purchaseNo = 'PUR-'.date('ymd').'-'.rand(1000, 9999);
-                $paymentStatus = (int)($request->payment_status ?? 1);
+                $paymentStatus = (int) ($request->payment_status ?? 1);
                 $isPaid = $paymentStatus === 1;
 
                 $purchase = Purchase::create([
@@ -119,6 +119,78 @@ class PurchaseService
                     'total_amount' => $totalAmount,
                     'paid_amount' => $isPaid ? ($request->paid_amount ?? $totalAmount) : 0,
                     'payment_status' => $paymentStatus,
+                ]);
+
+                return $purchase->load(['supplier', 'items.kitchenGoods', 'items.unit', 'user']);
+            });
+        } catch (Exception $exception) {
+            Log::info($exception->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function update(PurchaseRequest $request, Purchase $purchase): Purchase
+    {
+        try {
+            return DB::transaction(function () use ($request, $purchase) {
+                // Reverse previous stock additions
+                foreach ($purchase->items as $item) {
+                    $goods = KitchenGoods::find($item->kitchen_goods_id);
+                    if ($goods) {
+                        $goods->decrement('current_stock', $item->quantity);
+                    }
+                }
+
+                // Delete old purchase items
+                $purchase->items()->delete();
+
+                $paymentStatus = (int) ($request->payment_status ?? 1);
+                $isPaid = $paymentStatus === 1;
+
+                $items = is_string($request->items) ? json_decode($request->items) : $request->items;
+                $totalAmount = 0;
+
+                if (! blank($items)) {
+                    foreach ($items as $item) {
+                        $itemObj = (object) $item;
+                        $goodsId = $itemObj->kitchen_goods_id;
+                        $qty = (float) $itemObj->quantity;
+                        $cost = (float) $itemObj->unit_cost;
+                        $unitId = $itemObj->unit_id ?? null;
+                        $itemTotal = $qty * $cost;
+                        $totalAmount += $itemTotal;
+
+                        PurchaseItem::create([
+                            'purchase_id' => $purchase->id,
+                            'kitchen_goods_id' => $goodsId,
+                            'quantity' => $qty,
+                            'unit_id' => $unitId,
+                            'unit_cost' => $cost,
+                            'total_cost' => $itemTotal,
+                        ]);
+
+                        // Stock IN: Increment current stock of kitchen goods and update cost per unit
+                        $goods = KitchenGoods::find($goodsId);
+                        if ($goods) {
+                            $goods->increment('current_stock', $qty);
+                            if ($cost > 0) {
+                                $goods->update(['cost_per_unit' => $cost]);
+                            }
+                        }
+                    }
+                }
+
+                $purchase->update([
+                    'supplier_id' => $request->supplier_id,
+                    'date' => $request->date,
+                    'total_amount' => $totalAmount,
+                    'paid_amount' => $isPaid ? ($request->paid_amount ?? $totalAmount) : 0,
+                    'payment_status' => $paymentStatus,
+                    'payment_method' => $request->payment_method ?? PosPaymentMethod::CASH,
+                    'note' => $request->note,
                 ]);
 
                 return $purchase->load(['supplier', 'items.kitchenGoods', 'items.unit', 'user']);

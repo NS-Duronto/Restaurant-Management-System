@@ -25,7 +25,7 @@ class SendToKitchenController extends AdminController implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:send-to-kitchen', only: ['store', 'destroy', 'show']),
+            new Middleware('permission:send-to-kitchen', only: ['store', 'update', 'destroy', 'show']),
         ];
     }
 
@@ -51,6 +51,15 @@ class SendToKitchenController extends AdminController implements HasMiddleware
     {
         try {
             return new SendToKitchenDetailsResource($this->sendService->show($sendToKitchen));
+        } catch (Exception $exception) {
+            return response(['status' => false, 'message' => $exception->getMessage()], 422);
+        }
+    }
+
+    public function update(SendToKitchenRequest $request, SendToKitchen $sendToKitchen)
+    {
+        try {
+            return new SendToKitchenDetailsResource($this->sendService->update($request, $sendToKitchen));
         } catch (Exception $exception) {
             return response(['status' => false, 'message' => $exception->getMessage()], 422);
         }

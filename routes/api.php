@@ -621,6 +621,7 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::get('/', [PurchaseController::class, 'index']);
         Route::get('/show/{purchase}', [PurchaseController::class, 'show']);
         Route::post('/', [PurchaseController::class, 'store']);
+        Route::match(['put', 'patch'], '/{purchase}', [PurchaseController::class, 'update']);
         Route::delete('/{purchase}', [PurchaseController::class, 'destroy']);
     });
 
@@ -628,6 +629,7 @@ Route::prefix('admin')->name('admin.')->middleware(['installed', 'apiKey', 'auth
         Route::get('/', [SendToKitchenController::class, 'index']);
         Route::get('/show/{sendToKitchen}', [SendToKitchenController::class, 'show']);
         Route::post('/', [SendToKitchenController::class, 'store']);
+        Route::match(['put', 'patch'], '/{sendToKitchen}', [SendToKitchenController::class, 'update']);
         Route::delete('/{sendToKitchen}', [SendToKitchenController::class, 'destroy']);
     });
 

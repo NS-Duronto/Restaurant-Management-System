@@ -5,7 +5,7 @@
     <div id="sidebar" class="drawer !w-[700px] max-w-full">
         <div class="drawer-dialog !w-[700px] max-w-full">
             <div class="drawer-header">
-                <h3 class="drawer-title">{{ $t('menu.send_to_kitchen') }}</h3>
+                <h3 class="drawer-title">{{ isEditing ? $t('button.edit') : $t('menu.send_to_kitchen') }}</h3>
                 <button class="fa-solid fa-xmark close-btn" @click="reset"></button>
             </div>
             <div class="drawer-body">
@@ -96,6 +96,9 @@ export default {
         }
     },
     computed: {
+        isEditing: function () {
+            return this.$store.getters['sendToKitchen/temp'].isEditing;
+        },
         addButton: function () {
             return { title: this.$t('button.send_to_kitchen') };
         },
@@ -130,6 +133,7 @@ export default {
         },
         addReset: function () {
             this.errors = {};
+            this.$store.dispatch('sendToKitchen/reset').then().catch();
             this.props.form = {
                 date: new Date().toISOString().slice(0, 10),
                 note: "",
@@ -141,6 +145,7 @@ export default {
         reset: function () {
             this.errors = {};
             appService.sideDrawerHide();
+            this.$store.dispatch('sendToKitchen/reset').then().catch();
             this.props.form = {
                 date: new Date().toISOString().slice(0, 10),
                 note: "",
@@ -158,7 +163,7 @@ export default {
                 this.$store.dispatch('sendToKitchen/save', this.props).then((res) => {
                     this.loading.isActive = false;
                     appService.sideDrawerHide();
-                    alertService.success(this.$t('message.send_to_kitchen_success'));
+                    alertService.successFlip(this.isEditing, this.$t('menu.send_to_kitchen'));
                     this.$store.dispatch('kitchenGoods/lists', { paginate: 0 }).then().catch();
                     this.addReset();
                 }).catch((err) => {
