@@ -5,7 +5,7 @@
     <div id="sidebar" class="drawer">
         <div class="drawer-dialog">
             <div class="drawer-header">
-                <h3 class="drawer-title">{{ $t('menu.expenses') }}</h3>
+                <h3 class="drawer-title">{{ isEditing ? $t('button.edit') : $t('menu.expenses') }}</h3>
                 <button class="fa-solid fa-xmark close-btn" @click="reset"></button>
             </div>
             <div class="drawer-body">
@@ -99,6 +99,9 @@ export default {
         }
     },
     computed: {
+        isEditing: function () {
+            return this.$store.getters['expense/temp'].isEditing;
+        },
         addButton: function () {
             return { title: this.$t('button.add_expense') };
         },

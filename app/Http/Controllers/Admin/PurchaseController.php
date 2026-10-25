@@ -25,7 +25,7 @@ class PurchaseController extends AdminController implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:purchases', only: ['store', 'destroy', 'show']),
+            new Middleware('permission:purchases', only: ['store', 'update', 'destroy', 'show']),
         ];
     }
 
@@ -51,6 +51,15 @@ class PurchaseController extends AdminController implements HasMiddleware
     {
         try {
             return new PurchaseDetailsResource($this->purchaseService->show($purchase));
+        } catch (Exception $exception) {
+            return response(['status' => false, 'message' => $exception->getMessage()], 422);
+        }
+    }
+
+    public function update(PurchaseRequest $request, Purchase $purchase)
+    {
+        try {
+            return new PurchaseDetailsResource($this->purchaseService->update($request, $purchase));
         } catch (Exception $exception) {
             return response(['status' => false, 'message' => $exception->getMessage()], 422);
         }

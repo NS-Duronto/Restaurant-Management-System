@@ -5,6 +5,12 @@
                 <h3 class="db-card-title">{{ $t('menu.expenses') }}</h3>
                 <div class="db-card-filter">
                     <TableLimitComponent :method="list" :search="props.search" :page="paginationPage" />
+                    <div class="dropdown-group">
+                        <ExportComponent />
+                        <div class="dropdown-list db-card-filter-dropdown-list transition-all duration-300 scale-y-0 origin-top">
+                            <PrintComponent :props="printObj" />
+                        </div>
+                    </div>
                     <ExpenseCreateComponent :props="props" />
                 </div>
             </div>
@@ -16,7 +22,7 @@
                 </div>
 
                 <div class="db-table-responsive">
-                    <table class="db-table stripe">
+                    <table class="db-table stripe" id="print">
                         <thead class="db-table-head">
                             <tr class="db-table-head-tr">
                                 <th class="db-table-head-th">{{ $t('label.date') }}</th>
@@ -24,7 +30,7 @@
                                 <th class="db-table-head-th">{{ $t('label.amount') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.payment_method') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.description') }}</th>
-                                <th class="db-table-head-th">{{ $t('label.action') }}</th>
+                                <th class="db-table-head-th hidden-print">{{ $t('label.action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="db-table-body" v-if="expenses.length > 0">
@@ -36,8 +42,9 @@
                                 </td>
                                 <td class="db-table-body-td">{{ paymentMethodMap[item.payment_method] || $t('label.cash') }}</td>
                                 <td class="db-table-body-td">{{ item.note || item.description || '-' }}</td>
-                                <td class="db-table-body-td">
+                                <td class="db-table-body-td hidden-print">
                                     <div class="flex items-center gap-2">
+                                        <SmIconSidebarModalEditComponent @click="edit(item)" />
                                         <button @click.prevent="destroy(item.id)" class="db-table-action delete">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
@@ -62,6 +69,9 @@ import ExpenseCreateComponent from "./ExpenseCreateComponent.vue";
 import TableLimitComponent from "../components/TableLimitComponent.vue";
 import PaginationTextComponent from "../components/pagination/PaginationTextComponent.vue";
 import PaginationBox from "../components/pagination/PaginationBox.vue";
+import ExportComponent from "../components/buttons/export/ExportComponent.vue";
+import PrintComponent from "../components/buttons/export/PrintComponent.vue";
+import SmIconSidebarModalEditComponent from "../components/buttons/SmIconSidebarModalEditComponent.vue";
 import alertService from "../../../services/alertService";
 import appService from "../../../services/appService";
 
@@ -71,12 +81,19 @@ export default {
         ExpenseCreateComponent,
         TableLimitComponent,
         PaginationTextComponent,
-        PaginationBox
+        PaginationBox,
+        ExportComponent,
+        PrintComponent,
+        SmIconSidebarModalEditComponent
     },
     data() {
         return {
             loading: {
                 isActive: false
+            },
+            printObj: {
+                id: "print",
+                popTitle: this.$t('menu.expenses')
             },
             props: {
                 form: {
@@ -135,6 +152,17 @@ export default {
                 this.loading.isActive = false;
             });
         },
+        edit: function (item) {
+            appService.sideDrawerShow();
+            this.$store.dispatch('expense/edit', item.id);
+            this.props.form = {
+                expense_category_id: item.expense_category_id,
+                date: item.raw_date || item.date,
+                amount: item.amount,
+                payment_method: item.payment_method || 1,
+                description: item.note || item.description || item.title || '',
+            };
+        },
         destroy: function (id) {
             appService.destroyConfirmation().then((res) => {
                 if (res.isConfirmed) {
@@ -152,3 +180,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+@media print {
+    .hidden-print {
+        display: none !important;
+    }
+}
+</style>

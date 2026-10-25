@@ -43,6 +43,7 @@
                                 </td>
                                 <td class="db-table-body-td">
                                     <div class="flex items-center gap-2">
+                                        <SmIconSidebarModalEditComponent @click="edit(item)" />
                                         <button @click.prevent="destroy(item.id)" class="db-table-action delete">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
@@ -67,6 +68,7 @@ import PurchaseCreateComponent from "./PurchaseCreateComponent.vue";
 import TableLimitComponent from "../components/TableLimitComponent.vue";
 import PaginationTextComponent from "../components/pagination/PaginationTextComponent.vue";
 import PaginationBox from "../components/pagination/PaginationBox.vue";
+import SmIconSidebarModalEditComponent from "../components/buttons/SmIconSidebarModalEditComponent.vue";
 import alertService from "../../../services/alertService";
 import appService from "../../../services/appService";
 
@@ -76,7 +78,8 @@ export default {
         PurchaseCreateComponent,
         TableLimitComponent,
         PaginationTextComponent,
-        PaginationBox
+        PaginationBox,
+        SmIconSidebarModalEditComponent
     },
     data() {
         return {
@@ -133,6 +136,30 @@ export default {
                 this.loading.isActive = false;
             }).catch(() => {
                 this.loading.isActive = false;
+            });
+        },
+        edit: function (item) {
+            this.loading.isActive = true;
+            this.$store.dispatch('purchase/show', item.id).then((res) => {
+                this.loading.isActive = false;
+                const purchase = res.data.data;
+                this.props.form = {
+                    supplier_id: purchase.supplier_id,
+                    date: purchase.raw_date || purchase.date,
+                    payment_status: purchase.payment_status,
+                    payment_method: purchase.payment_method || 1,
+                    note: purchase.note || '',
+                    items: purchase.items && purchase.items.length > 0 ? purchase.items.map(i => ({
+                        kitchen_goods_id: i.kitchen_goods_id,
+                        quantity: i.quantity,
+                        unit_cost: i.unit_cost,
+                    })) : [{ kitchen_goods_id: null, quantity: "", unit_cost: "" }]
+                };
+                this.$store.dispatch('purchase/edit', item.id);
+                appService.sideDrawerShow();
+            }).catch((err) => {
+                this.loading.isActive = false;
+                alertService.error(err.response?.data?.message || 'Error loading purchase');
             });
         },
         destroy: function (id) {

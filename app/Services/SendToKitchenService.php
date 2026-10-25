@@ -116,6 +116,68 @@ class SendToKitchenService
     /**
      * @throws Exception
      */
+    public function update(SendToKitchenRequest $request, SendToKitchen $sendToKitchen): SendToKitchen
+    {
+        try {
+            return DB::transaction(function () use ($request, $sendToKitchen) {
+                // Reverse previous stock OUT (restore stock)
+                foreach ($sendToKitchen->items as $item) {
+                    $goods = KitchenGoods::find($item->kitchen_goods_id);
+                    if ($goods) {
+                        $goods->increment('current_stock', $item->quantity);
+                    }
+                }
+
+                // Delete old items
+                $sendToKitchen->items()->delete();
+
+                $items = is_string($request->items) ? json_decode($request->items) : $request->items;
+                $count = 0;
+
+                if (! blank($items)) {
+                    foreach ($items as $item) {
+                        $itemObj = (object) $item;
+                        $goodsId = $itemObj->kitchen_goods_id;
+                        $qty = (float) $itemObj->quantity;
+                        $unitId = $itemObj->unit_id ?? null;
+
+                        $goods = KitchenGoods::find($goodsId);
+                        if ($goods && (float) $goods->current_stock < $qty) {
+                            throw new Exception("Insufficient stock for {$goods->name}. Available: {$goods->current_stock}, Requested: {$qty}", 422);
+                        }
+
+                        SendToKitchenItem::create([
+                            'send_to_kitchen_id' => $sendToKitchen->id,
+                            'kitchen_goods_id' => $goodsId,
+                            'quantity' => $qty,
+                            'unit_id' => $unitId,
+                        ]);
+
+                        // Stock OUT: Decrement current stock in store
+                        if ($goods) {
+                            $goods->decrement('current_stock', $qty);
+                        }
+                        $count++;
+                    }
+                }
+
+                $sendToKitchen->update([
+                    'date' => $request->date,
+                    'note' => $request->note,
+                    'total_items' => $count,
+                ]);
+
+                return $sendToKitchen->load(['user', 'items.kitchenGoods', 'items.unit']);
+            });
+        } catch (Exception $exception) {
+            Log::info($exception->getMessage());
+            throw new Exception(QueryExceptionLibrary::message($exception), 422);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
     public function show(SendToKitchen $sendToKitchen): SendToKitchen
     {
         try {

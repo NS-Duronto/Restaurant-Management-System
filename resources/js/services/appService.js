@@ -7,18 +7,19 @@ import taxTypeEnum from "../enums/modules/taxTypeEnum";
 import currencyPositionEnum from "../enums/modules/currencyPositionEnum";
 
 export default {
-    sideDrawerShow: function (id = 'sideDrawer') {
+    sideDrawerShow: function (id = '#sidebar') {
         const drawerDivs = document?.querySelectorAll(".drawer");
         const drawerSets = document?.querySelectorAll("[data-drawer]");
-        drawerSets?.forEach((drawerSet) => {
-            const targetElm = document?.querySelector(drawerSet?.dataset?.drawer);
-            drawerSets?.forEach(drawerBtn => drawerBtn?.classList?.remove("active"));
-            drawerDivs?.forEach(drawerDiv => drawerDiv?.classList?.remove("active"));
-            targetElm?.classList?.add("active");
-            drawerSet?.classList?.add("active");
-            document.body.style.overflowY = "hidden";
-            document?.querySelector(".backdrop")?.classList?.add("active");
-        });
+        drawerSets?.forEach(drawerBtn => drawerBtn?.classList?.remove("active"));
+        drawerDivs?.forEach(drawerDiv => drawerDiv?.classList?.remove("active"));
+
+        const selector = id && id !== 'sideDrawer' ? id : '#sidebar';
+        const targetElm = document?.querySelector(selector) || document?.querySelector(".drawer");
+        if (targetElm) {
+            targetElm.classList.add("active");
+        }
+        document.body.style.overflowY = "hidden";
+        document?.querySelectorAll(".backdrop")?.forEach(drop => drop?.classList?.add("active"));
     },
     sideDrawerHide: function (id = 'sideDrawer') {
         const drawerDivs = document?.querySelectorAll(".drawer");

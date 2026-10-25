@@ -5,6 +5,12 @@
                 <h3 class="db-card-title">{{ $t('menu.kitchen_goods') }}</h3>
                 <div class="db-card-filter">
                     <TableLimitComponent :method="list" :search="props.search" :page="paginationPage" />
+                    <div class="dropdown-group">
+                        <ExportComponent />
+                        <div class="dropdown-list db-card-filter-dropdown-list transition-all duration-300 scale-y-0 origin-top">
+                            <PrintComponent :props="printObj" />
+                        </div>
+                    </div>
                     <KitchenGoodsCreateComponent :props="props" />
                 </div>
             </div>
@@ -16,7 +22,7 @@
                 </div>
 
                 <div class="db-table-responsive">
-                    <table class="db-table stripe">
+                    <table class="db-table stripe" id="print">
                         <thead class="db-table-head">
                             <tr class="db-table-head-tr">
                                 <th class="db-table-head-th">{{ $t('label.name') }}</th>
@@ -25,7 +31,7 @@
                                 <th class="db-table-head-th">{{ $t('label.current_stock') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.unit_cost') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.status') }}</th>
-                                <th class="db-table-head-th">{{ $t('label.action') }}</th>
+                                <th class="db-table-head-th hidden-print">{{ $t('label.action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="db-table-body" v-if="kitchenGoods.length > 0">
@@ -47,11 +53,9 @@
                                         {{ (item.status == 5 || item.status == 1) ? ($t('label.active') || 'Active') : ($t('label.inactive') || 'Inactive') }}
                                     </span>
                                 </td>
-                                <td class="db-table-body-td">
+                                <td class="db-table-body-td hidden-print">
                                     <div class="flex items-center gap-2">
-                                        <button @click.prevent="edit(item)" class="db-table-action edit">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
+                                        <SmIconSidebarModalEditComponent @click="edit(item)" />
                                         <button @click.prevent="destroy(item.id)" class="db-table-action delete">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
@@ -76,6 +80,9 @@ import KitchenGoodsCreateComponent from "./KitchenGoodsCreateComponent.vue";
 import TableLimitComponent from "../components/TableLimitComponent.vue";
 import PaginationTextComponent from "../components/pagination/PaginationTextComponent.vue";
 import PaginationBox from "../components/pagination/PaginationBox.vue";
+import ExportComponent from "../components/buttons/export/ExportComponent.vue";
+import PrintComponent from "../components/buttons/export/PrintComponent.vue";
+import SmIconSidebarModalEditComponent from "../components/buttons/SmIconSidebarModalEditComponent.vue";
 import statusEnum from "../../../enums/modules/statusEnum";
 import alertService from "../../../services/alertService";
 import appService from "../../../services/appService";
@@ -86,12 +93,19 @@ export default {
         KitchenGoodsCreateComponent,
         TableLimitComponent,
         PaginationTextComponent,
-        PaginationBox
+        PaginationBox,
+        ExportComponent,
+        PrintComponent,
+        SmIconSidebarModalEditComponent
     },
     data() {
         return {
             loading: {
                 isActive: false
+            },
+            printObj: {
+                id: "print",
+                popTitle: this.$t('menu.kitchen_goods')
             },
             enums: {
                 statusEnum: statusEnum,
@@ -180,3 +194,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+@media print {
+    .hidden-print {
+        display: none !important;
+    }
+}
+</style>

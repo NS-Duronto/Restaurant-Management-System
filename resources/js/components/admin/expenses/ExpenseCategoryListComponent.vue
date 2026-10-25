@@ -5,6 +5,12 @@
                 <h3 class="db-card-title">{{ $t('menu.expense_categories') }}</h3>
                 <div class="db-card-filter">
                     <TableLimitComponent :method="list" :search="props.search" :page="paginationPage" />
+                    <div class="dropdown-group">
+                        <ExportComponent />
+                        <div class="dropdown-list db-card-filter-dropdown-list transition-all duration-300 scale-y-0 origin-top">
+                            <PrintComponent :props="printObj" />
+                        </div>
+                    </div>
                     <ExpenseCategoryCreateComponent :props="props" />
                 </div>
             </div>
@@ -16,13 +22,13 @@
                 </div>
 
                 <div class="db-table-responsive">
-                    <table class="db-table stripe">
+                    <table class="db-table stripe" id="print">
                         <thead class="db-table-head">
                             <tr class="db-table-head-tr">
                                 <th class="db-table-head-th">{{ $t('label.name') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.description') }}</th>
                                 <th class="db-table-head-th">{{ $t('label.status') }}</th>
-                                <th class="db-table-head-th">{{ $t('label.action') }}</th>
+                                <th class="db-table-head-th hidden-print">{{ $t('label.action') }}</th>
                             </tr>
                         </thead>
                         <tbody class="db-table-body" v-if="categories.length > 0">
@@ -34,11 +40,9 @@
                                         {{ (item.status == 5 || item.status == 1) ? $t('label.active') : $t('label.inactive') }}
                                     </span>
                                 </td>
-                                <td class="db-table-body-td">
+                                <td class="db-table-body-td hidden-print">
                                     <div class="flex items-center gap-2">
-                                        <button @click.prevent="edit(item)" class="db-table-action edit">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
+                                        <SmIconSidebarModalEditComponent @click="edit(item)" />
                                         <button @click.prevent="destroy(item.id)" class="db-table-action delete">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
@@ -63,6 +67,9 @@ import ExpenseCategoryCreateComponent from "./ExpenseCategoryCreateComponent.vue
 import TableLimitComponent from "../components/TableLimitComponent.vue";
 import PaginationTextComponent from "../components/pagination/PaginationTextComponent.vue";
 import PaginationBox from "../components/pagination/PaginationBox.vue";
+import ExportComponent from "../components/buttons/export/ExportComponent.vue";
+import PrintComponent from "../components/buttons/export/PrintComponent.vue";
+import SmIconSidebarModalEditComponent from "../components/buttons/SmIconSidebarModalEditComponent.vue";
 import statusEnum from "../../../enums/modules/statusEnum";
 import alertService from "../../../services/alertService";
 import appService from "../../../services/appService";
@@ -73,12 +80,19 @@ export default {
         ExpenseCategoryCreateComponent,
         TableLimitComponent,
         PaginationTextComponent,
-        PaginationBox
+        PaginationBox,
+        ExportComponent,
+        PrintComponent,
+        SmIconSidebarModalEditComponent
     },
     data() {
         return {
             loading: {
                 isActive: false
+            },
+            printObj: {
+                id: "print",
+                popTitle: this.$t('menu.expense_categories')
             },
             enums: {
                 statusEnum: statusEnum,
@@ -157,3 +171,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+@media print {
+    .hidden-print {
+        display: none !important;
+    }
+}
+</style>

@@ -39,13 +39,20 @@ export const sendToKitchen = {
         },
         save: (context, payload) => {
             return new Promise((resolve, reject) => {
-                axios.post('/admin/send-to-kitchen', payload.form).then(res => {
+                let method = axios.post;
+                let url = '/admin/send-to-kitchen';
+                if (context.state.temp.isEditing) {
+                    method = axios.put;
+                    url = `/admin/send-to-kitchen/${context.state.temp.temp_id}`;
+                }
+                method(url, payload.form).then(res => {
                     context.dispatch('lists', payload.search).then().catch();
                     context.commit('reset');
                     resolve(res);
                 }).catch((err) => reject(err));
             });
         },
+        edit: (context, payload) => context.commit('temp', payload),
         destroy: (context, payload) => {
             return new Promise((resolve, reject) => {
                 axios.delete(`admin/send-to-kitchen/${payload.id}`).then((res) => {

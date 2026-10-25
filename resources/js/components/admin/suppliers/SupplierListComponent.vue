@@ -40,9 +40,7 @@
                                 </td>
                                 <td class="db-table-body-td">
                                     <div class="flex items-center gap-2">
-                                        <button @click.prevent="edit(supplier)" class="db-table-action edit">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
+                                        <SmIconSidebarModalEditComponent @click="edit(supplier)" />
                                         <button @click.prevent="destroy(supplier.id)" class="db-table-action delete">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
@@ -67,6 +65,7 @@ import SupplierCreateComponent from "./SupplierCreateComponent.vue";
 import TableLimitComponent from "../components/TableLimitComponent.vue";
 import PaginationTextComponent from "../components/pagination/PaginationTextComponent.vue";
 import PaginationBox from "../components/pagination/PaginationBox.vue";
+import SmIconSidebarModalEditComponent from "../components/buttons/SmIconSidebarModalEditComponent.vue";
 import statusEnum from "../../../enums/modules/statusEnum";
 import alertService from "../../../services/alertService";
 import appService from "../../../services/appService";
@@ -77,7 +76,8 @@ export default {
         SupplierCreateComponent,
         TableLimitComponent,
         PaginationTextComponent,
-        PaginationBox
+        PaginationBox,
+        SmIconSidebarModalEditComponent
     },
     data() {
         return {
