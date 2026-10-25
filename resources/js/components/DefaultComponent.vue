@@ -75,26 +75,22 @@ export default {
 
         if (this.logged) {
             this.$store.dispatch("authcheck").then(res => {
-<<<<<<< HEAD
                 const publicRoutes = ['resort.landing', 'frontend.rms', 'auth.login', 'auth.forgetPassword', 'auth.verifyEmail', 'auth.resetPassword'];
                 if (res.data.status === false && !publicRoutes.includes(this.$route.name) && (this.theme === "backend" || this.$route.meta?.auth === true)) {
-                    this.$router.push({ name: "auth.login" });
-                };
-            }).catch();
-=======
-                if (res.data.status === false && (this.theme === "frontend" || this.theme === "backend")) {
                     this.$store.commit('authLogout');
                     if (window.location.pathname !== '/login') {
                         window.location.href = '/login';
                     }
                 }
             }).catch(() => {
-                this.$store.commit('authLogout');
-                if (window.location.pathname !== '/login') {
-                    window.location.href = '/login';
+                const publicRoutes = ['resort.landing', 'frontend.rms', 'auth.login', 'auth.forgetPassword', 'auth.verifyEmail', 'auth.resetPassword'];
+                if (!publicRoutes.includes(this.$route.name) && (this.theme === "backend" || this.$route.meta?.auth === true)) {
+                    this.$store.commit('authLogout');
+                    if (window.location.pathname !== '/login') {
+                        window.location.href = '/login';
+                    }
                 }
             });
->>>>>>> 39beb44 (feat(auth): add configurable login session lifetime and auto-logout on expiration)
         }
     },
     watch: {

@@ -51,6 +51,7 @@ use App\Http\Controllers\Admin\PosController;
 use App\Http\Controllers\Admin\PosOrderController;
 use App\Http\Controllers\Admin\PosPaymentSettingController;
 use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\ResortController as AdminResortController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SalesReportController;
 use App\Http\Controllers\Admin\SendToKitchenController;
@@ -59,11 +60,6 @@ use App\Http\Controllers\Admin\SimpleUserController;
 use App\Http\Controllers\Admin\SiteController;
 use App\Http\Controllers\Admin\SmsGatewayController;
 use App\Http\Controllers\Admin\SupplierController;
-<<<<<<< HEAD
-use App\Http\Controllers\Admin\BackupController;
-use App\Http\Controllers\Admin\ResortController as AdminResortController;
-=======
->>>>>>> 39beb44 (feat(auth): add configurable login session lifetime and auto-logout on expiration)
 use App\Http\Controllers\Admin\TableOrderController as AdminTableOrderController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\ThemeController;
@@ -82,8 +78,8 @@ use App\Http\Controllers\Frontend\BranchController as FrontendBranchController;
 use App\Http\Controllers\Frontend\ItemController as FrontendItemController;
 use App\Http\Controllers\Frontend\LanguageController as FrontendLanguageController;
 use App\Http\Controllers\Frontend\PageController as FrontendPageController;
-use App\Http\Controllers\Frontend\ResortController as FrontendResortController;
 use App\Http\Controllers\Frontend\ProfileController;
+use App\Http\Controllers\Frontend\ResortController as FrontendResortController;
 use App\Http\Controllers\Frontend\SettingController;
 use App\Http\Controllers\Frontend\TokenStoreController;
 use App\Http\Controllers\Table\DiningTableController as TableDiningTableController;
