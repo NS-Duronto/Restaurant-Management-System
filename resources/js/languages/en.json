@@ -777,6 +777,8 @@
         "twilio": "Twilio"
     },
     "button": {
+        "resort": "Resort",
+        "back_to_resort": "Back to Resort Website",
         "add": "Add",
         "save": "Save",
         "edit": "Edit",

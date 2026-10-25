@@ -13,12 +13,21 @@
                 </span>
             </div>
             
-            <!-- Dark / Light Mode Toggle -->
-            <button @click="toggleTheme" type="button"
-                class="w-9 h-9 rounded-xl flex items-center justify-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 shadow-sm transition"
-                :title="isDarkMode ? $t('label.light_mode') : $t('label.dark_mode')">
-                <i :class="isDarkMode ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-indigo-500'"></i>
-            </button>
+            <div class="flex items-center gap-2">
+                <!-- Back to Resort (Top Button) -->
+                <router-link v-if="hasResort" :to="{ name: 'resort.landing' }"
+                    class="h-9 px-3 rounded-xl flex items-center gap-1.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:text-orange-500 hover:border-orange-500/40 dark:hover:text-orange-400 text-xs font-semibold shadow-sm transition">
+                    <i class="fa-solid fa-hotel text-[11px] text-orange-500"></i>
+                    <span>{{ $t('button.resort') }}</span>
+                </router-link>
+
+                <!-- Dark / Light Mode Toggle -->
+                <button @click="toggleTheme" type="button"
+                    class="w-9 h-9 rounded-xl flex items-center justify-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 shadow-sm transition"
+                    :title="isDarkMode ? $t('label.light_mode') : $t('label.dark_mode')">
+                    <i :class="isDarkMode ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-indigo-500'"></i>
+                </button>
+            </div>
         </div>
 
         <!-- Main Login Card -->
@@ -77,6 +86,16 @@
                     <i class="fa-solid fa-arrow-right text-xs"></i>
                 </button>
             </form>
+
+            <!-- Go to Resort Landing Link -->
+            <div v-if="hasResort" class="mt-6 pt-5 border-t border-gray-100 dark:border-gray-800 text-center">
+                <router-link :to="{ name: 'resort.landing' }"
+                    class="w-full h-11 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-gray-700 dark:text-gray-200 bg-gray-100 hover:bg-orange-50 hover:text-orange-600 dark:bg-gray-800 dark:hover:bg-gray-800/80 dark:hover:text-orange-400 border border-transparent hover:border-orange-500/30 transition group shadow-sm">
+                    <i class="fa-solid fa-hotel text-orange-500 group-hover:scale-110 transition-transform"></i>
+                    <span>{{ $t('button.back_to_resort') }}</span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-60 group-hover:translate-x-0.5 transition-transform"></i>
+                </router-link>
+            </div>
         </div>
 
         <!-- Demo Quick Login Card -->
@@ -141,6 +160,9 @@ export default {
         }
     },
     computed: {
+        hasResort: function () {
+            return this.$router.hasRoute('resort.landing');
+        },
         setting: function () {
             return this.$store.getters['frontendSetting/lists'];
         },
