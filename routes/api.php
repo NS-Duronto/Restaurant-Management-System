@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdministratorAddressController;
 use App\Http\Controllers\Admin\AdministratorController;
 use App\Http\Controllers\Admin\AnalyticController;
 use App\Http\Controllers\Admin\AnalyticSectionController;
+use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\ChefAddressController;
 use App\Http\Controllers\Admin\ChefController;
@@ -58,8 +59,11 @@ use App\Http\Controllers\Admin\SimpleUserController;
 use App\Http\Controllers\Admin\SiteController;
 use App\Http\Controllers\Admin\SmsGatewayController;
 use App\Http\Controllers\Admin\SupplierController;
+<<<<<<< HEAD
 use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\ResortController as AdminResortController;
+=======
+>>>>>>> 39beb44 (feat(auth): add configurable login session lifetime and auto-logout on expiration)
 use App\Http\Controllers\Admin\TableOrderController as AdminTableOrderController;
 use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\ThemeController;
@@ -133,7 +137,7 @@ Route::prefix('auth')->middleware(['installed', 'apiKey', 'localization'])->name
     });
 
     Route::post('/authcheck', function () {
-        if (Auth::check()) {
+        if (Auth::guard('sanctum')->check()) {
             return response()->json(['status' => true]);
         }
 

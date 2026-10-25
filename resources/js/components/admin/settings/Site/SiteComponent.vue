@@ -159,6 +159,19 @@
                     </div>
 
                     <div class="form-col-12 sm:form-col-6">
+                        <label for="site_session_lifetime" class="db-field-title required">
+                            {{ $t("label.session_lifetime") }}
+                            <span class="text-primary">{{ $t("label.in_minute") }}</span>
+                        </label>
+                        <input v-on:keypress="onlyNumber($event)" v-model="form.site_session_lifetime"
+                            v-bind:class="errors.site_session_lifetime ? 'invalid' : ''" type="text"
+                            id="site_session_lifetime" class="db-field-control" />
+                        <small class="db-field-alert" v-if="errors.site_session_lifetime">{{
+                            errors.site_session_lifetime[0]
+                        }}</small>
+                    </div>
+
+                    <div class="form-col-12 sm:form-col-6">
                         <label class="db-field-title required" for="enable">
                             {{ $t("label.currency_position") }}
                         </label>
@@ -385,6 +398,7 @@ export default {
                 site_online_payment_gateway: null,
                 site_default_sms_gateway: null,
                 site_food_preparation_time: null,
+                site_session_lifetime: null,
             },
             enums: {
                 dateFormatEnum: dateFormatEnum,
@@ -418,6 +432,9 @@ export default {
     methods: {
         floatNumber(e) {
             return appService.floatNumber(e);
+        },
+        onlyNumber(e) {
+            return appService.onlyNumber(e);
         },
         loadInfo: async function () {
             try {
@@ -470,6 +487,7 @@ export default {
                     site_online_payment_gateway: res.data.data.site_online_payment_gateway,
                     site_default_sms_gateway: res.data.data.site_default_sms_gateway === 0 || res.data.data.site_default_sms_gateway === undefined ? null : res.data.data.site_default_sms_gateway,
                     site_food_preparation_time: res.data.data.site_food_preparation_time,
+                    site_session_lifetime: res.data.data.site_session_lifetime,
                 }
                 this.loading.isActive = false;
             }).catch((err) => {

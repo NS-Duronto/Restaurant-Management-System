@@ -18,43 +18,44 @@ class SiteTableSeeder extends Seeder
      */
     public function run()
     {
-        $envService = new EnvEditor();
+        $envService = new EnvEditor;
         Settings::group('site')->set([
-            'site_date_format'               => 'd-m-Y',
-            'site_time_format'               => 'h:i A',
-            'site_default_timezone'          => 'Asia/Dhaka',
-            'site_default_branch'            => 1,
-            'site_default_currency'          => 1,
-            'site_default_currency_symbol'   => '৳',
-            'site_currency_position'         => CurrencyPosition::LEFT,
+            'site_date_format' => 'd-m-Y',
+            'site_time_format' => 'h:i A',
+            'site_default_timezone' => 'Asia/Dhaka',
+            'site_default_branch' => 1,
+            'site_default_currency' => 1,
+            'site_default_currency_symbol' => '৳',
+            'site_currency_position' => CurrencyPosition::LEFT,
             'site_digit_after_decimal_point' => '2',
-            'site_email_verification'        => Activity::ENABLE,
-            'site_phone_verification'        => Activity::DISABLE,
-            'site_default_language'          => 1,
-            'site_google_map_key'            => $envService->getValue(
+            'site_email_verification' => Activity::ENABLE,
+            'site_phone_verification' => Activity::DISABLE,
+            'site_default_language' => 1,
+            'site_google_map_key' => $envService->getValue(
                 'DEMO'
             ) ? 'Fake-map-key' : '',
-            'site_copyright'                 => $envService->getValue(
+            'site_copyright' => $envService->getValue(
                 'DEMO'
             ) ? '© সহজ রেস্টুরেন্ট - Sohoj RMS 2026, All Rights Reserved' : '',
-            'site_language_switch'        => Activity::ENABLE,
-            'site_app_debug'              => Activity::DISABLE,
-            'site_auto_update'            => Activity::DISABLE,
+            'site_language_switch' => Activity::ENABLE,
+            'site_app_debug' => Activity::DISABLE,
+            'site_auto_update' => Activity::DISABLE,
             'site_online_payment_gateway' => $envService->getValue('DEMO') ? Activity::ENABLE : Activity::DISABLE,
-            'site_default_sms_gateway'    => 0,
-            'site_default_ai_agent'       => 0,
-            'site_food_preparation_time'  => "30",
+            'site_default_sms_gateway' => 0,
+            'site_default_ai_agent' => 0,
+            'site_food_preparation_time' => '30',
+            'site_session_lifetime' => 120,
         ]);
 
         $envService->addData([
-            'APP_DEBUG'              => 'false',
-            'TIMEZONE'               => 'Asia/Dhaka',
-            'CURRENCY'               => 'BDT',
-            'CURRENCY_SYMBOL'        => '৳',
-            'CURRENCY_POSITION'      => '5',
+            'APP_DEBUG' => 'false',
+            'TIMEZONE' => 'Asia/Dhaka',
+            'CURRENCY' => 'BDT',
+            'CURRENCY_SYMBOL' => '৳',
+            'CURRENCY_POSITION' => '5',
             'CURRENCY_DECIMAL_POINT' => '2',
-            'DATE_FORMAT'            => 'd-m-Y',
-            'TIME_FORMAT'            => 'h:i A'
+            'DATE_FORMAT' => 'd-m-Y',
+            'TIME_FORMAT' => 'h:i A',
         ]);
         Artisan::call('optimize:clear');
     }

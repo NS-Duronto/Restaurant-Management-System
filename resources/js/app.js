@@ -55,6 +55,37 @@ axios.interceptors.request.use(
     },
     error => Promise.reject(error),
 );
+axios.interceptors.response.use(
+    response => {
+        if (store.getters.authStatus) {
+            store.commit('updateActivity');
+        }
+        return response;
+    },
+    error => {
+        if (error.response && error.response.status === 401) {
+            store.commit('authLogout');
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
+let activityThrottle = 0;
+const registerUserActivity = () => {
+    const now = Date.now();
+    if (now - activityThrottle > 10000) {
+        activityThrottle = now;
+        if (store.getters.authStatus) {
+            store.commit('updateActivity');
+        }
+    }
+};
+window.addEventListener('click', registerUserActivity, { passive: true });
+window.addEventListener('keydown', registerUserActivity, { passive: true });
+window.addEventListener('touchstart', registerUserActivity, { passive: true });
 /* End axios code */
 
 const app = createApp(DefaultComponent);
