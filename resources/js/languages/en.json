@@ -325,6 +325,7 @@
         "email_verification": "Email Verification",
         "phone_verification": "Phone Verification",
         "food_preparation_time": "Food Preparation Time",
+        "session_lifetime": "Login Session Lifetime",
         "in_minute": "( In Minute )",
         "digit_after_decimal_point": "Digit After Decimal Point",
         "ex": "( Ex: 0.00 )",

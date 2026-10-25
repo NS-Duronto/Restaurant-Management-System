@@ -326,6 +326,7 @@
         "email_verification": "ইমেল যাচাইকরণ",
         "phone_verification": "ফোন যাচাইকরণ",
         "food_preparation_time": "খাবার প্রস্তুতির সময়",
+        "session_lifetime": "লগইন সেশনের সময়সীমা",
         "in_minute": "( মিনিটে )",
         "digit_after_decimal_point": "দশমিক বিন্দুর পরে অঙ্ক",
         "ex": "( যেমন: ০.০০)",

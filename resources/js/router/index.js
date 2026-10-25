@@ -128,24 +128,46 @@ function resolveLandingRoute(permission) {
     return { name: "route.exception" };
 }
 
+function isSessionExpired() {
+    const lastActivity = store.getters.lastActivity;
+    const sessionLifetimeMinutes = Number(
+        store.getters.sessionLifetime ||
+        store.getters['frontendSetting/lists']?.site_session_lifetime ||
+        120
+    );
+    if (lastActivity && sessionLifetimeMinutes > 0) {
+        return (Date.now() - Number(lastActivity)) > (sessionLifetimeMinutes * 60 * 1000);
+    }
+    return false;
+}
+
 router.beforeEach((to, from, next) => {
     if (to.meta.auth === true) {
-        if (!store.getters.authStatus) {
+        if (!store.getters.authStatus || isSessionExpired()) {
+            if (store.getters.authStatus) {
+                store.commit('authLogout');
+            }
             next({ name: "auth.login" });
-        } else {
-            if (to.meta.isFrontend === false) {
-                if (to.meta.access === false) {
-                    next({
-                        name: "route.exception",
-                    });
-                } else {
-                    next();
-                }
+            return;
+        }
+
+        if (to.meta.isFrontend === false) {
+            if (to.meta.access === false) {
+                next({
+                    name: "route.exception",
+                });
             } else {
                 next();
             }
+        } else {
+            next();
         }
     } else if (to.name === "auth.login" && store.getters.authStatus) {
+        if (isSessionExpired()) {
+            store.commit('authLogout');
+            next();
+            return;
+        }
         next(resolveLandingRoute(store.getters.authPermission));
     } else {
         next();

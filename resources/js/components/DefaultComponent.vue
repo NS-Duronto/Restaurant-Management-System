@@ -59,6 +59,10 @@ export default {
     },
     beforeMount() {
         this.$store.dispatch('frontendSetting/lists').then(res => {
+            if (res.data?.data?.site_session_lifetime) {
+                this.$store.commit('setSessionLifetime', Number(res.data.data.site_session_lifetime));
+            }
+
             this.$store.dispatch('frontendLanguage/show', res.data.data.site_default_language).then(res => {
 
             }).catch();
@@ -69,12 +73,20 @@ export default {
             });
         }).catch();
 
-        if (env.DEMO === "true" || env.DEMO === 'TRUE' || env.DEMO === true || env.DEMO === "1" || env.DEMO === 1) {
+        if (this.logged) {
             this.$store.dispatch("authcheck").then(res => {
-                if (res.data.status === false && (this.theme == "frontend" || this.theme == "backend")) {
-                    this.$router.push({ name: "auth.login" });
-                };
-            }).catch();
+                if (res.data.status === false && (this.theme === "frontend" || this.theme === "backend")) {
+                    this.$store.commit('authLogout');
+                    if (window.location.pathname !== '/login') {
+                        window.location.href = '/login';
+                    }
+                }
+            }).catch(() => {
+                this.$store.commit('authLogout');
+                if (window.location.pathname !== '/login') {
+                    window.location.href = '/login';
+                }
+            });
         }
     },
     watch: {

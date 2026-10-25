@@ -13,7 +13,9 @@ export const auth = {
         },
         authPermission: {},
         authDefaultPermission: {},
-        authDefaultMenu:{}
+        authDefaultMenu:{},
+        lastActivity: null,
+        sessionLifetime: null
     },
     getters: {
         authStatus: function (state) {
@@ -42,6 +44,12 @@ export const auth = {
         },
         resetInfo: function (state) {
             return state.resetInfo;
+        },
+        lastActivity: function (state) {
+            return state.lastActivity;
+        },
+        sessionLifetime: function (state) {
+            return state.sessionLifetime;
         }
     },
     actions: {
@@ -140,6 +148,14 @@ export const auth = {
             state.authPermission = payload.permission;
             state.authDefaultPermission = payload.defaultPermission;
             state.authDefaultMenu = payload.defaultMenu;
+            state.lastActivity = Date.now();
+            state.sessionLifetime = payload.session_lifetime || state.sessionLifetime || null;
+        },
+        updateActivity: function (state) {
+            state.lastActivity = Date.now();
+        },
+        setSessionLifetime: function (state, payload) {
+            state.sessionLifetime = payload;
         },
         authLogout: function (state) {
             state.authStatus = false;
@@ -150,6 +166,8 @@ export const auth = {
             state.authPermission = {};
             state.authDefaultPermission = {};
             state.authDefaultMenu = {};
+            state.lastActivity = null;
+            state.sessionLifetime = null;
         },
         forgetPassword: function (state, payload) {
             state.resetInfo = {
